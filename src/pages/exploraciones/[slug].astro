@@ -62,17 +62,18 @@ const sizesMitad = '(min-width: 1248px) 548px, (min-width: 768px) calc(50vw - 44
         {
           d.galeria.map((bloque, i) =>
             bloque.formato === 'imagen' ? (
-              <figure class="pieza">
+              <figure class="pieza" data-reveal={i > 0 || undefined}>
                 <CaseImage
                   src={bloque.imagen}
                   alt={bloque.alt ?? bloque.pie}
                   sizes={sizesAncho}
                   eager={i === 0}
+                  transitionName={i === 0 ? `exploracion-${exploracion.id}` : undefined}
                 />
                 <figcaption class="pie">{bloque.pie}</figcaption>
               </figure>
             ) : (
-              <div class:list={['columnas', `columnas--${bloque.formato}`]}>
+              <div class:list={['columnas', `columnas--${bloque.formato}`]} data-reveal-group>
                 {bloque.piezas.map((p) => (
                   <figure class="pieza">
                     <CaseImage src={p.imagen} alt={p.alt ?? p.pie} sizes={sizesMitad} />

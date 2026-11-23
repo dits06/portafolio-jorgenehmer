@@ -30,7 +30,7 @@ const sizes = apilarEnMobile
 
 <div class="par">
   {titulo && <h4 class="par__titulo">{titulo}</h4>}
-  <div class:list={['par__imagenes', { 'par__imagenes--apilar': apilarEnMobile }]}>
+  <div class:list={['par__imagenes', { 'par__imagenes--apilar': apilarEnMobile }]} data-reveal-group>
     {[a, b].map((img) => (
       <ImagenConPie src={img.src} pie={img.pie} alt={img.alt} ratio={ratio} sizes={sizes} tamanoPie={tamanoPie} />
     ))}

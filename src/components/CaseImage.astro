@@ -17,6 +17,11 @@ interface Props {
   class?: string;
   /** Imagen para mobile cuando cambia la proporción (p. ej. la tabla de TCG). */
   mobile?: ImageMetadata;
+  /** Aparece al hacer scroll (documento de traspaso → Animaciones). */
+  reveal?: boolean;
+  /** Nombre para la transición entre páginas: el mismo que el transition:name de la card del home.
+      Va en el style porque transition:name sin valor le pone un nombre a cada imagen. */
+  transitionName?: string;
 }
 
 const {
@@ -27,6 +32,8 @@ const {
   eager = false,
   class: className,
   mobile,
+  reveal = false,
+  transitionName,
 } = Astro.props;
 
 const candidateWidths = [160, 320, 400, 640, 800, 1120, 1440, 1600, 2240, 2880];
@@ -55,8 +62,9 @@ const mobileRatio = mobile ? `${mobile.width} / ${mobile.height}` : ratio;
 ---
 
 <div
-  class:list={['case-image', className]}
-  style={`--ratio: ${ratio}; --ratio-mobile: ${mobileRatio}`}
+  class:list={['case-image', { 'case-image--transicion': transitionName }, className]}
+  style={`--ratio: ${ratio}; --ratio-mobile: ${mobileRatio}${transitionName ? `; view-transition-name: ${transitionName}` : ''}`}
+  data-reveal={reveal || undefined}
 >
   <picture>
     {
@@ -83,6 +91,11 @@ const mobileRatio = mobile ? `${mobile.width} / ${mobile.height}` : ratio;
     aspect-ratio: var(--ratio-mobile, var(--ratio));
     border-radius: var(--radius-thumb);
     background: var(--placeholder);
+  }
+
+  /* Destino de la transición entre páginas (ver global.css) */
+  .case-image--transicion {
+    view-transition-class: portada;
   }
 
   .case-image img {

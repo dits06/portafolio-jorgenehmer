@@ -124,3 +124,45 @@ button {
 .skip-link:focus-visible {
   transform: none;
 }
+
+/* ---------- Movimiento (documento de traspaso → Animaciones) ---------- */
+
+/*
+ * Aparición al hacer scroll: [data-reveal] sueltos y los hijos de
+ * [data-reveal-group] (cards, con 60 ms entre sí). Solo se ocultan cuando
+ * el script de BaseLayout pone .js-reveal en <html>: sin JS, sin
+ * IntersectionObserver o con reduced motion, todo se ve desde el inicio.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .js-reveal [data-reveal]:not([data-reveal-group] [data-reveal]),
+  .js-reveal [data-reveal-group] > * {
+    transition:
+      opacity var(--duration-reveal) var(--ease-out),
+      transform var(--duration-reveal) var(--ease-out);
+    transition-delay: calc(var(--reveal-order, 0) * var(--reveal-stagger));
+  }
+
+  .js-reveal [data-reveal]:not([data-reveal-group] [data-reveal]):not(.is-revealed),
+  .js-reveal [data-reveal-group] > :not(.is-revealed) {
+    opacity: 0;
+    transform: translateY(var(--reveal-shift));
+  }
+
+  /* Transición entre páginas: View Transitions entre documentos (sin router).
+     La imagen de la card (transition:name) se convierte en la portada. */
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+::view-transition-group(*) {
+  animation-duration: var(--duration-reveal);
+  animation-timing-function: var(--ease-out);
+}
+
+/* La card y la portada tienen otra proporción: recortar en vez de deformar */
+::view-transition-old(.portada),
+::view-transition-new(.portada) {
+  height: 100%;
+  object-fit: cover;
+}

@@ -32,6 +32,7 @@ const d = caso.data;
       ratio="1440 / 703"
       sizes="100vw"
       eager
+      transitionName={`caso-${caso.id}`}
     />
 
     <!-- 2. Título y bajada -->
@@ -83,7 +84,7 @@ const d = caso.data;
       d.destacados && (
         <section class="bloque destacados" aria-labelledby="destacados-titulo">
           <div class="contenedor destacados__contenido">
-            <header class="titulo-bloque">
+            <header class="titulo-bloque" data-reveal>
               <p class="eyebrow">{d.destacados.eyebrow}</p>
               <h2 class="titulo-seccion" id="destacados-titulo">
                 {d.destacados.titulo}
@@ -118,11 +119,11 @@ const d = caso.data;
     <!-- 6. Siguientes casos -->
     <section class="bloque siguientes" aria-labelledby="siguientes-titulo">
       <div class="contenedor siguientes__contenido">
-        <header class="titulo-bloque">
+        <header class="titulo-bloque" data-reveal>
           <p class="eyebrow">Más proyectos</p>
           <h2 class="titulo-seccion" id="siguientes-titulo">Siguientes casos</h2>
         </header>
-        <ul class="siguientes__cards" role="list">
+        <ul class="siguientes__cards" role="list" data-reveal-group>
           {
             d.siguientes.map((s) => (
               <li>

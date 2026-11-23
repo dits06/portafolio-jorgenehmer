@@ -17,7 +17,7 @@ interface Props {
 const { src, titulo, texto, alt, ratio, sizes } = Astro.props;
 ---
 
-<figure class="imagen-con-texto">
+<figure class="imagen-con-texto" data-reveal>
   <CaseImage src={src} alt={alt ?? titulo} ratio={ratio} sizes={sizes} />
   <figcaption class="imagen-con-texto__pie">
     <span class="imagen-con-texto__titulo">{titulo}</span>

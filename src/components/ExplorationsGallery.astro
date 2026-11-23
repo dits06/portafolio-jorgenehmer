@@ -36,12 +36,12 @@ const categories = explorationCategories.filter((c) =>
     }
   </div>
 
-  <ul class="grid" role="list">
+  <ul class="grid" role="list" data-reveal-group>
     {
       explorations.map((e) => (
         <li class="piece" data-category={e.category}>
           <a class="piece__link" href={`/exploraciones/${e.slug}`}>
-            <div class="piece__media">
+            <div class="piece__media" transition:name={`exploracion-${e.slug}`}>
               <Picture
                 src={e.image}
                 formats={['avif', 'webp']}
@@ -114,6 +114,7 @@ const categories = explorationCategories.filter((c) =>
   }
 
   .piece__media {
+    view-transition-class: portada;
     overflow: hidden;
     aspect-ratio: 1;
     border-radius: var(--radius-thumb);
@@ -134,9 +135,17 @@ const categories = explorationCategories.filter((c) =>
   }
 
   .piece__caption {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
     color: var(--muted);
     font-size: var(--text-thumb-caption);
     line-height: var(--leading-thumb-caption);
+  }
+
+  /* El pie hace de título de la pieza: se subraya como en las cards de proyecto */
+  .piece__link:hover .piece__caption,
+  .piece__link:focus-visible .piece__caption {
+    text-decoration-line: underline;
   }
 
   .all-link {

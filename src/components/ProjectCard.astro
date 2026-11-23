@@ -38,7 +38,7 @@ const fallback = await getImage({ src: image, format: 'webp', width: Math.min(12
 
 <li class:list={['project', { 'project--wide': wide }]}>
   <a class="project__link" href={`/casos/${slug}`}>
-    <div class="project__media">
+    <div class="project__media" transition:name={`caso-${slug}`}>
       <picture>
         {sources.map((s) => <source type={s.type} srcset={s.srcset} sizes={sizes} media={s.media} />)}
         <img
@@ -76,6 +76,7 @@ const fallback = await getImage({ src: image, format: 'webp', width: Math.min(12
   }
 
   .project__media {
+    view-transition-class: portada;
     overflow: hidden;
     border-radius: var(--radius-image);
     background: var(--placeholder);

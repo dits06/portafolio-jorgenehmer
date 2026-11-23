@@ -21,7 +21,7 @@ interface Props {
 const { src, pie, alt, ratio, sizes, tamanoPie = 'normal', mobile } = Astro.props;
 ---
 
-<figure class="imagen-con-pie">
+<figure class="imagen-con-pie" data-reveal>
   <CaseImage src={src} alt={alt ?? pie ?? ''} ratio={ratio} sizes={sizes} mobile={mobile} />
   {pie && <figcaption class:list={['pie', `pie--${tamanoPie}`]}>{pie}</figcaption>}
 </figure>

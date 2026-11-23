@@ -15,7 +15,7 @@ import { projects } from '../data/home';
 
   <section id="proyectos" aria-labelledby="proyectos-titulo">
     <HomeSectionTitle id="proyectos-titulo">Proyectos</HomeSectionTitle>
-    <ul class="projects" role="list">
+    <ul class="projects" role="list" data-reveal-group>
       {projects.map((project) => <ProjectCard project={project} />)}
     </ul>
   </section>

@@ -25,6 +25,47 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonical} />
     <meta name="generator" content={Astro.generator} />
     <Font cssVariable="--font-tiktok-sans" preload />
+    <script is:inline>
+      /* Aparición al hacer scroll (documento de traspaso → Animaciones): una sola vez por
+         elemento; los hijos de un [data-reveal-group] que entran juntos van con 60 ms entre sí.
+         Va en el head para ocultar antes del primer pintado; el CSS está en global.css. */
+      (() => {
+        if (!('IntersectionObserver' in window)) return;
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        document.documentElement.classList.add('js-reveal');
+
+        const init = () => {
+          const targets = [...document.querySelectorAll('[data-reveal]')].filter(
+            (el) => !el.parentElement?.closest('[data-reveal-group]'),
+          );
+          document.querySelectorAll('[data-reveal-group]').forEach((g) => targets.push(...g.children));
+
+          const io = new IntersectionObserver(
+            (entries) => {
+              const order = new Map();
+              for (const e of entries) {
+                const el = e.target;
+                // Lo que quedó arriba de la ventana (scroll restaurado, ancla) se muestra sin animar.
+                const above = e.boundingClientRect.bottom < 0;
+                if (!e.isIntersecting && !above) continue;
+                if (above) el.style.transition = 'none';
+                const group = el.parentElement?.hasAttribute('data-reveal-group') ? el.parentElement : el;
+                const n = order.get(group) ?? 0;
+                order.set(group, n + 1);
+                el.style.setProperty('--reveal-order', String(n));
+                el.classList.add('is-revealed');
+                io.unobserve(el);
+              }
+            },
+            { rootMargin: '0px 0px -8% 0px' },
+          );
+          targets.forEach((el) => io.observe(el));
+        };
+
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+        else init();
+      })();
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
