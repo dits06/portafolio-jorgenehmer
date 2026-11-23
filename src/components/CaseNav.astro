@@ -26,6 +26,13 @@ const { secciones } = Astro.props;
       ))
     }
   </ul>
+  <!-- Pedido fuera de Figma: último ítem para volver al home, en todas las plantillas con nav lateral -->
+  <a class="volver" href="/">
+    <svg class="volver__flecha" viewBox="-1 -1 11 12" width="10" height="12" aria-hidden="true">
+      <path d="M9 5H0m0 0 4.5-4.5M0 5l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+    Volver al inicio
+  </a>
 </nav>
 
 <script>
@@ -104,7 +111,7 @@ const { secciones } = Astro.props;
   }
 
   /* Indicador de 2 × 20 px */
-  a::before {
+  li a::before {
     content: '';
     flex: none;
     width: 2px;
@@ -123,5 +130,15 @@ const { secciones } = Astro.props;
 
   a[aria-current='true']::before {
     background: var(--ink);
+  }
+
+  /* Volver al inicio: separado de las secciones; la flecha ocupa el lugar del indicador */
+  .volver {
+    gap: var(--space-4); /* flecha de 10 + 4 = 14 px: el texto queda alineado con el de los ítems */
+    margin-top: var(--space-20);
+  }
+
+  .volver__flecha {
+    flex: none;
   }
 </style>
