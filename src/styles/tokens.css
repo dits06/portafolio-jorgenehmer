@@ -110,6 +110,10 @@
 
   /* Margen lateral de página: 20 px en 375 → 64 px en 1440 (home y nav) */
   --page-padding: clamp(1.25rem, 0.2817rem + 4.1315vw, 4rem);
+  /* Margen lateral real: igual a --page-padding hasta 1440 px; desde ahí el
+     contenido queda en 1312 px centrado (como el texto del header).
+     El 100% es el ancho del elemento donde se usa, así que va en padding-inline. */
+  --page-gutter: max(var(--page-padding), calc((100% - var(--page-max)) / 2 + 4rem));
   /* Ancho de contenido de casos y exploraciones */
   --content-max: 70rem; /* 1120 px */
   --case-nav-width: 13.75rem; /* 220 px */
