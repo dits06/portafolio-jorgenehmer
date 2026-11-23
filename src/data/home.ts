@@ -1,7 +1,7 @@
 /**
  * Contenido de las grillas del home — Figma: frame 1:2 (desktop) y 103:302 (mobile).
- * Textos copiados tal cual de Figma. En las etapas 3–5 esto pasará a leerse de las
- * content collections (casos/*.mdx y exploraciones/*.mdx).
+ * Textos copiados tal cual de Figma. Las piezas de Exploraciones se leen de la
+ * colección exploraciones (src/content/exploraciones/*.mdx, campos card y orden).
  */
 import type { ImageMetadata } from 'astro';
 
@@ -11,13 +11,6 @@ import cardRegistro from '../assets/home/card-registro-y-verificacion.png';
 import cardPagos from '../assets/home/card-pagos-masivos-b2b.png';
 import cardDesignSystem from '../assets/home/card-design-system.png';
 import cardDesignSystemMobile from '../assets/home/card-design-system-mobile.png';
-
-import expLoomer from '../assets/home/exploracion-loomer.png';
-import exp36Days from '../assets/home/exploracion-36-days-of-type.png';
-import expLogofolio from '../assets/home/exploracion-logofolio.png';
-import expIlustraciones from '../assets/home/exploracion-ilustraciones-3d.png';
-import expAlPaladar from '../assets/home/exploracion-al-paladar.png';
-import expHapp from '../assets/home/exploracion-happ.png';
 
 export interface Project {
   slug: string;
@@ -75,23 +68,6 @@ export const projects: Project[] = [
 /** Orden de los filtros en Figma. Los que no tienen piezas se ocultan (Publicidad). */
 export const explorationCategories = ['3D', 'Tipografía', 'Logos', 'UI', 'Publicidad'] as const;
 export type ExplorationCategory = (typeof explorationCategories)[number];
-
-export interface Exploration {
-  slug: string;
-  title: string;
-  category: ExplorationCategory;
-  year: string;
-  image: ImageMetadata;
-}
-
-export const explorations: Exploration[] = [
-  { slug: 'loomer', title: 'Loomer', category: 'UI', year: '2019', image: expLoomer },
-  { slug: '36-days-of-type', title: '36 Days of Type', category: 'Tipografía', year: '2018', image: exp36Days },
-  { slug: 'logofolio', title: 'Logofolio', category: 'Logos', year: '2016–2018', image: expLogofolio },
-  { slug: 'ilustraciones-3d', title: 'Ilustraciones 3D', category: '3D', year: '2022', image: expIlustraciones },
-  { slug: 'al-paladar', title: 'Al Paladar', category: 'UI', year: '2021', image: expAlPaladar },
-  { slug: 'happ', title: 'Happ', category: 'UI', year: '2022', image: expHapp },
-];
 
 /**
  * Destino de "Ver todas las exploraciones →": el inicio de la sección

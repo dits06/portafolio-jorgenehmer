@@ -107,6 +107,10 @@
   --leading-h4: clamp(1.5625rem, 1.4965rem + 0.2817vw, 1.75rem);
   --tracking-h4: -0.005em;
 
+  /* Nombre en la navegación entre exploraciones: 17/24 → 20/28, SemiBold, -0.5% */
+  --text-exp-nav: clamp(1.0625rem, 0.9965rem + 0.2817vw, 1.25rem);
+  --leading-exp-nav: clamp(1.5rem, 1.412rem + 0.3756vw, 1.75rem);
+
   /* Pie de imagen chico (antes/después, pantallas finales): 12/17 */
   --text-caption-sm: 0.75rem;
   --leading-caption-sm: 1.0625rem;
@@ -188,6 +192,16 @@
   --timeline-year: 6.875rem; /* 110 px, columna del año en desktop */
   --timeline-dot: 0.75rem; /* 12 px */
   --page-max: 90rem; /* 1440 px */
+
+  /* Exploraciones (Figma 157:634 / 305:1345): mobile → desktop */
+  --exp-intro-pt: clamp(2.5rem, 1.2676rem + 5.2582vw, 6rem); /* 40 → 96 */
+  --exp-intro-pb: clamp(2.5rem, 2.1479rem + 1.5023vw, 3.5rem); /* 40 → 56 */
+  --exp-intro-gap: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem); /* 16 → 20 */
+  --exp-meta-gap: clamp(1.5rem, 0.9718rem + 2.2535vw, 3rem); /* 24 → 48, entre metadatos */
+  --exp-description-max: 45rem; /* 720 px */
+  --exp-gallery-gap: clamp(1.25rem, 0.9859rem + 1.1268vw, 2rem); /* 20 → 32 */
+  --exp-gallery-pb: clamp(4rem, 3.2958rem + 3.0047vw, 6rem); /* 64 → 96 */
+  --exp-nav-y: clamp(2rem, 1.6479rem + 1.5023vw, 3rem); /* 32 → 48 */
 
   /* Ritmo vertical */
   --section-y: clamp(3rem, 2.2958rem + 3.0047vw, 5rem); /* 48 → 80 */

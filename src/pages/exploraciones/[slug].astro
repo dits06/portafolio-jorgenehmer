@@ -1,0 +1,260 @@
+---
+/**
+ * Plantilla Exploración — Figma: 157:634 (desktop), 305:1345 (mobile) para 36 Days of Type;
+ * las otras 5 usan la misma estructura (ids en el documento de traspaso).
+ * 1. Volver · 2. Eyebrow, título y descripción · 3. Metadatos · 4. Galería
+ * 5. Anterior / siguiente · 6. Footer (BaseLayout)
+ */
+import { getCollection, getEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaseImage from '../../components/CaseImage.astro';
+import { allExplorationsHref } from '../../data/home';
+
+export async function getStaticPaths() {
+  const exploraciones = await getCollection('exploraciones');
+  return exploraciones.map((exploracion) => ({
+    params: { slug: exploracion.id },
+    props: { exploracion },
+  }));
+}
+
+const { exploracion } = Astro.props;
+const d = exploracion.data;
+const anterior = await getEntry(d.anterior);
+const siguiente = await getEntry(d.siguiente);
+
+const metadatos = [
+  { etiqueta: 'Año', valor: d.anio },
+  { etiqueta: 'Tipo', valor: d.tipo },
+  { etiqueta: 'Herramientas', valor: d.herramientas },
+];
+
+// Ancho de la galería: 1120 px desde 1248 px de viewport; antes, el ancho menos los márgenes.
+const sizesAncho = '(min-width: 1248px) 1120px, calc(100vw - 40px)';
+const sizesMitad = '(min-width: 1248px) 548px, (min-width: 768px) calc(50vw - 44px), calc(100vw - 40px)';
+---
+
+<BaseLayout title={d.titulo} description={d.descripcion}>
+  <article class="exploracion">
+    <!-- 1–3. Volver, encabezado y metadatos -->
+    <header class="bloque intro">
+      <div class="contenedor intro__contenido">
+        <a class="volver" href={allExplorationsHref}>← Exploraciones</a>
+        <p class="eyebrow">Exploraciones · {d.categoria}</p>
+        <h1 class="titulo">{d.titulo}</h1>
+        <p class="descripcion">{d.descripcion}</p>
+        <dl class="metadatos">
+          {
+            metadatos.map((m) => (
+              <div class="metadato">
+                <dt class="eyebrow">{m.etiqueta}</dt>
+                <dd>{m.valor}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </header>
+
+    <!-- 4. Galería -->
+    <section class="bloque galeria" aria-label="Galería">
+      <div class="contenedor galeria__contenido">
+        {
+          d.galeria.map((bloque, i) =>
+            bloque.formato === 'imagen' ? (
+              <figure class="pieza">
+                <CaseImage
+                  src={bloque.imagen}
+                  alt={bloque.alt ?? bloque.pie}
+                  sizes={sizesAncho}
+                  eager={i === 0}
+                />
+                <figcaption class="pie">{bloque.pie}</figcaption>
+              </figure>
+            ) : (
+              <div class:list={['columnas', `columnas--${bloque.formato}`]}>
+                {bloque.piezas.map((p) => (
+                  <figure class="pieza">
+                    <CaseImage src={p.imagen} alt={p.alt ?? p.pie} sizes={sizesMitad} />
+                    <figcaption class="pie">{p.pie}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            ),
+          )
+        }
+      </div>
+    </section>
+
+    <!-- 5. Navegación anterior / siguiente (en ciclo) -->
+    <nav class="bloque navegacion" aria-label="Otras exploraciones">
+      <div class="contenedor navegacion__contenido">
+        <a class="vecina" href={`/exploraciones/${anterior.id}`} rel="prev">
+          <span class="eyebrow">Anterior</span>
+          <span class="vecina__titulo"><span class="flecha" aria-hidden="true">← </span>{anterior.data.titulo}</span>
+        </a>
+        <a class="vecina vecina--siguiente" href={`/exploraciones/${siguiente.id}`} rel="next">
+          <span class="eyebrow">Siguiente</span>
+          <span class="vecina__titulo">{siguiente.data.titulo}<span class="flecha" aria-hidden="true"> →</span></span>
+        </a>
+      </div>
+    </nav>
+  </article>
+</BaseLayout>
+
+<style>
+  /* ---------- Contenedor: margen lateral del sitio y 1120 px máx. ---------- */
+  .bloque {
+    padding-inline: var(--page-gutter);
+  }
+
+  .contenedor {
+    max-width: var(--content-max);
+    margin-inline: auto;
+  }
+
+  /* ---------- 1–3. Intro ---------- */
+  .intro {
+    padding-top: var(--exp-intro-pt);
+    padding-bottom: var(--exp-intro-pb);
+  }
+
+  .intro__contenido {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--exp-intro-gap);
+  }
+
+  .volver {
+    color: var(--muted);
+    font-size: var(--text-label);
+    line-height: var(--leading-label);
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+  }
+
+  .volver:hover,
+  .volver:focus-visible {
+    text-decoration-line: underline;
+  }
+
+  .titulo {
+    font-size: var(--text-case);
+    line-height: var(--leading-case);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-case);
+  }
+
+  .descripcion {
+    max-width: var(--exp-description-max);
+    color: var(--ink-3);
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-body-lg);
+  }
+
+  .metadatos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-16) var(--exp-meta-gap);
+    margin: 0;
+    padding-top: var(--space-12);
+  }
+
+  .metadato {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .metadato dd {
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  /* ---------- 4. Galería ---------- */
+  .galeria {
+    padding-bottom: var(--exp-gallery-pb);
+  }
+
+  .galeria__contenido {
+    display: flex;
+    flex-direction: column;
+    gap: var(--exp-gallery-gap);
+  }
+
+  /* En mobile, pares y grillas se apilan en la misma columna de la galería */
+  .columnas {
+    display: contents;
+  }
+
+  .pieza {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    min-width: 0;
+  }
+
+  .pie {
+    color: var(--muted);
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+  }
+
+  /* ---------- 5. Navegación entre exploraciones ---------- */
+  .navegacion {
+    padding-block: var(--exp-nav-y);
+    background: var(--surface);
+  }
+
+  .navegacion__contenido {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-16);
+  }
+
+  .vecina {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    text-decoration: none;
+  }
+
+  .vecina--siguiente {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .vecina__titulo {
+    font-size: var(--text-exp-nav);
+    line-height: var(--leading-exp-nav);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-h4);
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  .vecina:hover .vecina__titulo,
+  .vecina:focus-visible .vecina__titulo {
+    text-decoration-line: underline;
+  }
+
+  /* En mobile, Figma muestra solo el nombre, sin flecha */
+  .flecha {
+    display: none;
+  }
+
+  /* ---------- Desktop ---------- */
+  @media (min-width: 768px) {
+    .columnas {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--exp-gallery-gap) var(--grid-col-gap);
+    }
+
+    .flecha {
+      display: inline;
+    }
+  }
+</style>

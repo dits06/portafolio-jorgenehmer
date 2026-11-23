@@ -5,11 +5,19 @@
  * Los filtros sin piezas no se muestran (documento de traspaso: Publicidad).
  */
 import { Picture } from 'astro:assets';
-import {
-  explorations,
-  explorationCategories,
-  allExplorationsHref,
-} from '../data/home';
+import { getCollection } from 'astro:content';
+import { explorationCategories, allExplorationsHref } from '../data/home';
+
+// Piezas desde la colección exploraciones, en el orden de Figma (campo `orden`).
+const explorations = (await getCollection('exploraciones'))
+  .sort((a, b) => a.data.orden - b.data.orden)
+  .map((e) => ({
+    slug: e.id,
+    title: e.data.titulo,
+    category: e.data.categoria,
+    year: e.data.anio,
+    image: e.data.card,
+  }));
 
 const categories = explorationCategories.filter((c) =>
   explorations.some((e) => e.category === c),

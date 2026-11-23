@@ -2,7 +2,7 @@
  * Content collections — documento de traspaso → "Campos de cada archivo MDX".
  * El cuerpo de cada caso (las secciones) va en el MDX; aquí va la cabecera.
  */
-import { defineCollection } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
@@ -62,4 +62,43 @@ const casos = defineCollection({
     }),
 });
 
-export const collections = { casos };
+/**
+ * Exploraciones — documento de traspaso → "Plantilla Exploración" y "Exploraciones".
+ * Toda la página sale de la cabecera; el cuerpo del MDX queda vacío.
+ */
+/** Mismo orden que los filtros del home (src/data/home.ts). */
+const categoriasExploracion = ['3D', 'Tipografía', 'Logos', 'UI', 'Publicidad'] as const;
+
+const exploraciones = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/exploraciones' }),
+  schema: ({ image }) => {
+    const pieza = z.object({ imagen: image(), pie: z.string(), alt: z.string().optional() });
+    return z.object({
+      titulo: z.string(),
+      categoria: z.enum(categoriasExploracion),
+      descripcion: z.string(),
+      anio: z.string(),
+      tipo: z.string(),
+      herramientas: z.string(),
+      /** Card del home (composición exportada como imagen única). */
+      card: image(),
+      /** Posición en la grilla del home (orden de Figma). */
+      orden: z.number().int(),
+      /**
+       * Galería, en orden. 'imagen': a todo el ancho; 'par': 2 lado a lado;
+       * 'grilla': 2 columnas en varias filas. En mobile todo va en una columna.
+       */
+      galeria: z.array(
+        z.discriminatedUnion('formato', [
+          pieza.extend({ formato: z.literal('imagen') }),
+          z.object({ formato: z.literal('par'), piezas: z.array(pieza).length(2) }),
+          z.object({ formato: z.literal('grilla'), piezas: z.array(pieza).min(2) }),
+        ]),
+      ),
+      anterior: reference('exploraciones'),
+      siguiente: reference('exploraciones'),
+    });
+  },
+});
+
+export const collections = { casos, exploraciones };
