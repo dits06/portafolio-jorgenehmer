@@ -1,0 +1,217 @@
+---
+/**
+ * Nav del sitio — Figma: desktop 1:33 (frame 1:2), mobile 103:303 (frame 103:302).
+ * En mobile los links van en un menú que abre el ícono de hamburguesa.
+ * El estado abierto del menú no está diseñado en Figma.
+ */
+import MenuIcon from '../assets/icons/menu.svg';
+import { site } from '../data/site';
+
+const links = [
+  { label: 'Proyectos', href: '/#proyectos' },
+  { label: 'Currículum', href: site.curriculum, external: true },
+];
+---
+
+<header class="site-nav" data-site-nav>
+  <a class="brand" href="/">
+    <span class="brand__name">{site.name}</span>
+    <span class="brand__role">{site.role}</span>
+  </a>
+
+  <nav class="links" aria-label="Principal">
+    <ul role="list">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              {...(link.external ? { target: '_blank', rel: 'noopener' } : {})}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <button
+    class="menu-button"
+    type="button"
+    aria-expanded="false"
+    aria-controls="menu-mobile"
+    data-menu-button
+  >
+    <MenuIcon aria-hidden="true" />
+    <span class="visually-hidden">Menú</span>
+  </button>
+
+  <nav class="menu" id="menu-mobile" aria-label="Principal" hidden data-menu>
+    <ul role="list">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              {...(link.external ? { target: '_blank', rel: 'noopener' } : {})}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .site-nav {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-16) var(--page-padding);
+    background: var(--surface);
+    color: var(--ink);
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+  }
+
+  .brand__name {
+    font-size: var(--text-sub);
+    line-height: var(--leading-sub);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-sub);
+  }
+
+  .brand__role {
+    font-size: var(--text-tagline);
+    line-height: var(--leading-tagline);
+    letter-spacing: var(--tracking-tagline);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a:not(.brand) {
+    text-decoration: none;
+    text-underline-offset: 0.2em;
+  }
+
+  a:not(.brand):hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+  }
+
+  /* Desktop: links en línea */
+  .links {
+    display: none;
+  }
+
+  .links ul {
+    display: flex;
+    gap: var(--space-25);
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-body-lg);
+    white-space: nowrap;
+  }
+
+  /* Mobile: hamburguesa */
+  .menu-button {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
+  .menu-button::before {
+    /* Área táctil de 44 px sin cambiar el tamaño visual del ícono */
+    content: '';
+    position: absolute;
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: var(--space-8) var(--page-padding) var(--space-24);
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .menu ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-body-lg);
+  }
+
+  .menu a {
+    display: block;
+    padding-block: var(--space-4);
+  }
+
+  @media (min-width: 768px) {
+    .links {
+      display: block;
+    }
+
+    .menu-button,
+    .menu {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  function setupMenu() {
+    const nav = document.querySelector<HTMLElement>('[data-site-nav]');
+    const button = nav?.querySelector<HTMLButtonElement>('[data-menu-button]');
+    const menu = nav?.querySelector<HTMLElement>('[data-menu]');
+    if (!nav || !button || !menu) return;
+
+    const setOpen = (open: boolean) => {
+      button.setAttribute('aria-expanded', String(open));
+      menu.hidden = !open;
+    };
+
+    button.addEventListener('click', () => {
+      setOpen(button.getAttribute('aria-expanded') !== 'true');
+    });
+
+    menu.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !menu.hidden) {
+        setOpen(false);
+        button.focus();
+      }
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!menu.hidden && !nav.contains(event.target as Node)) setOpen(false);
+    });
+  }
+
+  setupMenu();
+</script>

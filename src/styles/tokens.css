@@ -1,0 +1,136 @@
+/*
+ * Tokens del portafolio.
+ * Valores medidos en Figma (no hay variables definidas allí); ver
+ * docs/Portafolio jorgenehmer.com — Traspaso a código.md → "Fundamentos visuales".
+ *
+ * Los tamaños tipográficos y algunos espacios son fluidos: valen exactamente el
+ * valor mobile en 375 px y el valor desktop en 1440 px, e interpolan entre medio.
+ */
+
+:root {
+  /* ---------- Color ---------- */
+  --ink: #000000;
+  --ink-2: #1a1a1a;
+  --ink-3: #333333;
+  --muted: #737373;
+  --muted-2: #666666;
+  --line: #e5e5e5;
+  --surface: #f8f8f8;
+  --placeholder: #d9d9d9;
+  --paper: #ffffff;
+  --hero-bg-from: #000956;
+  --hero-bg-to: #0014bc;
+  --accent: #00b995;
+
+  /* ---------- Tipografía ---------- */
+  --font-sans: var(--font-tiktok-sans), system-ui, sans-serif;
+
+  --weight-regular: 400;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Hero del home: 34 → 56 / 38 → 62, Bold, -2% */
+  --text-hero: clamp(2.125rem, 1.6408rem + 2.0657vw, 3.5rem);
+  --leading-hero: clamp(2.375rem, 1.8468rem + 2.2535vw, 3.875rem);
+  --tracking-hero: -0.02em;
+
+  /* Título de caso: 32/37 → 48/55, Bold, -1.5% */
+  --text-case: clamp(2rem, 1.6479rem + 1.5023vw, 3rem);
+  --leading-case: clamp(2.3125rem, 1.9164rem + 1.6901vw, 3.4375rem);
+  --tracking-case: -0.015em;
+
+  /* Título de sección: 26/31 → 36/43, Bold, -1% */
+  --text-section: clamp(1.625rem, 1.4049rem + 0.939vw, 2.25rem);
+  --leading-section: clamp(1.9375rem, 1.6734rem + 1.1268vw, 2.6875rem);
+  --tracking-section: -0.01em;
+
+  /* Subtítulo: 20/26 → 24/31, SemiBold, -0.5% (Heading/H3 en Figma) */
+  --text-sub: clamp(1.25rem, 1.162rem + 0.3756vw, 1.5rem);
+  --leading-sub: clamp(1.625rem, 1.515rem + 0.4695vw, 1.9375rem);
+  --tracking-sub: -0.005em;
+
+  /* Título de card: 16/22 → 18/25, SemiBold */
+  --text-card-title: clamp(1rem, 0.956rem + 0.1878vw, 1.125rem);
+  --leading-card-title: clamp(1.375rem, 1.309rem + 0.2817vw, 1.5625rem);
+
+  /* Cuerpo largo: 16/26 → 18/29, Regular (Body/Large en Figma) */
+  --text-body-lg: clamp(1rem, 0.956rem + 0.1878vw, 1.125rem);
+  --leading-body-lg: clamp(1.625rem, 1.559rem + 0.2817vw, 1.8125rem);
+
+  /* Cuerpo: 15/24 → 16/26, Regular */
+  --text-body: clamp(0.9375rem, 0.9155rem + 0.0939vw, 1rem);
+  --leading-body: clamp(1.5rem, 1.456rem + 0.1878vw, 1.625rem);
+
+  /* Texto de card: 14/21 → 15/23, Regular */
+  --text-card: clamp(0.875rem, 0.853rem + 0.0939vw, 0.9375rem);
+  --leading-card: clamp(1.3125rem, 1.2685rem + 0.1878vw, 1.4375rem);
+
+  /* Eyebrow y pie de imagen: 12/16 → 13/18 */
+  --text-eyebrow: clamp(0.75rem, 0.728rem + 0.0939vw, 0.8125rem);
+  --leading-eyebrow: clamp(1rem, 0.956rem + 0.1878vw, 1.125rem);
+  --tracking-eyebrow: 1.3px;
+  --text-caption: var(--text-eyebrow);
+  --leading-caption: var(--leading-eyebrow);
+
+  /* Rol bajo el nombre en el nav ("UX/UI designer"): 15/25, tracking 25% */
+  --text-tagline: 0.9375rem;
+  --leading-tagline: 1.5625rem;
+  --tracking-tagline: 0.25em;
+
+  /* Footer: 12 px */
+  --text-legal: 0.75rem;
+
+  /* ---------- Espaciado y layout ---------- */
+  --space-4: 0.25rem;
+  --space-8: 0.5rem;
+  --space-10: 0.625rem;
+  --space-14: 0.875rem;
+  --space-16: 1rem;
+  --space-24: 1.5rem;
+  --space-25: 1.5625rem;
+  --space-48: 3rem;
+
+  /* Margen lateral de página: 20 px en 375 → 64 px en 1440 (home y nav) */
+  --page-padding: clamp(1.25rem, 0.2817rem + 4.1315vw, 4rem);
+  /* Ancho de contenido de casos y exploraciones */
+  --content-max: 70rem; /* 1120 px */
+  --case-nav-width: 13.75rem; /* 220 px */
+  --case-nav-gap: 6.25rem; /* 100 px */
+  --case-column: 50rem; /* 800 px */
+  --page-max: 90rem; /* 1440 px */
+
+  /* Ritmo vertical */
+  --section-y: clamp(3rem, 2.2958rem + 3.0047vw, 5rem); /* 48 → 80 */
+  --case-section-gap: clamp(5.5rem, 3.9155rem + 6.7606vw, 10rem); /* 88 → 160 */
+
+  /* Grillas del home */
+  --grid-col-gap: 1.5rem; /* 24 */
+  --grid-row-gap: 1rem; /* 16 */
+
+  /* Radios */
+  --radius-image: 1rem; /* 16 */
+
+  /* Iconos */
+  --icon-size: 1.5rem; /* 24 */
+
+  /* ---------- Movimiento ---------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-reveal: 500ms;
+  --duration-hover: 400ms;
+  --reveal-shift: 1rem; /* 16 px */
+  --reveal-stagger: 60ms;
+  --hover-scale: 1.03;
+
+  /* Breakpoints de referencia (en CSS se escriben literal en @media):
+     375 · 768 · 1024 · 1440 */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-reveal: 0ms;
+    --duration-hover: 0ms;
+    --reveal-shift: 0;
+    --reveal-stagger: 0ms;
+    --hover-scale: 1;
+  }
+}

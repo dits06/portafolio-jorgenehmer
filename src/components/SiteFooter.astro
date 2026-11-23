@@ -1,0 +1,84 @@
+---
+/**
+ * Footer del sitio — Figma: desktop 4:13 (frame 1:2), mobile 103:416 (frame 103:302).
+ */
+import MailIcon from '../assets/icons/mail.svg';
+import LinkedinIcon from '../assets/icons/linkedin.svg';
+import { site } from '../data/site';
+---
+
+<footer class="site-footer">
+  <p class="legal">2026 Jorge Nehmer</p>
+
+  <ul class="social" role="list">
+    <li>
+      <a class="icon-link" href={`mailto:${site.email}`}>
+        <span class="icon icon--mail"><MailIcon aria-hidden="true" /></span>
+        <span class="visually-hidden">Correo</span>
+      </a>
+    </li>
+    <li>
+      <a class="icon-link" href={site.linkedin} target="_blank" rel="me noopener">
+        <span class="icon"><LinkedinIcon aria-hidden="true" /></span>
+        <span class="visually-hidden">LinkedIn</span>
+      </a>
+    </li>
+  </ul>
+</footer>
+
+<style>
+  .site-footer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-16);
+    padding: var(--space-48) var(--page-padding);
+    color: var(--ink);
+  }
+
+  .legal {
+    font-size: var(--text-legal);
+    line-height: normal;
+    white-space: nowrap;
+  }
+
+  .social {
+    display: flex;
+    flex: 1 0 0;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--space-14);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .icon-link {
+    position: relative;
+    display: block;
+  }
+
+  .icon-link::before {
+    /* Área táctil de 44 px */
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 2.75rem;
+    height: 2.75rem;
+    transform: translate(-50%, -50%);
+  }
+
+  .icon {
+    position: relative;
+    display: block;
+    width: var(--icon-size);
+    height: var(--icon-size);
+  }
+
+  /* El sobre de charm:mail mide 20.25 × 15.75 dentro de su caja de 24 px:
+     se respeta la misma posición que en Figma. */
+  .icon--mail :global(svg) {
+    position: absolute;
+    left: 1.875px;
+    top: 4.875px;
+  }
+</style>
