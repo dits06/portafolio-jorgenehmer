@@ -94,7 +94,7 @@ export const explorations: Exploration[] = [
 ];
 
 /**
- * [Confirmar] destino de "Ver todas las exploraciones →": el mapa del sitio no
- * tiene una página de índice de exploraciones.
+ * Destino de "Ver todas las exploraciones →": el inicio de la sección
+ * Exploraciones del home (no hay página de índice de exploraciones).
  */
-export const allExplorationsHref = '/exploraciones';
+export const allExplorationsHref = '/#exploraciones';

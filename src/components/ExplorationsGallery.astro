@@ -56,7 +56,7 @@ const categories = explorationCategories.filter((c) =>
 
   <p class="status visually-hidden" aria-live="polite" data-status></p>
 
-  <a class="all-link" href={allExplorationsHref}>Ver todas las exploraciones →</a>
+  <a class="all-link" href={allExplorationsHref} data-all-link>Ver todas las exploraciones →</a>
 </div>
 
 <style>
@@ -164,6 +164,9 @@ const categories = explorationCategories.filter((c) =>
     };
 
     for (const b of buttons) b.addEventListener('click', () => apply(b.dataset.filter ?? 'todo'));
+
+    // "Ver todas las exploraciones" lleva al inicio de la sección y quita el filtro activo.
+    root.querySelector('[data-all-link]')?.addEventListener('click', () => apply('todo'));
   }
 
   document.querySelectorAll<HTMLElement>('[data-gallery]').forEach(setupGallery);
