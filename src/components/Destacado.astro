@@ -1,0 +1,83 @@
+---
+/**
+ * Destacado del Diseño final — Figma: 9:78 / 9:89 / 9:100 (desktop), 104:219… (mobile).
+ * Desktop: texto + mockup de 440 × 560 con 96 px entre sí, alternando el lado.
+ * Mobile: siempre texto arriba e imagen debajo (24 px).
+ */
+import CaseImage from './CaseImage.astro';
+
+interface Props {
+  eyebrow: string;
+  titulo: string;
+  texto: string;
+  imagen: ImageMetadata;
+  alt: string;
+  /** Imagen a la izquierda en desktop. */
+  invertido?: boolean;
+}
+
+const { eyebrow, titulo, texto, imagen, alt, invertido = false } = Astro.props;
+---
+
+<article class:list={['destacado', { 'destacado--invertido': invertido }]}>
+  <div class="destacado__texto">
+    <p class="eyebrow">{eyebrow}</p>
+    <h3 class="destacado__titulo">{titulo}</h3>
+    <p class="destacado__cuerpo">{texto}</p>
+  </div>
+  <CaseImage
+    class="destacado__imagen"
+    src={imagen}
+    alt={alt}
+    ratio="440 / 560"
+    sizes="(min-width: 1024px) 440px, calc(100vw - 40px)"
+  />
+</article>
+
+<style>
+  .destacado {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-24);
+  }
+
+  .destacado__texto {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .destacado__titulo {
+    font-size: var(--text-sub);
+    line-height: var(--leading-sub);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-sub);
+  }
+
+  .destacado__cuerpo {
+    color: var(--ink-3);
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-body-lg);
+  }
+
+  @media (min-width: 1024px) {
+    .destacado {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--case-highlights-gap);
+    }
+
+    .destacado__texto {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .destacado :global(.destacado__imagen) {
+      flex: 0 0 27.5rem; /* 440 px, ancho del placeholder en Figma */
+    }
+
+    .destacado--invertido {
+      flex-direction: row-reverse;
+    }
+  }
+</style>

@@ -98,6 +98,16 @@ button {
   border: 0;
 }
 
+/* Overline de Figma: eyebrows de sección, metadatos, "Decisión 01"… */
+.eyebrow {
+  color: var(--muted);
+  font-size: var(--text-eyebrow);
+  line-height: var(--leading-eyebrow);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+}
+
 .skip-link {
   position: absolute;
   left: var(--space-16);

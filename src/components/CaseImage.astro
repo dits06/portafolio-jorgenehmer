@@ -1,0 +1,69 @@
+---
+/**
+ * Imagen de los casos: <picture> con AVIF y WebP generados por Astro
+ * (mismo patrón que ProjectCard). El PNG de origen está exportado en ×2.
+ * La proporción la fija el contenedor con `ratio` (ancho / alto de Figma).
+ */
+import { getImage } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  /** Atributo sizes; por defecto, el ancho de la columna del caso. */
+  sizes?: string;
+  /** Proporción del placeholder en Figma, p. ej. "800 / 450". */
+  ratio?: string;
+  eager?: boolean;
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  sizes = '(min-width: 1440px) 800px, (min-width: 1024px) calc(100vw - 640px), calc(100vw - 40px)',
+  ratio = `${src.width} / ${src.height}`,
+  eager = false,
+  class: className,
+} = Astro.props;
+
+const candidateWidths = [160, 320, 400, 640, 800, 1120, 1440, 1600, 2240, 2880];
+const widths = candidateWidths.filter((w) => w < src.width).concat(src.width);
+
+const sources = await Promise.all(
+  (['avif', 'webp'] as const).map(async (format) => {
+    const out = await getImage({ src, format, widths });
+    return { type: `image/${format}`, srcset: out.srcSet.attribute };
+  }),
+);
+const fallback = await getImage({ src, format: 'webp', width: Math.min(1600, src.width) });
+---
+
+<div class:list={['case-image', className]} style={`--ratio: ${ratio}`}>
+  <picture>
+    {sources.map((s) => <source type={s.type} srcset={s.srcset} sizes={sizes} />)}
+    <img
+      src={fallback.src}
+      width={src.width}
+      height={src.height}
+      alt={alt}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : undefined}
+      decoding="async"
+    />
+  </picture>
+</div>
+
+<style>
+  .case-image {
+    overflow: hidden;
+    aspect-ratio: var(--ratio);
+    border-radius: var(--radius-thumb);
+    background: var(--placeholder);
+  }
+
+  .case-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

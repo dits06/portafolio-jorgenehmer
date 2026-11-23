@@ -1,0 +1,85 @@
+---
+/**
+ * Card/Numerada — Figma: componente 35:305.
+ * Número (o pregunta corta), título y descripción sobre --surface.
+ * Con `imagen`, la imagen va pegada arriba (fuentes de Investigación).
+ */
+import CaseImage from './CaseImage.astro';
+
+interface Props {
+  numero?: string;
+  titulo: string;
+  texto: string;
+  imagen?: ImageMetadata;
+  alt?: string;
+  /** Proporción de la imagen en Figma. */
+  ratio?: string;
+}
+
+const { numero, titulo, texto, imagen, alt, ratio = '392 / 200' } = Astro.props;
+---
+
+<article class:list={['card-numerada', { 'card-numerada--imagen': imagen }]}>
+  {
+    imagen && (
+      <CaseImage
+        class="card-numerada__imagen"
+        src={imagen}
+        alt={alt ?? titulo}
+        ratio={ratio}
+        sizes="(min-width: 1440px) 392px, (min-width: 768px) calc(50vw - 328px), calc(100vw - 40px)"
+      />
+    )
+  }
+  <div class="card-numerada__cuerpo">
+    {numero && <p class="card-numerada__numero">{numero}</p>}
+    <h4 class="card-numerada__titulo">{titulo}</h4>
+    <p class="card-numerada__texto">{texto}</p>
+  </div>
+</article>
+
+<style>
+  .card-numerada {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--radius-thumb);
+    background: var(--surface);
+  }
+
+  .card-numerada__imagen {
+    border-radius: 0;
+  }
+
+  .card-numerada__cuerpo {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    gap: var(--space-8);
+    padding: var(--space-24);
+  }
+
+  .card-numerada__numero {
+    color: var(--muted);
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+  }
+
+  .card-numerada__titulo {
+    font-size: var(--text-card-title);
+    line-height: var(--leading-card-title);
+    font-weight: var(--weight-semibold);
+  }
+
+  /* En Figma el título se estira y empuja la descripción al fondo de la card
+     cuando las cards de la fila tienen alturas distintas. */
+  .card-numerada--imagen .card-numerada__titulo {
+    flex: 1 0 auto;
+  }
+
+  .card-numerada__texto {
+    color: var(--muted-2);
+    font-size: var(--text-card);
+    line-height: var(--leading-card);
+  }
+</style>

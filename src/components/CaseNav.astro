@@ -1,0 +1,127 @@
+---
+/**
+ * Nav lateral del caso — Figma: 11:342, ítems Nav/Item (8:46, Activo / Inactivo).
+ * Fijo mientras se recorre el cuerpo; marca la sección visible
+ * (documento de traspaso → Animaciones → "Sección activa").
+ * El scroll suave lo da `scroll-behavior` en global.css, que ya respeta
+ * prefers-reduced-motion. Solo desktop: en mobile el nav desaparece.
+ */
+interface Props {
+  secciones: { id: string; titulo: string }[];
+}
+
+const { secciones } = Astro.props;
+---
+
+<nav class="case-nav" aria-labelledby="case-nav-titulo" data-case-nav>
+  <p class="eyebrow" id="case-nav-titulo">En este caso</p>
+  <ul role="list">
+    {
+      secciones.map((s, i) => (
+        <li>
+          <a href={`#${s.id}`} aria-current={i === 0 ? 'true' : undefined} data-case-nav-link={s.id}>
+            {s.titulo}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<script>
+  function initCaseNav() {
+    const nav = document.querySelector<HTMLElement>('[data-case-nav]');
+    if (!nav) return;
+
+    const links = new Map<string, HTMLAnchorElement>();
+    nav.querySelectorAll<HTMLAnchorElement>('[data-case-nav-link]').forEach((a) => {
+      links.set(a.dataset.caseNavLink!, a);
+    });
+
+    const setActive = (id: string) => {
+      links.forEach((a, key) => {
+        if (key === id) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+    };
+
+    const sections = [...links.keys()]
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    // La sección activa es la que cruza una franja a ~35 % del alto de la ventana.
+    const visible = new Set<string>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) visible.add(e.target.id);
+          else visible.delete(e.target.id);
+        });
+        const current = sections.find((s) => visible.has(s.id));
+        if (current) setActive(current.id);
+      },
+      { rootMargin: '-35% 0px -60% 0px' },
+    );
+    sections.forEach((s) => observer.observe(s));
+
+    // Al hacer clic, marcar de inmediato (sin esperar al scroll).
+    links.forEach((a, id) => a.addEventListener('click', () => setActive(id)));
+  }
+
+  initCaseNav();
+</script>
+
+<style>
+  .case-nav {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .case-nav {
+      position: sticky;
+      top: var(--space-48);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      align-self: start;
+    }
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    padding-block: var(--space-6);
+    color: var(--muted-4);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  /* Indicador de 2 × 20 px */
+  a::before {
+    content: '';
+    flex: none;
+    width: 2px;
+    height: var(--space-20);
+    background: var(--placeholder);
+  }
+
+  a:hover {
+    color: var(--ink);
+  }
+
+  a[aria-current='true'] {
+    color: var(--ink);
+    font-weight: var(--weight-semibold);
+  }
+
+  a[aria-current='true']::before {
+    background: var(--ink);
+  }
+</style>

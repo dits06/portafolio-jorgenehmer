@@ -1,0 +1,361 @@
+---
+/**
+ * Plantilla Caso — Figma: 8:10 (desktop), 104:175 (mobile) para Registro y verificación.
+ * 1. Portada · 2. Título y bajada · 3. Intro · 4. Diseño final (3 destacados)
+ * 5. Cuerpo con nav lateral · 6. Siguientes casos · 7. Footer (BaseLayout)
+ */
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaseImage from '../../components/CaseImage.astro';
+import Metrica from '../../components/Metrica.astro';
+import Metricas from '../../components/Metricas.astro';
+import Destacado from '../../components/Destacado.astro';
+import CaseNav from '../../components/CaseNav.astro';
+
+export async function getStaticPaths() {
+  const casos = await getCollection('casos');
+  return casos.map((caso) => ({ params: { slug: caso.id }, props: { caso } }));
+}
+
+const { caso } = Astro.props;
+const { Content } = await render(caso);
+const d = caso.data;
+---
+
+<BaseLayout title={d.nombre} description={d.bajada}>
+  <article class="caso">
+    <!-- 1. Portada a todo el ancho -->
+    <CaseImage
+      class="portada"
+      src={d.portada}
+      alt={d.portadaAlt}
+      ratio="1440 / 703"
+      sizes="100vw"
+      eager
+    />
+
+    <!-- 2. Título y bajada -->
+    <header class="encabezado">
+      <h1 class="encabezado__titulo">{d.titulo}</h1>
+      <p class="encabezado__bajada">{d.bajada}</p>
+    </header>
+
+    <!-- 3. Intro: metadatos, Resumen + Qué hice, En números -->
+    <section class="bloque intro" aria-label="Resumen del proyecto">
+      <div class="contenedor intro__contenido">
+        <dl class="metadatos">
+          {
+            d.metadatos.map((m) => (
+              <div class="metadato">
+                <dt class="eyebrow">{m.etiqueta}</dt>
+                <dd>{m.valor}</dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        <hr class="divisor" />
+
+        <div class="resumen">
+          <div class="resumen__col">
+            <h2 class="subtitulo">Resumen</h2>
+            <p class="texto-largo">{d.resumen}</p>
+          </div>
+          <div class="resumen__col">
+            <h2 class="subtitulo">Qué hice</h2>
+            <ul class="texto-largo lista">
+              {d.queHice.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        </div>
+
+        <div class="numeros">
+          <h2 class="eyebrow">{d.metricas.eyebrow}</h2>
+          <Metricas>
+            {d.metricas.items.map((m) => <Metrica valor={m.valor} descripcion={m.descripcion} />)}
+          </Metricas>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Diseño final: 3 destacados que alternan imagen y texto -->
+    <section class="bloque destacados" aria-labelledby="destacados-titulo">
+      <div class="contenedor destacados__contenido">
+        <header class="titulo-bloque">
+          <p class="eyebrow">{d.destacados.eyebrow}</p>
+          <h2 class="titulo-seccion" id="destacados-titulo">{d.destacados.titulo}</h2>
+        </header>
+        {
+          d.destacados.items.map((item, i) => (
+            <Destacado
+              eyebrow={item.eyebrow}
+              titulo={item.titulo}
+              texto={item.texto}
+              imagen={item.imagen}
+              alt={item.alt}
+              invertido={i % 2 === 1}
+            />
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- 5. Cuerpo: nav lateral fijo + secciones del MDX -->
+    <div class="cuerpo">
+      <div class="contenedor cuerpo__grilla">
+        <CaseNav secciones={d.secciones} />
+        <div class="cuerpo__contenido">
+          <Content />
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Siguientes casos -->
+    <section class="bloque siguientes" aria-labelledby="siguientes-titulo">
+      <div class="contenedor siguientes__contenido">
+        <header class="titulo-bloque">
+          <p class="eyebrow">Más proyectos</p>
+          <h2 class="titulo-seccion" id="siguientes-titulo">Siguientes casos</h2>
+        </header>
+        <ul class="siguientes__cards" role="list">
+          {
+            d.siguientes.map((s) => (
+              <li>
+                <a class="siguiente" href={`/casos/${s.slug}`}>
+                  <CaseImage
+                    class="siguiente__imagen"
+                    src={s.imagen}
+                    alt=""
+                    ratio="357 / 240"
+                    sizes="(min-width: 1440px) 357px, (min-width: 768px) calc((100vw - 176px) / 3), calc(100vw - 40px)"
+                  />
+                  <h3 class="siguiente__titulo">{s.titulo}</h3>
+                  <p class="siguiente__texto">{s.texto}</p>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  /* ---------- Contenedor: margen lateral del sitio y 1120 px máx. ---------- */
+  .bloque,
+  .cuerpo {
+    padding-inline: var(--page-gutter);
+  }
+
+  .contenedor {
+    max-width: var(--content-max);
+    margin-inline: auto;
+  }
+
+  .bloque {
+    padding-block: var(--section-y);
+  }
+
+  .titulo-seccion {
+    font-size: var(--text-section);
+    line-height: var(--leading-section);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-section);
+  }
+
+  .subtitulo {
+    font-size: var(--text-sub);
+    line-height: var(--leading-sub);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-sub);
+  }
+
+  .texto-largo {
+    color: var(--ink-3);
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-body-lg);
+  }
+
+  .titulo-bloque {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  /* ---------- 1. Portada ---------- */
+  .caso :global(.portada) {
+    border-radius: 0;
+  }
+
+  /* ---------- 2. Título y bajada ---------- */
+  .encabezado {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+    padding: var(--space-24) var(--page-gutter);
+  }
+
+  .encabezado__titulo {
+    font-size: var(--text-case);
+    line-height: var(--leading-case);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-case);
+  }
+
+  /* ---------- 3. Intro ---------- */
+  .intro__contenido {
+    display: flex;
+    flex-direction: column;
+    gap: var(--case-intro-gap);
+  }
+
+  .metadatos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-20) var(--space-16);
+    margin: 0;
+  }
+
+  .metadato {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .metadato dd {
+    margin: 0;
+  }
+
+  .divisor {
+    width: 100%;
+    height: 1px;
+    margin: 0;
+    border: 0;
+    background: var(--divider);
+  }
+
+  .resumen {
+    display: grid;
+    gap: var(--resumen-gap);
+  }
+
+  .resumen__col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+  }
+
+  .lista {
+    margin: 0;
+    padding-left: var(--list-indent);
+  }
+
+  .numeros {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-20);
+  }
+
+  /* ---------- 4. Diseño final ---------- */
+  .destacados__contenido {
+    display: flex;
+    flex-direction: column;
+    gap: var(--case-highlights-gap);
+  }
+
+  /* ---------- 5. Cuerpo ---------- */
+  .cuerpo {
+    padding-block: var(--case-body-y);
+  }
+
+  .cuerpo__contenido {
+    display: flex;
+    flex-direction: column;
+    gap: var(--case-section-gap);
+    min-width: 0;
+  }
+
+  /* ---------- 6. Siguientes casos ---------- */
+  .siguientes {
+    background: var(--surface);
+  }
+
+  .siguientes__contenido {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-32);
+  }
+
+  .siguientes__cards {
+    display: grid;
+    gap: var(--space-24);
+  }
+
+  .siguiente {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    text-decoration: none;
+  }
+
+  .siguiente :global(img) {
+    transition: transform var(--duration-hover) var(--ease-out);
+  }
+
+  .siguiente__titulo {
+    font-size: var(--text-sub);
+    line-height: var(--leading-sub);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-sub);
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  .siguiente__texto {
+    color: var(--muted-2);
+  }
+
+  /* Hover de cards (documento de traspaso → Animaciones) */
+  .siguiente:hover :global(img),
+  .siguiente:focus-visible :global(img) {
+    transform: scale(var(--hover-scale));
+  }
+
+  .siguiente:hover .siguiente__titulo,
+  .siguiente:focus-visible .siguiente__titulo {
+    text-decoration-line: underline;
+  }
+
+  /* ---------- Desktop ---------- */
+  @media (min-width: 768px) {
+    .encabezado {
+      align-items: center;
+      text-align: center;
+    }
+
+    .metadatos {
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(0, 1fr);
+      grid-template-columns: none;
+      gap: var(--space-32);
+    }
+
+    .resumen {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .siguientes__cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .cuerpo__grilla {
+      display: grid;
+      grid-template-columns: var(--case-nav-width) minmax(0, var(--case-column));
+      justify-content: space-between;
+      column-gap: var(--case-nav-gap);
+    }
+  }
+</style>

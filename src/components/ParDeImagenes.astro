@@ -1,0 +1,70 @@
+---
+/**
+ * Par de imágenes con pie, lado a lado (16 px).
+ * `apilarEnMobile`: en mobile van una bajo la otra (wireframes de alternativas);
+ * si no, siguen en 2 columnas (antes y después).
+ * `titulo` opcional arriba (Card/Title en --ink-2, 12 px de separación).
+ */
+import ImagenConPie from './ImagenConPie.astro';
+
+interface Imagen {
+  src: ImageMetadata;
+  pie: string;
+  alt?: string;
+}
+
+interface Props {
+  a: Imagen;
+  b: Imagen;
+  titulo?: string;
+  ratio?: string;
+  apilarEnMobile?: boolean;
+  tamanoPie?: 'normal' | 'chico';
+}
+
+const { a, b, titulo, ratio = '392 / 480', apilarEnMobile = false, tamanoPie = 'chico' } = Astro.props;
+const sizes = apilarEnMobile
+  ? '(min-width: 1440px) 392px, (min-width: 768px) calc(50vw - 328px), calc(100vw - 40px)'
+  : '(min-width: 1440px) 392px, (min-width: 768px) calc(50vw - 328px), calc(50vw - 28px)';
+---
+
+<div class="par">
+  {titulo && <h4 class="par__titulo">{titulo}</h4>}
+  <div class:list={['par__imagenes', { 'par__imagenes--apilar': apilarEnMobile }]}>
+    {[a, b].map((img) => (
+      <ImagenConPie src={img.src} pie={img.pie} alt={img.alt} ratio={ratio} sizes={sizes} tamanoPie={tamanoPie} />
+    ))}
+  </div>
+</div>
+
+<style>
+  .par {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .par__titulo {
+    color: var(--ink-2);
+    font-size: var(--text-card-title);
+    line-height: var(--leading-card-title);
+    font-weight: var(--weight-semibold);
+  }
+
+  .par__imagenes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-16);
+  }
+
+  .par__imagenes--apilar {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-20);
+  }
+
+  @media (min-width: 768px) {
+    .par__imagenes--apilar {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

@@ -1,0 +1,70 @@
+---
+/**
+ * Sección del cuerpo de un caso — Figma: "Sección — …" (10:25 en adelante).
+ * Eyebrow + título (H2) y el contenido, todo con 24 px entre sí.
+ * El `id` es el ancla del nav lateral; el eyebrow es el texto del ítem.
+ */
+interface Props {
+  id: string;
+  eyebrow: string;
+  titulo: string;
+}
+
+const { id, eyebrow, titulo } = Astro.props;
+---
+
+<section class="case-section" id={id} aria-labelledby={`${id}-titulo`} data-case-section>
+  <p class="eyebrow">{eyebrow}</p>
+  <h2 class="case-section__titulo" id={`${id}-titulo`}>{titulo}</h2>
+  <slot />
+</section>
+
+<style>
+  .case-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-24);
+    /* Deja aire arriba al saltar desde el nav lateral */
+    scroll-margin-top: var(--space-48);
+  }
+
+  .case-section__titulo {
+    font-size: var(--text-section);
+    line-height: var(--leading-section);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-section);
+  }
+
+  /* Texto de la sección (Body/Large, máx. 720 px) */
+  .case-section > :global(p:not([class])) {
+    max-width: 45rem;
+    color: var(--ink-3);
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-body-lg);
+  }
+
+  /* Subtítulos dentro de la sección ("Por qué importa", "Hallazgos clave"…) */
+  .case-section :global(h3:not([class])) {
+    font-size: var(--text-h4);
+    line-height: var(--leading-h4);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-h4);
+  }
+
+  /* Grupo de bloques con más aire entre sí (alternativas exploradas: 40 px) */
+  .case-section > :global(.grupo) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-40);
+  }
+
+  .case-section > :global(ol),
+  .case-section > :global(ul) {
+    max-width: 45rem;
+    margin: 0;
+    padding-left: var(--list-indent);
+    color: var(--ink-3);
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-body-lg);
+  }
+</style>

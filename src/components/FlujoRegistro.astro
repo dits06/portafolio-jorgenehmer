@@ -1,0 +1,383 @@
+---
+/**
+ * Flujo de registro — Figma: 246:981 (desktop), 251:981 (mobile).
+ * Pasos numerados sobre un riel vertical, agrupados por etapa, con las
+ * decisiones (elegida / omitir) ramificadas. HTML y CSS, sin imagen.
+ * Desktop: la etapa va a la izquierda y las opciones a la derecha del paso.
+ * Mobile: la etapa va arriba de su primer paso y las opciones debajo.
+ */
+interface Opcion {
+  etiqueta: string;
+  numero?: string;
+  texto: string;
+  elegida?: boolean;
+}
+
+interface Paso {
+  numero: string;
+  texto: string;
+  /** Nombre de la etapa que empieza en este paso. */
+  etapa?: string;
+  detalle?: string;
+  tipo?: 'decision' | 'final';
+  opciones?: Opcion[];
+}
+
+interface Props {
+  pasos: Paso[];
+  nota: string;
+  /** "Ver flujo completo": solo se muestra si hay destino. */
+  enlace?: { texto: string; href?: string };
+}
+
+const { pasos, nota, enlace } = Astro.props;
+---
+
+<figure class="flujo">
+  <ol class="flujo__pasos" role="list">
+    {
+      pasos.map((paso) => (
+        <li class:list={['paso', paso.tipo && `paso--${paso.tipo}`, { 'paso--etapa': paso.etapa }]}>
+          {paso.etapa && <span class="paso__etapa">{paso.etapa}</span>}
+          <span class="paso__punto" aria-hidden="true" />
+          <span class="paso__numero">{paso.numero}</span>
+          <span class="paso__texto">{paso.texto}</span>
+          {paso.detalle && <span class="paso__detalle">{paso.detalle}</span>}
+          {paso.opciones && (
+            <ul class="opciones" role="list">
+              {paso.opciones.map((op) => (
+                <li class:list={['opcion', op.elegida ? 'opcion--elegida' : 'opcion--omitir']}>
+                  <span class="opcion__etiqueta">{op.etiqueta}</span>
+                  <span class="opcion__valor">
+                    {op.numero && <span class="opcion__numero">{op.numero}</span>}
+                    <span>{op.texto}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+
+  <figcaption class="flujo__pie">
+    <span class="flujo__nota">{nota}</span>
+    {enlace?.href && <a class="flujo__enlace" href={enlace.href}>{enlace.texto}</a>}
+  </figcaption>
+</figure>
+
+<style>
+  .flujo {
+    --fila: 1.25rem; /* alto de cada línea de paso: 20 px */
+    --riel-x: var(--space-8); /* centro del riel */
+    --riel-top: calc(var(--fila) * 1.5 + 1.125rem); /* etapa + 18 px + medio paso */
+
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-20) var(--space-16);
+    border-radius: var(--radius-thumb);
+    background: var(--surface);
+    color: var(--diagram-text);
+    line-height: var(--fila);
+  }
+
+  .flujo__pasos {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16); /* filas cada 36 px */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Riel: del primer punto al último */
+  .flujo__pasos::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--riel-x) - 0.75px);
+    top: var(--riel-top);
+    bottom: calc(var(--fila) / 2);
+    border-left: 1.5px solid var(--diagram-line);
+  }
+
+  .paso {
+    display: grid;
+    grid-template-columns: 1rem 1.75rem minmax(0, 1fr);
+    grid-template-areas:
+      'etapa etapa etapa'
+      'punto numero texto'
+      '. . detalle'
+      'opciones opciones opciones';
+    align-items: center;
+  }
+
+  .paso--etapa:not(:first-child) {
+    margin-top: var(--space-6); /* 16 + 6 = 22 antes de una etapa nueva */
+  }
+
+  .paso__etapa {
+    grid-area: etapa;
+    margin-bottom: 1.125rem;
+    padding-left: var(--space-24);
+    font-size: var(--text-diagram-md);
+    font-weight: var(--weight-semibold);
+  }
+
+  .paso__punto {
+    grid-area: punto;
+    position: relative;
+    justify-self: center;
+    width: 0.5625rem; /* 9 */
+    height: 0.5625rem;
+    border: 1.5px solid var(--diagram-dot-soft);
+    border-radius: 50%;
+    background: var(--paper);
+  }
+
+  .paso--decision .paso__punto,
+  .paso--final .paso__punto {
+    width: 0.875rem; /* 14 + aro de 3 px del color de fondo */
+    height: 0.875rem;
+    border: 0;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--surface);
+  }
+
+  .paso--final .paso__punto {
+    background: var(--ink-2);
+  }
+
+  .paso__numero {
+    grid-area: numero;
+    padding-left: var(--space-8);
+    color: var(--diagram-muted);
+    font-size: var(--text-diagram-sm);
+    font-weight: var(--weight-medium);
+  }
+
+  .paso__texto {
+    grid-area: texto;
+    font-size: var(--text-diagram);
+    font-weight: var(--weight-medium);
+  }
+
+  .paso--decision .paso__texto,
+  .paso--final .paso__texto {
+    font-weight: var(--weight-semibold);
+  }
+
+  .paso__detalle {
+    grid-area: detalle;
+    margin-top: calc(var(--space-4) * -1);
+    color: var(--diagram-muted);
+    font-size: var(--text-diagram-sm);
+    line-height: 1rem;
+  }
+
+  /* ---------- Opciones de una decisión ---------- */
+  .opciones {
+    --rama: var(--space-16); /* tramo horizontal hasta la caja */
+    --sep: var(--space-8);
+
+    grid-area: opciones;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sep);
+    margin: var(--sep) 0 0 4.25rem; /* 68 */
+    padding: 0;
+    list-style: none;
+  }
+
+  .opcion {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-8) var(--space-12);
+    border: 1.5px solid var(--accent);
+    border-radius: var(--space-8);
+    background: var(--paper);
+    line-height: normal;
+  }
+
+  .opcion--omitir {
+    border: 1.5px dashed var(--diagram-dash);
+    background: var(--surface);
+    color: var(--diagram-muted);
+  }
+
+  .opcion__etiqueta {
+    color: var(--diagram-muted);
+    font-size: var(--text-diagram-xs);
+  }
+
+  .opcion__valor {
+    display: flex;
+    gap: var(--space-8);
+    font-size: var(--text-diagram);
+    font-weight: var(--weight-medium);
+  }
+
+  .opcion__numero {
+    color: var(--diagram-muted);
+    font-size: var(--text-diagram-sm);
+  }
+
+  .opcion--elegida .opcion__numero {
+    color: var(--ink-2);
+    font-size: var(--text-diagram);
+  }
+
+  /* Ramas (mobile): baja desde el paso hasta el centro de cada caja */
+  .opcion::after {
+    content: '';
+    position: absolute;
+    left: calc(var(--rama) * -1 - 1.5px);
+    top: calc(var(--sep) * -1 - 1.5px);
+    width: var(--rama);
+    height: calc(50% + var(--sep) + 0.75px);
+    border-left: 1.5px solid var(--diagram-line);
+    border-bottom: 1.5px solid var(--diagram-line);
+  }
+
+  .opcion--elegida::after {
+    border-color: var(--accent);
+  }
+
+  .opcion:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--rama) * -1 - 1.5px);
+    top: 50%;
+    height: calc(50% + var(--sep) + 1.5px);
+    border-left: 1.5px solid var(--diagram-line);
+  }
+
+  /* ---------- Pie ---------- */
+  .flujo__pie {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+    margin-top: 1.375rem; /* 22 */
+    padding-top: var(--space-16);
+    border-top: 1px solid var(--diagram-rule);
+    line-height: normal;
+  }
+
+  .flujo__nota {
+    color: var(--diagram-muted);
+    font-size: var(--text-diagram-xs);
+  }
+
+  .flujo__enlace {
+    color: var(--ink-2);
+    font-size: var(--text-diagram-sm);
+    font-weight: var(--weight-medium);
+    text-underline-offset: 0.15em;
+  }
+
+  /* ---------- Desktop ---------- */
+  @media (min-width: 768px) {
+    .flujo {
+      --riel-x: 10rem; /* 148 + 12 */
+      --riel-top: calc(var(--fila) / 2);
+
+      padding: 2.8125rem var(--space-32) var(--space-24); /* 45 arriba */
+    }
+
+    .flujo__pasos {
+      gap: var(--space-20);
+    }
+
+    .paso {
+      grid-template-columns: 9.25rem 1.5rem 2rem auto minmax(0, 1fr);
+      grid-template-areas: 'etapa punto numero texto extra';
+    }
+
+    .paso--etapa:not(:first-child) {
+      margin-top: var(--space-24); /* 20 + 24 = 44 */
+    }
+
+    .paso__etapa {
+      margin: 0;
+      padding: 0;
+    }
+
+    .paso__detalle {
+      grid-area: extra;
+      margin: 0 0 0 var(--space-8);
+      line-height: var(--fila);
+    }
+
+    .opciones {
+      --rama: 1.625rem; /* 26 */
+      --sep: var(--space-13);
+
+      position: relative;
+      grid-area: extra;
+      align-self: center;
+      align-items: flex-start; /* cada caja al ancho de su texto */
+      margin: 0 0 0 var(--space-14);
+      padding-left: 3.9375rem; /* 37 + 26 */
+    }
+
+    /* Tramo del paso a la bifurcación (37 px) */
+    .opciones::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: calc(50% - 0.75px);
+      width: 2.3125rem;
+      border-top: 1.5px solid var(--accent);
+    }
+
+    .opcion {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-8);
+      padding: var(--space-6) var(--space-12);
+      white-space: nowrap;
+    }
+
+    .opcion__valor {
+      align-items: baseline;
+    }
+
+    .opcion--elegida .opcion__numero {
+      color: var(--diagram-muted);
+      font-size: var(--text-diagram-sm);
+    }
+
+    .opcion::before {
+      content: none !important;
+    }
+
+    /* Primera opción: sube desde la bifurcación (⌐) */
+    .opcion:first-child::after {
+      top: calc(50% - 0.75px);
+      height: calc(50% + var(--sep) / 2 + 1.5px);
+      border-bottom: 0;
+      border-top: 1.5px solid var(--diagram-line);
+    }
+
+    .opcion--elegida:first-child::after {
+      border-color: var(--accent);
+    }
+
+    /* Última opción: baja desde la bifurcación (L) */
+    .opcion:last-child::after {
+      top: calc(var(--sep) / -2 - 1.5px);
+      height: calc(50% + var(--sep) / 2 + 0.75px);
+    }
+
+    .flujo__pie {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-top: 1.875rem; /* 30 */
+      padding-top: 1.0625rem; /* 17 */
+    }
+  }
+</style>

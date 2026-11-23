@@ -1,0 +1,52 @@
+---
+/**
+ * Grilla de cards o imágenes del cuerpo de un caso (una "fila" de Figma).
+ * `columnas`: columnas desde 768 px. `columnasMobile`: en 375 px
+ * (1 por defecto: "en mobile todas las columnas se apilan").
+ * `separacion`: entre columnas (16 o 24). `separacionFilas`: entre filas
+ * cuando la grilla se parte en varias (por defecto, igual a `separacion`).
+ */
+interface Props {
+  columnas: 2 | 3 | 4;
+  columnasMobile?: 1 | 2;
+  separacion?: 16 | 24;
+  separacionFilas?: 16 | 20 | 24;
+  /** 'stretch': celdas de una fila con la misma altura (fuentes de Investigación). */
+  alinear?: 'start' | 'stretch';
+}
+
+const {
+  columnas,
+  columnasMobile = 1,
+  separacion = 16,
+  separacionFilas = separacion,
+  alinear = 'start',
+} = Astro.props;
+---
+
+<div
+  class="grilla"
+  style={`--cols: ${columnas}; --cols-mobile: ${columnasMobile}; --col-gap: var(--space-${separacion}); --row-gap: var(--space-${separacionFilas}); --align: ${alinear};`}
+>
+  <slot />
+</div>
+
+<style>
+  .grilla {
+    display: grid;
+    grid-template-columns: repeat(var(--cols-mobile), minmax(0, 1fr));
+    gap: var(--row-gap) var(--col-gap);
+    align-items: var(--align);
+  }
+
+  /* En una sola columna, la separación vertical es la de las columnas */
+  .grilla[style*='--cols-mobile: 1'] {
+    row-gap: var(--col-gap);
+  }
+
+  @media (min-width: 768px) {
+    .grilla {
+      grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    }
+  }
+</style>

@@ -1,0 +1,92 @@
+---
+/**
+ * Decisión de diseño — Figma: 11:141 / 11:170 / 11:217 (desktop), 104:476… (mobile).
+ * "Decisión 0N", título (H4) y filas Problema / Decisión / Resultado.
+ * Desktop: etiqueta de 120 px + 24 px + texto. Mobile: etiqueta arriba (4 px).
+ * Las imágenes (antes y después, iteraciones) van en el slot.
+ */
+interface Props {
+  numero: string;
+  titulo: string;
+  problema: string;
+  decision: string;
+  resultado: string;
+}
+
+const { numero, titulo, problema, decision, resultado } = Astro.props;
+const filas = [
+  ['Problema', problema],
+  ['Decisión', decision],
+  ['Resultado', resultado],
+];
+---
+
+<article class="decision">
+  <p class="eyebrow">Decisión {numero}</p>
+  <h3 class="decision__titulo">{titulo}</h3>
+  <dl class="decision__filas">
+    {
+      filas.map(([etiqueta, texto]) => (
+        <div class="decision__fila">
+          <dt>{etiqueta}</dt>
+          <dd>{texto}</dd>
+        </div>
+      ))
+    }
+  </dl>
+  <slot />
+</article>
+
+<style>
+  .decision {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-20);
+    padding-top: var(--space-32);
+  }
+
+  .decision__titulo {
+    font-size: var(--text-h4);
+    line-height: var(--leading-h4);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-h4);
+  }
+
+  .decision__filas {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-20);
+    margin: 0;
+  }
+
+  .decision__fila {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  dt {
+    font-weight: var(--weight-semibold);
+  }
+
+  dd {
+    margin: 0;
+    color: var(--ink-3);
+  }
+
+  @media (min-width: 768px) {
+    .decision__fila {
+      flex-direction: row;
+      gap: var(--space-24);
+    }
+
+    dt {
+      flex: 0 0 7.5rem; /* 120 px */
+    }
+
+    dd {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  }
+</style>

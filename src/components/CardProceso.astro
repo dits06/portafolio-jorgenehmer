@@ -1,0 +1,74 @@
+---
+/**
+ * Card/Proceso — Figma: componente 8:50.
+ * Ícono de la fase (Ícono/Proceso/*, 32:257–32:262), número antes del título y descripción.
+ */
+import Descubrir from '../assets/icons/proceso/descubrir.svg';
+import Definir from '../assets/icons/proceso/definir.svg';
+import Explorar from '../assets/icons/proceso/explorar.svg';
+import Idear from '../assets/icons/proceso/idear.svg';
+import DisenarYValidar from '../assets/icons/proceso/disenar-y-validar.svg';
+import MedirEIterar from '../assets/icons/proceso/medir-e-iterar.svg';
+
+const iconos = {
+  descubrir: Descubrir,
+  definir: Definir,
+  explorar: Explorar,
+  idear: Idear,
+  'disenar-y-validar': DisenarYValidar,
+  'medir-e-iterar': MedirEIterar,
+};
+
+interface Props {
+  icono: keyof typeof iconos;
+  numero: string;
+  titulo: string;
+  texto: string;
+}
+
+const { icono, numero, titulo, texto } = Astro.props;
+const Icono = iconos[icono];
+---
+
+<article class="card-proceso">
+  <Icono class="card-proceso__icono" aria-hidden="true" />
+  <h4 class="card-proceso__titulo">
+    <span class="card-proceso__numero">{numero}</span>
+    <span>{titulo}</span>
+  </h4>
+  <p class="card-proceso__texto">{texto}</p>
+</article>
+
+<style>
+  .card-proceso {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    padding: var(--space-24);
+    border-radius: var(--radius-thumb);
+    background: var(--surface);
+  }
+
+  .card-proceso :global(.card-proceso__icono) {
+    flex: none;
+  }
+
+  .card-proceso__titulo {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-8);
+    font-size: var(--text-card-title);
+    line-height: var(--leading-card-title);
+    font-weight: var(--weight-semibold);
+  }
+
+  .card-proceso__numero {
+    color: var(--muted-5);
+  }
+
+  .card-proceso__texto {
+    color: var(--muted-2);
+    font-size: var(--text-card);
+    line-height: var(--leading-card);
+  }
+</style>

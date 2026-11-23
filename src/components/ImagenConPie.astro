@@ -1,0 +1,48 @@
+---
+/**
+ * Imagen con pie — imagen redondeada y pie debajo (8 px).
+ * `pie="chico"`: 12/17 fijo (antes/después, pantallas finales);
+ * por defecto 12/17 → 13/18 (wireframes de alternativas).
+ * Sin pie visible, la imagen va sola (`pie` vacío).
+ */
+import CaseImage from './CaseImage.astro';
+
+interface Props {
+  src: ImageMetadata;
+  pie?: string;
+  alt?: string;
+  ratio?: string;
+  sizes?: string;
+  tamanoPie?: 'normal' | 'chico';
+}
+
+const { src, pie, alt, ratio, sizes, tamanoPie = 'normal' } = Astro.props;
+---
+
+<figure class="imagen-con-pie">
+  <CaseImage src={src} alt={alt ?? pie ?? ''} ratio={ratio} sizes={sizes} />
+  {pie && <figcaption class:list={['pie', `pie--${tamanoPie}`]}>{pie}</figcaption>}
+</figure>
+
+<style>
+  .imagen-con-pie {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    min-width: 0;
+  }
+
+  .pie {
+    color: var(--muted);
+  }
+
+  .pie--normal {
+    font-size: var(--text-thumb-caption);
+    line-height: var(--leading-thumb-caption);
+  }
+
+  .pie--chico {
+    font-size: var(--text-caption-sm);
+    line-height: var(--leading-caption-sm);
+  }
+</style>

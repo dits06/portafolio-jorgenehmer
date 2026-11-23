@@ -1,0 +1,371 @@
+---
+# Caso — Registro y verificación. Figma: 8:10 (desktop), 104:175 (mobile).
+# Textos copiados tal cual de Figma. [Confirmar] = dato que falta en Figma.
+titulo: Menos fricción para empezar a invertir
+bajada: Rediseño del registro y la verificación de identidad en Skipo.
+nombre: Registro y verificación
+subtitulo: Skipo
+tags: [Diseño de producto, Caso de estudio, App mobile]
+portada: ../../assets/casos/registro-y-verificacion/portada.png
+portadaAlt: Tres pantallas de la app de Skipo sobre fondo azul
+metadatos:
+  - etiqueta: Rol
+    valor: Único diseñador UX/UI
+  - etiqueta: Equipo
+    valor: Product Owner, CTO y 2 desarrolladores
+  - etiqueta: Herramientas
+    valor: Figma, Blender, FigJam, Google Analytics, Jira
+  - etiqueta: Período
+    valor: '2025'
+resumen: Skipo es una plataforma chilena para invertir en cripto, acciones tokenizadas y stablecoins. Muchos usuarios abandonaban el registro o no llegaban a su primera compra. Rediseñé el registro y la verificación de identidad para bajar esa fricción sin dejar de cumplir la regulación.
+queHice:
+  - Detecté el problema con tickets de soporte y Google Analytics
+  - Rediseñé el flujo de registro y verificación de punta a punta
+  - Diseñé la verificación diferida y el paso de PIN + biometría
+  - Medí el impacto después del lanzamiento
+metricas:
+  eyebrow: Impacto
+  items:
+    - valor: 75%
+      descripcion: de los usuarios aprueba transacciones con PIN + biometría (antes 32%). Cada aprobación que dejó de ir por SMS es un costo que la empresa dejó de pagar.
+    - valor: 23%
+      descripcion: menos abandono en el KYC
+destacados:
+  eyebrow: Diseño final
+  titulo: Tres cambios que bajaron la fricción
+  items:
+    - eyebrow: Verificación de identidad
+      titulo: Explicar sin abrumar
+      texto: Las preguntas legales, como PEP o U.S. Citizen, pasaron de bloques de texto a preguntas cortas, con la explicación en un tooltip. Al final, el usuario revisa lo que Onfido leyó de su carnet.
+      imagen: ../../assets/casos/registro-y-verificacion/destacado-explicar-sin-abrumar.png
+      alt: 'Mockup mobile: pantalla de registro completo que pide verificar la identidad'
+    - eyebrow: Primer uso
+      titulo: Cotizar antes de verificar
+      texto: Sin verificarse, el usuario puede cotizar en Convert y recorrer casi toda la app. Así comprueba que los precios le convienen, y la verificación se pide recién al comprar.
+      imagen: ../../assets/casos/registro-y-verificacion/destacado-cotizar-antes-de-verificar.png
+      alt: 'Mockup mobile: cotización en Convert sin verificar la identidad'
+    - eyebrow: Seguridad
+      titulo: Biometría desde el primer día
+      texto: PIN + biometría como paso del registro. Al activarlo, queda como método para aprobar transacciones y reemplaza al SMS.
+      imagen: ../../assets/casos/registro-y-verificacion/destacado-biometria-desde-el-primer-dia.png
+      alt: 'Mockup mobile: paso de PIN + biometría en el registro'
+secciones:
+  - { id: contexto, titulo: Contexto }
+  - { id: el-problema, titulo: El problema }
+  - { id: mi-proceso, titulo: Mi proceso }
+  - { id: investigacion, titulo: Investigación }
+  - { id: definicion, titulo: Definición }
+  - { id: exploracion, titulo: Exploración }
+  - { id: decisiones-de-diseno, titulo: Decisiones de diseño }
+  - { id: diseno-final, titulo: Diseño final }
+  - { id: impacto, titulo: Impacto }
+  - { id: aprendizajes, titulo: Aprendizajes }
+siguientes:
+  - slug: vision-general
+    titulo: Skipo — Visión general
+    texto: Cuatro años diseñando el producto de punta a punta.
+    imagen: ../../assets/casos/registro-y-verificacion/siguiente-vision-general.png
+  - slug: pagos-masivos-b2b
+    titulo: Pagos masivos B2B
+    texto: Cómo empresas pagan a equipos remotos en stablecoins.
+    imagen: ../../assets/casos/registro-y-verificacion/siguiente-pagos-masivos-b2b.png
+  - slug: design-system
+    titulo: Design system de Skipo
+    texto: La librería detrás de la app y la webapp.
+    imagen: ../../assets/casos/registro-y-verificacion/siguiente-design-system.png
+---
+
+import CaseSection from '../../components/CaseSection.astro';
+import Metrica from '../../components/Metrica.astro';
+import Metricas from '../../components/Metricas.astro';
+import ImagenConPie from '../../components/ImagenConPie.astro';
+import ParDeImagenes from '../../components/ParDeImagenes.astro';
+import Grilla from '../../components/Grilla.astro';
+import CardProceso from '../../components/CardProceso.astro';
+import CardNumerada from '../../components/CardNumerada.astro';
+import Punto from '../../components/Punto.astro';
+import Decision from '../../components/Decision.astro';
+import MapaFriccion from '../../components/MapaFriccion.astro';
+import FlujoRegistro from '../../components/FlujoRegistro.astro';
+
+import pantallasDeLaApp from '../../assets/casos/registro-y-verificacion/pantallas-de-la-app.png';
+import ticketsDeSoporte from '../../assets/casos/registro-y-verificacion/tickets-de-soporte.png';
+import embudoEnGoogleAnalytics from '../../assets/casos/registro-y-verificacion/embudo-en-google-analytics.png';
+import benchmark from '../../assets/casos/registro-y-verificacion/benchmark.png';
+import restricciones from '../../assets/casos/registro-y-verificacion/restricciones.png';
+import pepA from '../../assets/casos/registro-y-verificacion/explicar-el-pep-alternativa-a.png';
+import pepB from '../../assets/casos/registro-y-verificacion/explicar-el-pep-alternativa-b.png';
+import biometriaA from '../../assets/casos/registro-y-verificacion/activar-la-biometria-alternativa-a.png';
+import biometriaB from '../../assets/casos/registro-y-verificacion/activar-la-biometria-alternativa-b.png';
+import cotizarA from '../../assets/casos/registro-y-verificacion/cotizar-sin-verificar-alternativa-a.png';
+import cotizarB from '../../assets/casos/registro-y-verificacion/cotizar-sin-verificar-alternativa-b.png';
+import antesExplicacion from '../../assets/casos/registro-y-verificacion/antes-explicacion-completa-en-la-opcion.png';
+import despuesTooltip from '../../assets/casos/registro-y-verificacion/despues-pregunta-corta-tooltip.png';
+import antesConvert from '../../assets/casos/registro-y-verificacion/antes-convert-bloqueado.png';
+import despuesConvert from '../../assets/casos/registro-y-verificacion/despues-convert-con-cotizacion.png';
+import recordatorioModal from '../../assets/casos/registro-y-verificacion/recordatorio-como-modal.png';
+import recordatorioCard from '../../assets/casos/registro-y-verificacion/recordatorio-como-card.png';
+import antesPerfil from '../../assets/casos/registro-y-verificacion/antes-perfil-seguridad.png';
+import despuesRegistro from '../../assets/casos/registro-y-verificacion/despues-paso-del-registro.png';
+import correoYCodigo from '../../assets/casos/registro-y-verificacion/correo-y-codigo-de-referido.png';
+import pinBiometria from '../../assets/casos/registro-y-verificacion/pin-biometria.png';
+import confirmaTusDatos from '../../assets/casos/registro-y-verificacion/confirma-tus-datos.png';
+import convertSinVerificar from '../../assets/casos/registro-y-verificacion/convert-sin-verificar.png';
+
+<CaseSection id="contexto" eyebrow="Contexto" titulo="Invertir no debería requerir experiencia">
+
+Skipo permite invertir en cripto, acciones tokenizadas y stablecoins desde el celular. Buena parte de sus usuarios nunca había invertido, y la regulación obliga a verificar la identidad antes de operar.
+
+<Metricas>
+  {/* En Figma dice "10.000": va con formato de EE. UU. según el CLAUDE.md */}
+  <Metrica valor="10,000" descripcion="usuarios registrados" />
+  <Metrica valor="3" descripcion="tipos de activos: cripto, xStocks y stablecoins" />
+</Metricas>
+
+<ImagenConPie src={pantallasDeLaApp} alt="Pantallas de la app de Skipo" ratio="800 / 450" />
+
+</CaseSection>
+
+<CaseSection id="el-problema" eyebrow="El problema" titulo="Los usuarios se iban antes de invertir">
+
+Los tickets de soporte y el embudo de registro mostraban el mismo patrón: la gente abandonaba al entregar sus datos, y quienes terminaban el registro tampoco llegaban a comprar.
+
+<MapaFriccion
+  titulo="Registro antes del rediseño"
+  pasos={[
+    { texto: 'Correo' },
+    { texto: 'Contraseña' },
+    { texto: ['Verificar', 'correo'] },
+    { texto: ['Nombre y', 'usuario'] },
+    { texto: 'Teléfono' },
+    { texto: ['Verificación de', 'identidad (KYC)'], estado: 'bloqueo' },
+    { texto: ['Recién ahí:', 'cotizar y operar'], estado: 'despues' },
+  ]}
+  anotacion="Mayor abandono"
+  hallazgo="La mayor caída estaba en la verificación de identidad. Se podía entrar a la app sin ella, pero no cotizar en Convert ni usar la mayoría de las funciones, y sus explicaciones eran bloques de texto que muchos no leían."
+  subtituloDudas="Dudas frecuentes en soporte"
+  dudas={[
+    '¿Por qué tengo que subir mi carnet?',
+    '¿Qué significa ser PEP?',
+    'Quiero cotizar antes de dar mis datos.',
+  ]}
+  nota="Dudas representativas, redactadas a partir de los temas que más se repetían en los tickets."
+/>
+
+### Por qué importa
+
+<Grilla columnas={3} separacion={24}>
+  <Punto titulo="Usuario">Se siente agobiado por tanto texto y no entiende para qué se piden sus datos.</Punto>
+  <Punto titulo="Negocio">Cada abandono es un usuario que nunca llega a invertir.</Punto>
+  <Punto titulo="Costos">Cada aprobación por SMS es un costo para la empresa.</Punto>
+</Grilla>
+
+</CaseSection>
+
+<CaseSection id="mi-proceso" eyebrow="Mi proceso" titulo="Cómo trabajé este problema">
+
+No teníamos acceso a entrevistas con usuarios, así que la investigación se basó en datos de comportamiento y de soporte. Cada decisión se midió después del lanzamiento.
+
+<Grilla columnas={3}>
+  <CardProceso icono="descubrir" numero="01" titulo="Descubrir" texto="Tickets de soporte y embudo en Google Analytics." />
+  <CardProceso icono="definir" numero="02" titulo="Definir" texto="Tres problemas concretos y sus restricciones." />
+  <CardProceso icono="explorar" numero="03" titulo="Explorar" texto="Benchmark de cinco plataformas de inversión." />
+</Grilla>
+
+<Grilla columnas={3}>
+  <CardProceso icono="idear" numero="04" titulo="Idear" texto="Flujos en FigJam y wireframes de alternativas." />
+  <CardProceso icono="disenar-y-validar" numero="05" titulo="Diseñar y validar" texto="Prototipos en Figma y revisión con PO y desarrollo." />
+  <CardProceso icono="medir-e-iterar" numero="06" titulo="Medir e iterar" texto="Métricas post lanzamiento y ajustes." />
+</Grilla>
+
+</CaseSection>
+
+<CaseSection id="investigacion" eyebrow="Investigación" titulo="Datos en lugar de entrevistas">
+
+Para entender por qué la gente abandonaba, crucé cuatro fuentes:
+
+<Grilla columnas={2} alinear="stretch">
+  <CardNumerada imagen={ticketsDeSoporte} numero="01" titulo="Tickets de soporte" texto="Dudas repetidas sobre por qué pedíamos ciertos datos." />
+  <CardNumerada imagen={embudoEnGoogleAnalytics} numero="02" titulo="Embudo en Google Analytics" texto="Abandono por paso del registro." />
+</Grilla>
+
+<Grilla columnas={2} alinear="stretch">
+  <CardNumerada imagen={benchmark} numero="03" titulo="Benchmark" texto="Kraken, Binance, Revolut, Robinhood y Coinbase." />
+  <CardNumerada imagen={restricciones} numero="04" titulo="Restricciones" texto="Verificación obligatoria y proveedor externo (Onfido)." />
+</Grilla>
+
+### Hallazgos clave
+
+1. Las explicaciones legales ocupaban toda la pantalla: muchos no las leían y terminaban sin entender para qué se pedía cada dato.
+2. Sin KYC no se podía cotizar ni usar la mayoría de las funciones, así que el usuario no sabía si le convenía.
+3. Cada transacción se aprobaba con un código SMS, y la biometría estaba escondida en Perfil > Seguridad.
+
+</CaseSection>
+
+<CaseSection id="definicion" eyebrow="Definición" titulo="Tres preguntas para guiar el diseño">
+
+<Grilla columnas={3}>
+  <CardNumerada numero="¿Cómo podríamos…" titulo="…generar confianza al pedir datos?" texto="Que el usuario entienda para qué se usa cada dato." />
+  <CardNumerada numero="¿Cómo podríamos…" titulo="…dejarlos cotizar antes de verificarse?" texto="Sin romper la regulación." />
+  <CardNumerada numero="¿Cómo podríamos…" titulo="…lograr que activen la biometría?" texto="Sin sumar fricción al registro." />
+</Grilla>
+
+### Métricas a mover
+
+<Metricas filaEnMobile>
+  <Metrica valor="↓" descripcion="Abandono del registro" />
+  <Metrica valor="↑" descripcion="Conversión a primera compra" />
+  <Metrica valor="↑" descripcion="Activación de PIN + biometría" />
+</Metricas>
+
+</CaseSection>
+
+<CaseSection id="exploracion" eyebrow="Exploración" titulo="Mapear el recorrido completo">
+
+Dibujé el flujo de registro de punta a punta y marqué los puntos de fricción que mostraban los datos. Con eso exploré alternativas en wireframes antes de pasar a alta fidelidad.
+
+<FlujoRegistro
+  pasos={[
+    { etapa: 'Crear cuenta', numero: '1', texto: 'Email y términos', detalle: 'código de referido opcional' },
+    { numero: '2', texto: 'Contraseña' },
+    { numero: '3', texto: 'Verifica tu email' },
+    { etapa: 'Perfil y seguridad', numero: '4', texto: 'Nombre y apellido' },
+    { numero: '5', texto: 'Nombre de usuario' },
+    {
+      numero: '6',
+      texto: '¿Activar biometría?',
+      tipo: 'decision',
+      opciones: [
+        { etiqueta: 'Habilitar', numero: '7', texto: 'PIN + biometría', elegida: true },
+        { etiqueta: 'Omitir', texto: 'Omitir por ahora' },
+      ],
+    },
+    { numero: '8', texto: 'Teléfono y código SMS' },
+    {
+      etapa: 'Verificación',
+      numero: '9',
+      texto: '¿Verificar identidad?',
+      tipo: 'decision',
+      opciones: [
+        { etiqueta: 'Verificarme', texto: 'Onfido + Confirma tus datos', elegida: true },
+        { etiqueta: 'Omitir', texto: 'Omitir por ahora, puede cotizar' },
+      ],
+    },
+    { numero: '10', texto: 'Home', tipo: 'final' },
+  ]}
+  nota="Login, reenvío de correo y tooltips están en el flujo completo."
+  enlace={{ texto: 'Ver flujo completo' /* [Confirmar] destino del link: falta en Figma */ }}
+/>
+
+### Alternativas exploradas
+
+{/* Wireframes marcados en Figma como "MUESTRA — reemplazar por original" [Confirmar] */}
+<div class="grupo">
+  <ParDeImagenes
+    titulo="Explicar el PEP"
+    ratio="392 / 440"
+    apilarEnMobile
+    tamanoPie="normal"
+    a={{ src: pepA, pie: 'Alternativa A · La explicación se despliega bajo la pregunta' }}
+    b={{ src: pepB, pie: 'Alternativa B · Pregunta corta con tooltip (elegida)' }}
+  />
+  <ParDeImagenes
+    titulo="Activar la biometría"
+    ratio="392 / 440"
+    apilarEnMobile
+    tamanoPie="normal"
+    a={{ src: biometriaA, pie: 'Alternativa A · Modal en el Home al segundo ingreso. Descartada: muchos lo cerrarían sin leer, porque entran rápido a ver un precio' }}
+    b={{ src: biometriaB, pie: 'Alternativa B · Paso dentro del registro (elegida)' }}
+  />
+  <ParDeImagenes
+    titulo="Cotizar sin verificar"
+    ratio="392 / 440"
+    apilarEnMobile
+    tamanoPie="normal"
+    a={{ src: cotizarA, pie: 'Alternativa A · Precios visibles, pero la cotización bloqueada hasta el KYC' }}
+    b={{ src: cotizarB, pie: 'Alternativa B · Cotización abierta y KYC al confirmar la compra (elegida)' }}
+  />
+</div>
+
+</CaseSection>
+
+<CaseSection id="decisiones-de-diseno" eyebrow="Decisiones de diseño" titulo="Problema, decisión y resultado">
+
+<Decision
+  numero="01"
+  titulo="Explicar sin abrumar"
+  problema="Las explicaciones de PEP o U.S. Citizen iban completas dentro de cada opción: demasiado texto, y muchos no lo leían."
+  decision="Preguntas cortas con la explicación en un tooltip, y al final el usuario confirma lo que Onfido leyó del carnet."
+  resultado="[Confirmar]"
+>
+  <ParDeImagenes
+    a={{ src: antesExplicacion, pie: 'Antes', alt: 'Antes: explicación completa en la opción' }}
+    b={{ src: despuesTooltip, pie: 'Después', alt: 'Después: pregunta corta + tooltip' }}
+  />
+</Decision>
+
+<Decision
+  numero="02"
+  titulo="Cotizar antes de verificar"
+  problema="Sin KYC no se podía cotizar en Convert y la mayoría de las funciones estaban bloqueadas."
+  decision="Verificación diferida: cotizar en Convert y recorrer casi toda la app sin KYC. Genera confianza y deja ver que los precios son mejores; el KYC se pide al comprar."
+  resultado="[Confirmar]"
+>
+  <ParDeImagenes
+    a={{ src: antesConvert, pie: 'Antes', alt: 'Antes: Convert bloqueado' }}
+    b={{ src: despuesConvert, pie: 'Después', alt: 'Después: Convert con cotización' }}
+  />
+
+  <h3>Iteración del recordatorio</h3>
+
+  {/* [Confirmar] En Figma los pies parecen cruzados: la imagen del modal dice "Recordatorio como card" y viceversa. Se copian tal cual. */}
+  <ParDeImagenes
+    a={{ src: recordatorioModal, pie: 'Recordatorio como card' }}
+    b={{ src: recordatorioCard, pie: 'Recordatorio como modal' }}
+  />
+</Decision>
+
+<Decision
+  numero="03"
+  titulo="Biometría desde el primer día"
+  problema="PIN + biometría solo se activaba en Perfil > Seguridad; el resto aprobaba con SMS."
+  decision={'Paso de PIN + biometría en el registro, con "Ahora no". Queda como método para aprobar transacciones.'}
+  resultado="De 32% a 75% de usuarios con PIN + biometría, y menos costo en SMS."
+>
+  <ParDeImagenes
+    a={{ src: antesPerfil, pie: 'Antes', alt: 'Antes: Perfil > Seguridad' }}
+    b={{ src: despuesRegistro, pie: 'Después', alt: 'Después: paso del registro' }}
+  />
+</Decision>
+
+</CaseSection>
+
+<CaseSection id="diseno-final" eyebrow="Diseño final" titulo="El registro final">
+
+El recorrido completo, desde el correo hasta la confirmación de identidad. Cada pantalla lleva una nota con la decisión que hay detrás.
+
+<Grilla columnas={4} columnasMobile={2} separacionFilas={20}>
+  <ImagenConPie src={correoYCodigo} pie="Correo y código de referido" ratio="188 / 400" tamanoPie="chico" sizes="(min-width: 1440px) 188px, (min-width: 768px) 20vw, 45vw" />
+  <ImagenConPie src={pinBiometria} pie="PIN + biometría" ratio="188 / 400" tamanoPie="chico" sizes="(min-width: 1440px) 188px, (min-width: 768px) 20vw, 45vw" />
+  <ImagenConPie src={confirmaTusDatos} pie="Confirma tus datos" ratio="188 / 400" tamanoPie="chico" sizes="(min-width: 1440px) 188px, (min-width: 768px) 20vw, 45vw" />
+  <ImagenConPie src={convertSinVerificar} pie="Convert sin verificar" ratio="188 / 400" tamanoPie="chico" sizes="(min-width: 1440px) 188px, (min-width: 768px) 20vw, 45vw" />
+</Grilla>
+
+</CaseSection>
+
+<CaseSection id="impacto" eyebrow="Impacto" titulo="Lo que cambió">
+
+<Metricas>
+  <Metrica valor="75%" descripcion="de los usuarios aprueba transacciones con PIN + biometría (antes 32%). Cada aprobación que dejó de ir por SMS es un costo que la empresa dejó de pagar." />
+  <Metrica valor="23%" descripcion="menos abandono en el KYC" />
+</Metricas>
+
+</CaseSection>
+
+<CaseSection id="aprendizajes" eyebrow="Aprendizajes" titulo="Qué me llevo">
+
+<CardNumerada numero="01" titulo="Los datos fueron mi investigación" texto="Hoy sumaría pruebas cortas con usuarios para entender el porqué detrás de los números." />
+<CardNumerada numero="02" titulo="Diferir no es eliminar" texto="La verificación sigue ahí, pero llega cuando el usuario tiene un motivo." />
+<CardNumerada numero="03" titulo="Un paso más puede ser menos fricción" texto="Si le ahorra trabajo al usuario después, vale la pena." />
+
+</CaseSection>

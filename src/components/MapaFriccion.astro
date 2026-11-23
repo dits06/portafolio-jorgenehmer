@@ -1,0 +1,352 @@
+---
+/**
+ * Mapa de fricción — Figma: 253:981 (desktop), 255:981 (mobile).
+ * Línea de tiempo de los pasos del registro, con el punto de mayor abandono,
+ * el hallazgo y las dudas frecuentes de soporte. Se dibuja con HTML y CSS
+ * para que el texto sea real; desktop horizontal, mobile vertical.
+ *
+ * Cada paso puede venir partido en dos líneas ([línea 1, línea 2]): en desktop
+ * se respeta el corte de Figma; en mobile va en una sola línea.
+ */
+type Texto = string | [string, string];
+
+interface Paso {
+  texto: Texto;
+  /** 'bloqueo': punto de mayor abandono. 'despues': pasos a los que no se llegaba. */
+  estado?: 'bloqueo' | 'despues';
+}
+
+interface Props {
+  titulo: string;
+  pasos: Paso[];
+  anotacion: string;
+  hallazgo: string;
+  subtituloDudas: string;
+  dudas: string[];
+  nota: string;
+}
+
+const { titulo, pasos, anotacion, hallazgo, subtituloDudas, dudas, nota } = Astro.props;
+const lineas = (t: Texto) => (Array.isArray(t) ? t : [t]);
+---
+
+<figure class="mapa">
+  <figcaption class="mapa__titulo">{titulo}</figcaption>
+
+  <ol class="mapa__pasos" role="list">
+    {
+      pasos.map((paso, i) => {
+        const siguiente = pasos[i + 1];
+        return (
+          <li
+            class:list={[
+              'paso',
+              paso.estado && `paso--${paso.estado}`,
+              { 'paso--antes-de-despues': siguiente?.estado === 'despues' },
+            ]}
+          >
+            <span class="paso__punto" aria-hidden="true" />
+            <span class="paso__texto">
+              {lineas(paso.texto).map((l) => (
+                <span class="paso__linea">{l}</span>
+              ))}
+            </span>
+            {paso.estado === 'bloqueo' && <span class="paso__anotacion">{anotacion}</span>}
+          </li>
+        );
+      })
+    }
+  </ol>
+
+  <div class="mapa__detalle">
+    <p class="mapa__hallazgo">{hallazgo}</p>
+    <div class="mapa__dudas">
+      <p class="mapa__subtitulo">{subtituloDudas}</p>
+      <ul class="dudas" role="list">
+        {dudas.map((d) => <li class="duda">{d}</li>)}
+      </ul>
+    </div>
+  </div>
+
+  <p class="mapa__nota">{nota}</p>
+</figure>
+
+<style>
+  .mapa {
+    --punto: 0.5625rem; /* 9 px en mobile, 10 px en desktop */
+    --punto-bloqueo: 0.875rem; /* 14 → 16 */
+    --halo: 0.5rem; /* 30 → 34 */
+    --fila: 1.25rem;
+
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-20) var(--diagram-pad) var(--space-20);
+    border-radius: var(--radius-thumb);
+    background: var(--surface);
+    color: var(--diagram-text);
+    line-height: normal;
+  }
+
+  .mapa__titulo {
+    font-size: var(--text-diagram-title);
+    font-weight: var(--weight-semibold);
+  }
+
+  /* ---------- Pasos: vertical (mobile) ---------- */
+  .mapa__pasos {
+    margin: var(--space-32) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .paso {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--space-24) 1fr;
+    column-gap: var(--space-8);
+    align-items: center;
+    padding-bottom: var(--space-16);
+    font-size: var(--text-diagram);
+    font-weight: var(--weight-medium);
+    line-height: var(--fila);
+  }
+
+  .paso:last-child {
+    padding-bottom: 0;
+  }
+
+  /* Tramo de línea hasta el punto siguiente */
+  .paso:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: calc(var(--space-12) - 0.75px);
+    top: calc(var(--fila) / 2);
+    height: 100%;
+    border-left: 1.5px solid var(--diagram-line);
+  }
+
+  .paso--antes-de-despues::after {
+    border-left-style: dashed !important;
+    border-left-color: var(--diagram-dot-soft) !important;
+  }
+
+  .paso__punto {
+    position: relative;
+    z-index: 1;
+    justify-self: center;
+    width: var(--punto);
+    height: var(--punto);
+    border: 1.5px solid var(--diagram-dot);
+    border-radius: 50%;
+    background: var(--paper);
+  }
+
+  .paso__linea + .paso__linea::before {
+    content: ' ';
+  }
+
+  .paso--bloqueo {
+    color: var(--danger);
+    font-weight: var(--weight-semibold);
+  }
+
+  .paso--bloqueo .paso__punto {
+    width: var(--punto-bloqueo);
+    height: var(--punto-bloqueo);
+    border: 0;
+    background: var(--danger);
+    box-shadow: 0 0 0 var(--halo) var(--danger-halo);
+  }
+
+  .paso--despues {
+    color: var(--diagram-muted);
+  }
+
+  .paso--despues .paso__punto {
+    border: 1.5px dashed var(--diagram-dot-soft);
+    background: transparent;
+  }
+
+  .paso__anotacion {
+    grid-column: 2;
+    font-size: var(--text-diagram-xs);
+    font-weight: var(--weight-regular);
+    line-height: 1rem;
+  }
+
+  .paso--bloqueo {
+    padding-bottom: var(--space-12);
+  }
+
+  .paso--bloqueo::after {
+    top: calc(var(--fila) / 2);
+  }
+
+  /* ---------- Hallazgo y dudas ---------- */
+  .mapa__detalle {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-24);
+    margin-top: var(--space-48);
+  }
+
+  .mapa__hallazgo {
+    color: var(--ink-3);
+    font-size: var(--text-diagram-md);
+  }
+
+  .mapa__dudas {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-11);
+  }
+
+  .mapa__subtitulo {
+    color: var(--diagram-muted);
+    font-size: var(--text-diagram-sm);
+    font-weight: var(--weight-medium);
+  }
+
+  .dudas {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .duda {
+    padding: var(--space-10) var(--space-14);
+    border-radius: var(--space-16) var(--space-16) var(--space-16) var(--space-4);
+    background: var(--paper);
+    box-shadow: var(--bubble-shadow);
+    font-size: var(--text-diagram);
+  }
+
+  /* En mobile la burbuja del medio va a la derecha, con la punta abajo a la derecha */
+  .duda:nth-child(2) {
+    align-self: flex-end;
+    border-radius: var(--space-16) var(--space-16) var(--space-4) var(--space-16);
+  }
+
+  .mapa__nota {
+    margin-top: var(--space-24);
+    color: var(--diagram-muted);
+    font-size: var(--text-diagram-xs);
+  }
+
+  /* ---------- Desktop: horizontal ---------- */
+  @media (min-width: 768px) {
+    .mapa {
+      --punto: 0.625rem;
+      --punto-bloqueo: 1rem;
+      --halo: 0.5625rem;
+
+      padding: var(--space-32);
+    }
+
+    .mapa__pasos {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(0, 1fr);
+      margin-top: 3.3125rem; /* 53 px del título al halo; la anotación sube sobre ese espacio */
+    }
+
+    .paso {
+      grid-template-columns: 1fr;
+      grid-template-rows: 2.125rem auto; /* fila del halo (34) + texto */
+      row-gap: var(--space-4);
+      justify-items: center;
+      align-items: start;
+      padding: 0;
+      font-size: var(--text-diagram-sm);
+      line-height: normal;
+      text-align: center;
+    }
+
+    .paso__punto {
+      align-self: center;
+    }
+
+    .paso:not(:last-child)::after {
+      left: 50%;
+      top: calc(2.125rem / 2 - 0.75px);
+      width: 100%;
+      height: 0;
+      border-left: 0;
+      border-top: 1.5px solid var(--diagram-line);
+    }
+
+    .paso--antes-de-despues::after {
+      border-top-style: dashed !important;
+      border-top-color: var(--diagram-dot-soft) !important;
+    }
+
+    /* Como en Figma, cada rótulo mide 112 px aunque la columna sea más angosta */
+    .paso__texto {
+      width: 7rem;
+    }
+
+    .paso__linea {
+      display: block;
+      white-space: nowrap;
+    }
+
+    .paso__linea + .paso__linea::before {
+      content: none;
+    }
+
+    .paso--bloqueo {
+      padding: 0;
+    }
+
+    /* Anotación arriba del punto, unida por una guía roja */
+    .paso__anotacion {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      grid-column: auto;
+      width: 7.5rem;
+      padding-bottom: 2.9375rem; /* 6 px + guía de 41 px hasta el halo */
+      transform: translateX(-50%);
+      background: linear-gradient(var(--danger), var(--danger)) center bottom / 1.5px 2.5625rem no-repeat;
+      font-weight: var(--weight-semibold);
+      line-height: normal;
+    }
+
+    .mapa__detalle {
+      display: grid;
+      grid-template-columns: 22.5rem minmax(0, 1fr); /* 360 + resto */
+      gap: var(--space-48);
+      margin-top: var(--space-48);
+    }
+
+    .mapa__hallazgo {
+      color: var(--ink-3);
+    }
+
+    .mapa__dudas {
+      gap: var(--space-13);
+    }
+
+    .dudas {
+      gap: var(--space-10);
+    }
+
+    .duda {
+      padding: var(--space-12) var(--space-16);
+      border-radius: 1.125rem 1.125rem 1.125rem var(--space-4);
+      font-size: var(--text-diagram-md);
+    }
+
+    .duda:nth-child(2) {
+      border-radius: 1.125rem 1.125rem 1.125rem var(--space-4);
+    }
+
+    .mapa__nota {
+      margin-top: var(--space-40);
+    }
+  }
+</style>
