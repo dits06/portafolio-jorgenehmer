@@ -1,0 +1,170 @@
+---
+/**
+ * Exploraciones del home: filtros, grilla y link a todas.
+ * Figma: 155:484 (desktop, 3 columnas) y 155:549 (mobile, 2 columnas).
+ * Los filtros sin piezas no se muestran (documento de traspaso: Publicidad).
+ */
+import { Picture } from 'astro:assets';
+import {
+  explorations,
+  explorationCategories,
+  allExplorationsHref,
+} from '../data/home';
+
+const categories = explorationCategories.filter((c) =>
+  explorations.some((e) => e.category === c),
+);
+---
+
+<div class="gallery" data-gallery>
+  <div class="filters" role="group" aria-label="Filtrar exploraciones">
+    <button class="chip" type="button" aria-pressed="true" data-filter="todo">Todo</button>
+    {
+      categories.map((c) => (
+        <button class="chip" type="button" aria-pressed="false" data-filter={c}>
+          {c}
+        </button>
+      ))
+    }
+  </div>
+
+  <ul class="grid" role="list">
+    {
+      explorations.map((e) => (
+        <li class="piece" data-category={e.category}>
+          <a class="piece__link" href={`/exploraciones/${e.slug}`}>
+            <div class="piece__media">
+              <Picture
+                src={e.image}
+                formats={['avif', 'webp']}
+                fallbackFormat="webp"
+                widths={[161, 322, 421, 842]}
+                sizes="(min-width: 1440px) 421px, (min-width: 768px) calc((100vw - 176px) / 3), calc(50vw - 26px)"
+                alt={e.title}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <p class="piece__caption">
+              {e.category} · {e.year}
+            </p>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="status visually-hidden" aria-live="polite" data-status></p>
+
+  <a class="all-link" href={allExplorationsHref}>Ver todas las exploraciones →</a>
+</div>
+
+<style>
+  .gallery {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-24);
+    padding: 0 var(--page-padding) var(--section-y);
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8) var(--space-11);
+  }
+
+  .chip {
+    padding: var(--space-10);
+    border: 0;
+    border-radius: var(--radius-chip);
+    background: var(--line);
+    color: var(--ink);
+    font-size: var(--text-chip);
+    line-height: var(--leading-chip);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .chip[aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--thumbs-row-gap) var(--thumbs-col-gap);
+    width: 100%;
+  }
+
+  .piece__link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+    text-decoration: none;
+  }
+
+  .piece__media {
+    overflow: hidden;
+    aspect-ratio: 1;
+    border-radius: var(--radius-thumb);
+    background: var(--placeholder);
+  }
+
+  .piece__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-hover) var(--ease-out);
+  }
+
+  /* Hover de cards (documento de traspaso → Animaciones) */
+  .piece__link:hover :global(img),
+  .piece__link:focus-visible :global(img) {
+    transform: scale(var(--hover-scale));
+  }
+
+  .piece__caption {
+    color: var(--muted);
+    font-size: var(--text-thumb-caption);
+    line-height: var(--leading-thumb-caption);
+  }
+
+  .all-link {
+    font-size: var(--text-label);
+    line-height: var(--leading-label);
+    font-weight: var(--weight-medium);
+    text-decoration-line: underline;
+    text-underline-position: from-font;
+  }
+
+  @media (min-width: 768px) {
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>
+
+<script>
+  function setupGallery(root: HTMLElement) {
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+    const pieces = [...root.querySelectorAll<HTMLElement>('[data-category]')];
+    const status = root.querySelector<HTMLElement>('[data-status]');
+
+    const apply = (filter: string) => {
+      let shown = 0;
+      for (const piece of pieces) {
+        const match = filter === 'todo' || piece.dataset.category === filter;
+        piece.hidden = !match;
+        if (match) shown++;
+      }
+      for (const b of buttons) b.setAttribute('aria-pressed', String(b.dataset.filter === filter));
+      if (status) status.textContent = `${shown} ${shown === 1 ? 'pieza' : 'piezas'}`;
+    };
+
+    for (const b of buttons) b.addEventListener('click', () => apply(b.dataset.filter ?? 'todo'));
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach(setupGallery);
+</script>

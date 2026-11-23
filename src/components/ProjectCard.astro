@@ -1,0 +1,150 @@
+---
+/**
+ * Card de proyecto del home — Figma: 3:78 (desktop), 103:344 (mobile).
+ * Imagen, nombre + subtítulo y 3 tags. La card "wide" ocupa las 2 columnas.
+ */
+import { getImage } from 'astro:assets';
+import type { Project } from '../data/home';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const { slug, title, subtitle, tags, image, imageMobile, wide } = project;
+
+const formats = ['avif', 'webp'] as const;
+// Ancho del contenido: 335 px en 375, 1312 px en 1440.
+const sizes = wide
+  ? '(min-width: 1440px) 1312px, 92vw'
+  : '(min-width: 1440px) 644px, (min-width: 768px) calc(50vw - 60px), calc(100vw - 40px)';
+const widthsFor = (img: ImageMetadata) =>
+  [335, 670, 644, 1288, 1312, 2624].filter((w) => w <= img.width);
+
+const sourcesFor = (img: ImageMetadata, media?: string) =>
+  Promise.all(
+    formats.map(async (format) => {
+      const out = await getImage({ src: img, format, widths: widthsFor(img) });
+      return { type: `image/${format}`, srcset: out.srcSet.attribute, media };
+    }),
+  );
+
+const sources = [
+  ...(imageMobile ? await sourcesFor(imageMobile, '(max-width: 767px)') : []),
+  ...(await sourcesFor(image)),
+];
+const fallback = await getImage({ src: image, format: 'webp', width: Math.min(1288, image.width) });
+---
+
+<li class:list={['project', { 'project--wide': wide }]}>
+  <a class="project__link" href={`/casos/${slug}`}>
+    <div class="project__media">
+      <picture>
+        {sources.map((s) => <source type={s.type} srcset={s.srcset} sizes={sizes} media={s.media} />)}
+        <img
+          src={fallback.src}
+          width={image.width}
+          height={image.height}
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
+    </div>
+    <h3 class="project__heading">
+      <span class="project__title">{title}</span>
+      <span class="project__subtitle">{subtitle}</span>
+    </h3>
+  </a>
+  <ul class="project__tags" role="list" aria-label="Etiquetas">
+    {tags.map((tag) => <li class="chip">{tag}</li>)}
+  </ul>
+</li>
+
+<style>
+  .project {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-17);
+  }
+
+  .project__link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-17);
+    text-decoration: none;
+  }
+
+  .project__media {
+    overflow: hidden;
+    border-radius: var(--radius-image);
+    background: var(--placeholder);
+    aspect-ratio: 335 / 242;
+  }
+
+  .project__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-hover) var(--ease-out);
+  }
+
+  .project__heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: var(--space-13);
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-body-lg);
+    font-weight: var(--weight-regular);
+  }
+
+  .project__title {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  .project__subtitle {
+    color: var(--muted-3);
+  }
+
+  /* Hover de cards (documento de traspaso → Animaciones) */
+  .project__link:hover img,
+  .project__link:focus-visible img {
+    transform: scale(var(--hover-scale));
+  }
+
+  .project__link:hover .project__title,
+  .project__link:focus-visible .project__title {
+    text-decoration-line: underline;
+  }
+
+  .project__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8) var(--space-11);
+  }
+
+  .chip {
+    padding: var(--space-10);
+    border-radius: var(--radius-chip);
+    background: var(--line);
+    font-size: var(--text-chip);
+    line-height: var(--leading-chip);
+    white-space: nowrap;
+  }
+
+  @media (min-width: 768px) {
+    .project__media {
+      aspect-ratio: 644 / 455.55;
+    }
+
+    .project--wide {
+      grid-column: 1 / -1;
+    }
+
+    .project--wide .project__media {
+      aspect-ratio: 1312 / 560;
+    }
+  }
+</style>

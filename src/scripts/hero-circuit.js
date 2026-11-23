@@ -1,0 +1,448 @@
+/*
+ * Header circuito JN — script del artefacto, copiado sin cambios desde
+ * docs/Header circuito JN — Jorge Nehmer.html (líneas 114–556).
+ * Lo carga src/components/HeroCircuit.astro.
+ */
+(() => {
+  'use strict';
+
+  /* ================= Ajustes ================= */
+  const CONFIG = {
+    pauseMin: 1.2, pauseMax: 4.0,       // segundos que cada círculo espera en un extremo
+    moveBase: 0.5, movePerPx: 1 / 700,  // duración = base + largo del recorrido × esto
+    stretch: 0.085, stretchMax: 90,     // cuánto se estira el círculo según su velocidad
+    click: true,                        // clic en un círculo → cruza a la otra punta de su canal
+    // Glass de la diagonal (valores del Figma)
+    blur: 14.1, depth: 29.5, refraction: 1, dispersion: 0.5, tint: 0.2,
+    maxDpr: 2,
+  };
+
+  /* ================= Geometría del Figma (coordenadas del frame de 1440 × 761) ================= */
+  const X0 = 663, Y0 = 158, W = 728, H = 480;   // caja del arte dentro del frame
+  const T = 110.669, R = T / 2;                 // grosor de los canales / radio de los círculos
+  const RA = 95.913;                            // radio de la línea media de las curvas
+  const JC = [838.494, 461.6], NC = [1215.753, 333.231];   // centros de la curva de la J y del arco de la N
+  const PI = Math.PI;
+
+  // Nodos de los canales de JN. 2 y 6 son solo de paso (donde un tramo recto se vuelve curva).
+  const NODES = [
+    [742.33, 237.32],    // 0 · barra superior, izquierda
+    [934.3, 237.32],     // 1 · cruce: barra, tallo de la J y diagonal
+    [934.41, 461.6],     // 2 · fin del tallo de la J
+    [838.49, 557.51],    // 3 · base de la J
+    [742.58, 461.6],     // 4 · punta del gancho de la J
+    [1119.84, 557.5],    // 5 · pie de la N
+    [1119.84, 333.23],   // 6 · inicio del arco de la N
+    [1215.75, 237.32],   // 7 · cima del arco de la N
+    [1311.67, 333.23],   // 8 · punta del arco de la N
+  ];
+  const EDGES = [
+    { a: 0, b: 1 }, { a: 1, b: 2 },
+    { a: 2, b: 3, arc: { c: JC, r: RA, a0: 0, a1: PI / 2 } },
+    { a: 3, b: 4, arc: { c: JC, r: RA, a0: PI / 2, a1: PI } },
+    { a: 1, b: 5 }, { a: 5, b: 6 },
+    { a: 6, b: 7, arc: { c: NC, r: RA, a0: PI, a1: 1.5 * PI } },
+    { a: 7, b: 8, arc: { c: NC, r: RA, a0: 1.5 * PI, a1: 2 * PI } },
+  ];
+
+  // Degradado lineal de Figma → puntos inicio/fin en coordenadas del frame
+  const lin = (m, w, h, tr, c0, c1) => {
+    const [[a, b, tx], [c, d, ty]] = tr, det = a * d - b * c;
+    const pt = (gx, gy) => {
+      const x = gx - tx, y = gy - ty;
+      const lx = (d * x - b * y) / det * w, ly = (-c * x + a * y) / det * h;
+      return [m[0] * lx + m[1] * ly + m[2], m[3] * lx + m[4] * ly + m[5]];
+    };
+    return { p0: pt(0, 0.5), p1: pt(1, 0.5), c0, c1 };
+  };
+  const G1 = [[-0.119, -1.168, 1.245], [1.168, -0.119, 0.627]];
+  const BG0 = '#0014BC', BG1 = '#000956';
+  // Líneas de fondo: no llevan círculos, solo arman el circuito detrás de JN
+  const BG_LINES = [
+    { p: [742.33, 237.36], q: [742.33, 461.15], g: lin([0, 1, 687, -1, 0, 516.489], 334.466, T, [[1.532, 0, -0.2], [0, 1.532, -0.266]], BG0, BG1) },
+    { p: [853.0, 558.3], q: [1119.84, 558.3],   g: lin([-1, 0, 1175.174, 0, -1, 613.632], 377.504, T, [[-1.499, 0, 1.359], [0, -1.499, 2.182]], BG0, BG1) },
+    { p: [1119.84, 558.3], q: [1311.67, 558.3], g: lin([-1, 0, 1367, 0, -1, 613.632], 302.495, T, [[-2.365, 0, 1.774], [0, -2.365, 1.683]], BG0, BG1) },
+    { p: [1311.67, 558.3], q: [1311.67, 325.9], g: lin([0, 1, 1256.331, -1, 0, 613.632], 343.074, T, [[-0.877, 0, 0.927], [0, -0.877, 0.938]], BG0, BG1) },
+    { p: [933.77, 237.2], q: [1201.1, 237.2],   g: lin([-1, 0, 1256.331, 0, -1, 292.41], 377.778, 110.427, [[2.102, 0, -0.732], [0, 2.102, -0.551]], BG0, BG1) },
+  ];
+  const PAINT = {
+    j:   lin([1, 0, 687.246, 0, 1, 181.983], 302.495, 430.871, [[0.399, -0.463, 0.751], [0.325, 0.569, 0.003]], '#CF0E8D', '#370ECC'),
+    n:   lin([-1, 0, 1367, 0, -1, 612.855], 302.495, 430.871, [[-0.011, -0.93, 0.977], [0.459, -0.011, 0.186]], '#FF6F16', '#0A068B'),
+    bar: lin([1, 0, 687, 0, 1, 181.983], 302.495, T, [[-2.891, 0, 1.872], [0, -0.627, 0.5]], '#740FCD', '#CF0E8D'),
+  };
+  // Cada círculo vive en su canal: va y vuelve entre `node` (posición del Figma) y `other`.
+  // Los canales comparten los nodos 1 y 5, así que los círculos se turnan para ocuparlos.
+  const KNOBS = [
+    { node: 4, other: 1, home: [742.33, 461.11],  g: lin([0, -1, 797.669, 1, 0, 405.78], T, T, [[-1, 0, 1], [0, -1, 1.566]], '#842F94', '#35A3F9') },
+    { node: 5, other: 1, home: [1119.84, 557.07], g: lin([-1, 0, 1175.174, 0, -1, 612.402], T, T, G1, '#F36A1B', '#F0028D') },
+    { node: 8, other: 5, home: [1311.67, 334.5],  g: lin([-1, 0, 1367, 0, -1, 389.834], T, T, G1, '#F36A1B', '#2E02F0') },
+    { node: 0, other: 1, home: [742.33, 237.32],  g: lin([0, -1, 797.669, 1, 0, 181.983], T, T, G1, '#12CAB5', '#F0028D') },
+  ];
+  // Diagonal de vidrio: cápsula entre el cruce y el pie de la N
+  const GLASS = (() => {
+    const p = [934.16, 237.32], q = [1119.84, 557.03], len = Math.hypot(q[0] - p[0], q[1] - p[1]);
+    return { c: [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2], axis: [(q[0] - p[0]) / len, (q[1] - p[1]) / len], half: len / 2 };
+  })();
+
+  const art = document.getElementById('heroArt');
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const clamp01 = (u) => Math.min(1, Math.max(0, u));
+  const easeInOut = (u) => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
+  const easeOutCubic = (u) => 1 - Math.pow(1 - u, 3);
+  const easeOutBack = (u) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(u - 1, 3) + c1 * Math.pow(u - 1, 2); };
+
+  /* ================= Rutas sobre los canales ================= */
+  const neighbors = (n) => EDGES.filter((e) => e.a === n || e.b === n).map((e) => (e.a === n ? e.b : e.a));
+  function nodePath(from, to) {
+    const prev = { [from]: -1 }, queue = [from];
+    while (queue.length) {
+      const n = queue.shift();
+      if (n === to) break;
+      for (const m of neighbors(n)) if (!(m in prev)) { prev[m] = n; queue.push(m); }
+    }
+    const out = [];
+    for (let x = to; x !== -1; x = prev[x]) out.unshift(x);
+    return out;
+  }
+  function makeRoute(nodes) {
+    const segs = []; let len = 0;
+    for (let i = 0; i < nodes.length - 1; i++) {
+      const a = nodes[i], b = nodes[i + 1];
+      const e = EDGES.find((x) => (x.a === a && x.b === b) || (x.a === b && x.b === a));
+      let s;
+      if (e.arc) {
+        const fwd = e.a === a;
+        s = { arc: e.arc, a0: fwd ? e.arc.a0 : e.arc.a1, a1: fwd ? e.arc.a1 : e.arc.a0, len: Math.abs(e.arc.a1 - e.arc.a0) * e.arc.r };
+      } else {
+        const p = NODES[a], q = NODES[b];
+        s = { p, q, len: Math.hypot(q[0] - p[0], q[1] - p[1]) };
+      }
+      s.start = len; len += s.len; segs.push(s);
+    }
+    return { segs, len };
+  }
+  function segAt(route, s) {
+    for (const x of route.segs) if (s <= x.start + x.len) return x;
+    return route.segs[route.segs.length - 1];
+  }
+  function pointAt(route, s) {
+    s = Math.min(route.len, Math.max(0, s));
+    const seg = segAt(route, s), u = seg.len ? (s - seg.start) / seg.len : 0;
+    if (seg.arc) {
+      const ang = seg.a0 + (seg.a1 - seg.a0) * u;
+      return [seg.arc.c[0] + Math.cos(ang) * seg.arc.r, seg.arc.c[1] + Math.sin(ang) * seg.arc.r];
+    }
+    return [seg.p[0] + (seg.q[0] - seg.p[0]) * u, seg.p[1] + (seg.q[1] - seg.p[1]) * u];
+  }
+
+  /* ================= Escena 2D ================= */
+  const scene = document.createElement('canvas');
+  const ctx = scene.getContext('2d');
+
+  const gradient = (g, dx = 0, dy = 0) => {
+    const gr = ctx.createLinearGradient(g.p0[0] + dx, g.p0[1] + dy, g.p1[0] + dx, g.p1[1] + dy);
+    gr.addColorStop(0, g.c0); gr.addColorStop(1, g.c1);
+    return gr;
+  };
+  function strokeRoute(route, s0, s1, style) {
+    ctx.beginPath();
+    const p = pointAt(route, s0); ctx.moveTo(p[0], p[1]);
+    for (let s = s0 + 5; s < s1; s += 5) { const q = pointAt(route, s); ctx.lineTo(q[0], q[1]); }
+    const q = pointAt(route, s1); ctx.lineTo(q[0], q[1]);
+    ctx.strokeStyle = style; ctx.stroke();
+  }
+  function strokeLine(p, q, prog, style) {
+    ctx.beginPath(); ctx.moveTo(p[0], p[1]);
+    ctx.lineTo(p[0] + (q[0] - p[0]) * prog, p[1] + (q[1] - p[1]) * prog);
+    ctx.strokeStyle = style; ctx.stroke();
+  }
+
+  // Entrada: primero el circuito de fondo, luego JN, el vidrio y los círculos
+  BG_LINES.forEach((l, i) => { l.t0 = 0.05 + i * 0.09; l.dur = 0.7; });
+  const CHANNELS = [                              // en orden de capas
+    { route: makeRoute([1, 2, 3, 4]), paint: PAINT.j,   t0: 0.55, dur: 0.95 },
+    { route: makeRoute([5, 6, 7, 8]), paint: PAINT.n,   t0: 0.75, dur: 0.95 },
+    { route: makeRoute([1, 0]),       paint: PAINT.bar, t0: 0.70, dur: 0.55 },
+  ];
+  const GLASS_T0 = 1.25, INTRO_END = 2.3;
+  const knobs = KNOBS.map((k, i) => ({
+    ...k, pos: NODES[k.node].slice(), tail: null, scale: reduceMotion ? 1 : 0, t0: 1.45 + i * 0.14,
+    off: [k.home[0] - NODES[k.node][0], k.home[1] - NODES[k.node][1]],
+    ends: [k.node, k.other], move: null, want: false, next: INTRO_END + 0.3 + i * 0.45 + rand(0, 0.6),
+  }));
+  let glassAlpha = reduceMotion ? 1 : 0, prevT = 0;
+
+  function tryMove(k, now) {
+    const to = k.node === k.ends[0] ? k.ends[1] : k.ends[0];
+    // extremo compartido: espera si otro círculo está ahí o va hacia ahí
+    if (knobs.some((o) => o !== k && (o.node === to || (o.move && o.move.to === to)))) return false;
+    const route = makeRoute(nodePath(k.node, to));
+    k.move = { route, to, t0: now, dur: CONFIG.moveBase + route.len * CONFIG.movePerPx, s: 0 };
+    k.want = false;
+    return true;
+  }
+
+  function update(now) {
+    const dt = Math.min(0.1, Math.max(1e-3, now - prevT)); prevT = now;
+    glassAlpha = easeOutCubic(clamp01((now - GLASS_T0) / 0.7));
+    for (const k of knobs) if (k.scale < 1 || now < k.t0 + 0.6) k.scale = Math.max(0, easeOutBack(clamp01((now - k.t0) / 0.55)));
+    if (now < INTRO_END) return;
+
+    for (const k of knobs) {
+      const m = k.move;
+      if (!m) {
+        if ((k.want || now >= k.next) && !tryMove(k, now)) k.next = now + 0.3;   // extremo ocupado: reintenta
+        continue;
+      }
+      const u = clamp01((now - m.t0) / m.dur);
+      const s = m.route.len * easeInOut(u);
+      const speed = (s - m.s) / dt; m.s = s;
+      const st = Math.min(CONFIG.stretchMax, speed * CONFIG.stretch);
+      k.pos = pointAt(m.route, s);
+      k.tail = st > 0.5 ? { route: m.route, s0: Math.max(0, s - st), s1: s } : null;
+      if (u >= 1) {
+        k.node = m.to; k.pos = NODES[m.to].slice(); k.tail = null; k.move = null;
+        // en un extremo compartido se queda poco, para dejarle el turno a los demás
+        const shared = knobs.some((o) => o !== k && o.ends.includes(k.node));
+        k.next = now + (shared ? rand(0.5, 1.1) : rand(CONFIG.pauseMin, CONFIG.pauseMax));
+      }
+    }
+  }
+
+  function drawScene(scale, now) {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, scene.width, scene.height);
+    ctx.setTransform(scale, 0, 0, scale, -X0 * scale, -Y0 * scale);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = T;
+    const prog = (o) => (reduceMotion ? 1 : now < o.t0 ? -1 : easeInOut(clamp01((now - o.t0) / o.dur)));
+
+    for (const l of BG_LINES) {                   // circuito de fondo
+      const pr = prog(l); if (pr < 0) continue;
+      strokeLine(l.p, l.q, pr, gradient(l.g));
+    }
+    for (const ch of CHANNELS) {                  // trazos de JN
+      const pr = prog(ch); if (pr < 0) continue;
+      strokeRoute(ch.route, 0, ch.route.len * pr, gradient(ch.paint));
+    }
+    for (const k of knobs) {                      // círculos
+      if (k.scale <= 0) continue;
+      const g = gradient(k.g, k.pos[0] + k.off[0] - k.home[0], k.pos[1] + k.off[1] - k.home[1]);
+      if (k.tail) strokeRoute(k.tail.route, k.tail.s0, k.tail.s1, g);
+      else { ctx.beginPath(); ctx.arc(k.pos[0], k.pos[1], R * k.scale, 0, PI * 2); ctx.fillStyle = g; ctx.fill(); }
+    }
+  }
+
+  /* ================= WebGL: blur + refracción de la diagonal (canvas transparente) ================= */
+  const VERT = `attribute vec2 p; varying vec2 vUv; void main(){ vUv = p * .5 + .5; gl_Position = vec4(p, 0., 1.); }`;
+  const BLUR = `precision highp float;
+    varying vec2 vUv; uniform sampler2D uTex; uniform vec2 uStep;
+    void main(){
+      vec4 c = vec4(0.); float tw = 0.;
+      for (int i = -6; i <= 6; i++) {
+        float f = float(i); float w = exp(-f * f / 14.9);   // σ = 2.73 taps
+        c += texture2D(uTex, vUv + uStep * f) * w; tw += w;
+      }
+      gl_FragColor = c / tw;
+    }`;
+  const FRAG = `precision highp float;
+    uniform sampler2D uScene, uBlur;
+    uniform vec2 uRes, uSize, uC, uAxis, uMouse;
+    uniform float uScale, uHalf, uRad, uDepth, uRefr, uDisp, uTint, uGlass, uHover;
+    vec2 uvOf(vec2 p){ return vec2(p.x / uSize.x, 1. - p.y / uSize.y); }
+    float bevel(float t){ return 1. - sqrt(1. - t * t); }
+    void main(){
+      vec2 p = vec2(gl_FragCoord.x, uRes.y - gl_FragCoord.y) / uScale;   // px de diseño
+      vec4 col = texture2D(uScene, uvOf(p));                              // alfa premultiplicado
+      vec2 dl = p - uC, perp = vec2(-uAxis.y, uAxis.x);
+      float u = dot(dl, uAxis), v = dot(dl, perp);
+      vec2 q = vec2(sign(u) * max(abs(u) - uHalf, 0.), v);
+      float e = uRad - length(q);                       // distancia al borde de la cápsula
+      if (e > 0. && uGlass > 0.) {
+        vec2 n = length(q) > .001 ? normalize(uAxis * q.x + perp * q.y) : vec2(0.);
+        float b = bevel(clamp(1. - e / uDepth, 0., 1.));
+        vec2 off = -n * b * uDepth * uRefr;             // el bisel curva la imagen hacia dentro
+        float k = uDisp * .3;
+        vec4 g = texture2D(uBlur, uvOf(p + off));
+        g.r = texture2D(uBlur, uvOf(p + off * (1. + k))).r;
+        g.b = texture2D(uBlur, uvOf(p + off * (1. - k))).b;
+        g = g * (1. - uTint) + uTint;                   // blanco al 20 % encima
+        vec2 L = normalize(vec2(-1., -1.) + uHover * .7 * normalize(uMouse - p + .001));   // luz a -45°
+        float d1 = dot(n, L);
+        float glow = uHover * exp(-dot(uMouse - p, uMouse - p) / 30000.);
+        float h = b * (.03 + .09 * max(d1, 0.)) + glow * .05
+                + smoothstep(1.5, 0., e) * (.10 + .55 * pow(max(d1, 0.), 1.5) + .28 * pow(max(-d1, 0.), 2.) + .3 * glow);
+        g = vec4(g.rgb + h, min(1., g.a + h));
+        col = mix(col, g, uGlass * clamp(e * uScale, 0., 1.));
+      }
+      gl_FragColor = col;
+    }`;
+
+  function initGL(canvas) {
+    const gl = canvas.getContext('webgl', { antialias: false, alpha: true, premultipliedAlpha: true, powerPreference: 'high-performance' });
+    if (!gl) return null;
+    const compile = (type, src) => {
+      const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+      return s;
+    };
+    const program = (fs) => {
+      const pr = gl.createProgram();
+      gl.attachShader(pr, compile(gl.VERTEX_SHADER, VERT));
+      gl.attachShader(pr, compile(gl.FRAGMENT_SHADER, fs));
+      gl.bindAttribLocation(pr, 0, 'p'); gl.linkProgram(pr);
+      if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pr));
+      const u = {}; const n = gl.getProgramParameter(pr, gl.ACTIVE_UNIFORMS);
+      for (let i = 0; i < n; i++) { const name = gl.getActiveUniform(pr, i).name; u[name] = gl.getUniformLocation(pr, name); }
+      return { pr, u };
+    };
+    let blur, glass;
+    try { blur = program(BLUR); glass = program(FRAG); } catch (err) { console.warn(err); return null; }
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+
+    const tex = () => {
+      const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      return t;
+    };
+    const sceneTex = tex();
+    const targets = [0, 1].map(() => ({ tex: tex(), fbo: gl.createFramebuffer() }));
+    let bw = 1, bh = 1;
+    const pass = (src, dst, sx, sy) => {
+      gl.bindTexture(gl.TEXTURE_2D, src);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, dst);
+      gl.uniform2f(blur.u.uStep, sx, sy); gl.drawArrays(gl.TRIANGLES, 0, 3);
+    };
+
+    return {
+      resize(w, h) {
+        bw = Math.max(1, Math.round(w / 2)); bh = Math.max(1, Math.round(h / 2));
+        for (const t of targets) {
+          gl.bindTexture(gl.TEXTURE_2D, t.tex);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, bw, bh, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+          gl.bindFramebuffer(gl.FRAMEBUFFER, t.fbo);
+          gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t.tex, 0);
+        }
+      },
+      render(scale, mouse, hover, alpha) {
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, sceneTex);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, scene);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+
+        // blur separable a media resolución, dos iteraciones (σ total = CONFIG.blur)
+        const stepPx = (CONFIG.blur / Math.SQRT2) * (scale / 2) / 2.73;
+        gl.useProgram(blur.pr); gl.uniform1i(blur.u.uTex, 0); gl.viewport(0, 0, bw, bh);
+        pass(sceneTex, targets[0].fbo, stepPx / bw, 0);
+        pass(targets[0].tex, targets[1].fbo, 0, stepPx / bh);
+        pass(targets[1].tex, targets[0].fbo, stepPx / bw, 0);
+        pass(targets[0].tex, targets[1].fbo, 0, stepPx / bh);
+
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        gl.useProgram(glass.pr);
+        gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, sceneTex);
+        gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, targets[1].tex);
+        const u = glass.u;
+        gl.uniform1i(u.uScene, 0); gl.uniform1i(u.uBlur, 1);
+        gl.uniform2f(u.uRes, canvas.width, canvas.height);
+        gl.uniform2f(u.uSize, W, H);
+        gl.uniform2f(u.uC, GLASS.c[0] - X0, GLASS.c[1] - Y0);
+        gl.uniform2f(u.uAxis, GLASS.axis[0], GLASS.axis[1]);
+        gl.uniform2f(u.uMouse, mouse.x, mouse.y);
+        gl.uniform1f(u.uScale, scale);
+        gl.uniform1f(u.uHalf, GLASS.half);
+        gl.uniform1f(u.uRad, R);
+        gl.uniform1f(u.uDepth, CONFIG.depth);
+        gl.uniform1f(u.uRefr, CONFIG.refraction);
+        gl.uniform1f(u.uDisp, CONFIG.dispersion);
+        gl.uniform1f(u.uTint, CONFIG.tint);
+        gl.uniform1f(u.uGlass, alpha);
+        gl.uniform1f(u.uHover, hover);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+      },
+    };
+  }
+
+  /* ================= Montaje ================= */
+  const view = document.createElement('canvas');
+  const glr = initGL(view);
+  art.appendChild(glr ? view : scene);
+
+  function drawGlassFallback() {                 // sin WebGL: diagonal translúcida sin blur
+    const a = GLASS.axis, h = GLASS.half, c = GLASS.c;
+    ctx.lineWidth = T;
+    strokeLine([c[0] - a[0] * h, c[1] - a[1] * h], [c[0] + a[0] * h, c[1] + a[1] * h], 1, `rgba(255,255,255,${0.2 * glassAlpha})`);
+  }
+
+  let scale = 1;
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, CONFIG.maxDpr);
+    const w = Math.max(2, Math.round(art.clientWidth * dpr));
+    const h = Math.max(2, Math.round(w * H / W));
+    if (scene.width === w && scene.height === h) return;
+    scene.width = w; scene.height = h;
+    scale = w / W;
+    if (glr) { view.width = w; view.height = h; glr.resize(w, h); }
+    if (!running) frame();
+  }
+
+  /* ================= Cursor ================= */
+  const mouse = { x: W / 2, y: H / 2 };
+  let hover = 0, hoverTarget = 0;
+  const toDesign = (ev) => {
+    const r = art.getBoundingClientRect();
+    return [(ev.clientX - r.left) / r.width * W, (ev.clientY - r.top) / r.height * H];
+  };
+  const knobAt = (x, y) => knobs.find((k) => Math.hypot(x + X0 - k.pos[0], y + Y0 - k.pos[1]) < R);
+  if (!reduceMotion) {
+    art.addEventListener('pointermove', (ev) => {
+      const [x, y] = toDesign(ev);
+      mouse.tx = x; mouse.ty = y; hoverTarget = 1;
+      art.style.cursor = CONFIG.click && knobAt(x, y) ? 'pointer' : '';
+    });
+    art.addEventListener('pointerleave', () => { hoverTarget = 0; });
+    if (CONFIG.click) art.addEventListener('click', (ev) => {
+      const k = knobAt(...toDesign(ev));
+      if (k && !k.move && clock() >= INTRO_END) k.want = true;
+    });
+  }
+
+  /* ================= Loop ================= */
+  const start = performance.now();
+  let offset = 0, pausedAt = 0, running = false, visible = true, raf = 0;
+  const clock = () => (performance.now() - start - offset) / 1000;
+
+  function frame() {
+    const now = clock();
+    if (!reduceMotion) update(now);
+    if (mouse.tx !== undefined) { mouse.x += (mouse.tx - mouse.x) * 0.15; mouse.y += (mouse.ty - mouse.y) * 0.15; }
+    hover += (hoverTarget - hover) * 0.08;
+    drawScene(scale, now);
+    if (glr) glr.render(scale, mouse, hover, glassAlpha); else drawGlassFallback();
+    if (running) raf = requestAnimationFrame(frame);
+  }
+  function setRunning(on) {
+    if (reduceMotion || on === running) return;
+    running = on;
+    if (on) { if (pausedAt) offset += performance.now() - pausedAt; raf = requestAnimationFrame(frame); }
+    else { pausedAt = performance.now(); cancelAnimationFrame(raf); }
+  }
+
+  new ResizeObserver(resize).observe(art);
+  resize();
+  frame();
+  // se pausa cuando el header sale de pantalla o la pestaña pierde foco
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; setRunning(visible && !document.hidden); }).observe(art);
+  document.addEventListener('visibilitychange', () => setRunning(visible && !document.hidden));
+})();

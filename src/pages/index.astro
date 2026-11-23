@@ -1,14 +1,42 @@
 ---
+/**
+ * Home — Figma: desktop 1:2, mobile 103:302.
+ */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroCircuit from '../components/HeroCircuit.astro';
+import HomeSectionTitle from '../components/HomeSectionTitle.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import ExplorationsGallery from '../components/ExplorationsGallery.astro';
+import { projects } from '../data/home';
 ---
 
-<!-- Etapa 1: solo layout base. El header, Proyectos y Exploraciones llegan en la etapa 2. -->
 <BaseLayout>
-  <section id="proyectos" class="placeholder" aria-label="Proyectos"></section>
+  <HeroCircuit />
+
+  <section id="proyectos" aria-labelledby="proyectos-titulo">
+    <HomeSectionTitle id="proyectos-titulo">Proyectos</HomeSectionTitle>
+    <ul class="projects" role="list">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </ul>
+  </section>
+
+  <section id="exploraciones" aria-labelledby="exploraciones-titulo">
+    <HomeSectionTitle id="exploraciones-titulo">Exploraciones</HomeSectionTitle>
+    <ExplorationsGallery />
+  </section>
 </BaseLayout>
 
 <style>
-  .placeholder {
-    min-height: 60vh;
+  .projects {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--projects-row-gap) var(--grid-col-gap);
+    padding: 0 var(--page-padding) var(--projects-pb);
+  }
+
+  @media (min-width: 768px) {
+    .projects {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 </style>

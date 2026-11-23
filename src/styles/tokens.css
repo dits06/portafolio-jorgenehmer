@@ -14,7 +14,9 @@
   --ink-3: #333333;
   --muted: #737373;
   --muted-2: #666666;
+  --muted-3: #6e6e6e; /* subtítulo de las cards de proyecto (Skipo / Proyecto propio) */
   --line: #e5e5e5;
+  --rule: var(--placeholder); /* línea junto a los títulos de sección del home */
   --surface: #f8f8f8;
   --placeholder: #d9d9d9;
   --paper: #ffffff;
@@ -26,6 +28,7 @@
   --font-sans: var(--font-tiktok-sans), system-ui, sans-serif;
 
   --weight-regular: 400;
+  --weight-medium: 500;
   --weight-semibold: 600;
   --weight-bold: 700;
 
@@ -80,12 +83,27 @@
   /* Footer: 12 px */
   --text-legal: 0.75rem;
 
+  /* Tags y filtros del home (Caption en Figma): 12/17 en ambos tamaños */
+  --text-chip: 0.75rem;
+  --leading-chip: 1.0625rem;
+
+  /* Pie de las piezas de Exploraciones: 12/17 → 13/18 */
+  --text-thumb-caption: var(--text-caption);
+  --leading-thumb-caption: clamp(1.0625rem, 1.0405rem + 0.0939vw, 1.125rem);
+
+  /* Link "Ver todas las exploraciones" (Label en Figma): 14/20, Medium */
+  --text-label: 0.875rem;
+  --leading-label: 1.25rem;
+
   /* ---------- Espaciado y layout ---------- */
   --space-4: 0.25rem;
   --space-8: 0.5rem;
   --space-10: 0.625rem;
+  --space-11: 0.6875rem;
+  --space-13: 0.8125rem;
   --space-14: 0.875rem;
   --space-16: 1rem;
+  --space-17: 1.0625rem;
   --space-24: 1.5rem;
   --space-25: 1.5625rem;
   --space-48: 3rem;
@@ -103,12 +121,22 @@
   --section-y: clamp(3rem, 2.2958rem + 3.0047vw, 5rem); /* 48 → 80 */
   --case-section-gap: clamp(5.5rem, 3.9155rem + 6.7606vw, 10rem); /* 88 → 160 */
 
+  /* Títulos de sección del home ("Proyectos", "Exploraciones" + línea) */
+  --home-title-pt: clamp(2rem, 2.6761rem - 0.7512vw, 2.5rem); /* 40 → 32 */
+  --home-title-pb: clamp(1.5rem, 1.3239rem + 0.7512vw, 2rem); /* 24 → 32 */
+
   /* Grillas del home */
   --grid-col-gap: 1.5rem; /* 24 */
-  --grid-row-gap: 1rem; /* 16 */
+  --grid-row-gap: 1rem; /* 16 en desktop */
+  --projects-row-gap: clamp(1rem, 3.0282rem - 2.2535vw, 2.5rem); /* 40 → 16 */
+  --projects-pb: clamp(0rem, 4.0563rem - 4.507vw, 3rem); /* 48 → 0 */
+  --thumbs-row-gap: clamp(1.25rem, 0.9859rem + 1.1268vw, 2rem); /* 20 → 32 */
+  --thumbs-col-gap: clamp(0.75rem, 0.4859rem + 1.1268vw, 1.5rem); /* 12 → 24 */
 
   /* Radios */
   --radius-image: 1rem; /* 16 */
+  --radius-thumb: 0.75rem; /* 12, piezas de Exploraciones */
+  --radius-chip: 0.6875rem; /* 11, tags y filtros */
 
   /* Iconos */
   --icon-size: 1.5rem; /* 24 */
