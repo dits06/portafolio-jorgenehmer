@@ -63,7 +63,17 @@ const { pasos, nota, enlace } = Astro.props;
 
   <figcaption class="flujo__pie">
     <span class="flujo__nota">{nota}</span>
-    {enlace?.href && <a class="flujo__enlace" href={enlace.href}>{enlace.texto}</a>}
+    {
+      enlace?.href && (
+        <a
+          class="flujo__enlace"
+          href={enlace.href}
+          {...(/^https?:/.test(enlace.href) ? { target: '_blank', rel: 'noopener' } : {})}
+        >
+          {enlace.texto}
+        </a>
+      )
+    }
   </figcaption>
 </figure>
 
