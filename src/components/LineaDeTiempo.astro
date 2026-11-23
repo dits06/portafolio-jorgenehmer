@@ -1,0 +1,198 @@
+---
+/**
+ * Línea de tiempo — Visión general, Figma 113:507 (desktop) / 168:605 (mobile).
+ * Desktop: riel (punto + línea) · año de 110 px · hitos, con 20 px entre columnas.
+ * Mobile: riel · año y etiqueta en una fila, hitos debajo (12 px).
+ * Cada año deja 48 px bajo sus hitos, salvo el último.
+ */
+interface Hito {
+  titulo: string;
+  texto: string;
+  etiquetas?: string[];
+}
+
+interface Anio {
+  anio: string;
+  etiqueta: string;
+  hitos: Hito[];
+  /** Línea "También: …" al final del año. */
+  tambien?: string;
+}
+
+interface Props {
+  anios: Anio[];
+}
+
+const { anios } = Astro.props;
+---
+
+<!-- El div evita las reglas de listas de texto de CaseSection (720 px, sangría) -->
+<div>
+<ol class="linea-de-tiempo" role="list">
+  {
+    anios.map((a) => (
+      <li class="anio">
+        <span class="anio__riel" aria-hidden="true" />
+        <div class="anio__contenido">
+          <h3 class="anio__encabezado">
+            <span class="anio__numero">{a.anio}</span>
+            <span class="anio__etiqueta">{a.etiqueta}</span>
+          </h3>
+          <div class="anio__hitos">
+            {a.hitos.map((h) => (
+              <div class="hito">
+                <p class="hito__titulo">
+                  <span>{h.titulo}</span>
+                  {h.etiquetas?.map((e) => (
+                    <span class="hito__etiqueta">{e}</span>
+                  ))}
+                </p>
+                <p class="hito__texto">{h.texto}</p>
+              </div>
+            ))}
+            {a.tambien && <p class="anio__tambien">{a.tambien}</p>}
+          </div>
+        </div>
+      </li>
+    ))
+  }
+</ol>
+</div>
+
+<style>
+  .linea-de-tiempo {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .anio {
+    display: flex;
+    gap: var(--space-12);
+  }
+
+  /* Punto de 12 px arriba (8 px de margen) y línea de 1 px hasta el año siguiente */
+  .anio__riel {
+    position: relative;
+    flex: 0 0 var(--timeline-dot);
+    margin-top: var(--space-8);
+  }
+
+  .anio__riel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--timeline-dot);
+    height: var(--timeline-dot);
+    border-radius: 50%;
+    background: var(--ink);
+  }
+
+  .anio__riel::after {
+    content: '';
+    position: absolute;
+    top: var(--timeline-dot);
+    bottom: 0;
+    left: calc(50% - 0.5px);
+    width: 1px;
+    background: var(--timeline-line);
+  }
+
+  .anio__contenido {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: var(--space-12);
+    min-width: 0;
+  }
+
+  .anio__encabezado {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2) var(--space-10);
+    margin: 0;
+    font-weight: inherit;
+  }
+
+  .anio__numero {
+    font-size: var(--text-sub);
+    line-height: var(--leading-sub);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-sub);
+  }
+
+  .anio__etiqueta {
+    color: var(--muted);
+    font-size: var(--text-thumb-caption);
+    line-height: var(--leading-thumb-caption);
+  }
+
+  .anio__hitos {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-18);
+    padding-bottom: var(--space-48);
+  }
+
+  .anio:last-child .anio__hitos {
+    padding-bottom: 0;
+  }
+
+  .hito {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .hito__titulo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-8);
+    font-size: var(--text-h4);
+    line-height: var(--leading-h4);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-h4);
+  }
+
+  .hito__etiqueta {
+    padding: var(--space-3) var(--space-8);
+    border-radius: var(--radius-pill);
+    background: var(--chip-bg);
+    color: var(--ink-3);
+    font-size: var(--text-thumb-caption);
+    line-height: var(--leading-thumb-caption);
+    font-weight: var(--weight-regular);
+    letter-spacing: 0;
+  }
+
+  .hito__texto {
+    color: var(--muted-2);
+  }
+
+  .anio__tambien {
+    color: var(--muted-4);
+    font-size: var(--text-thumb-caption);
+    line-height: var(--leading-thumb-caption);
+  }
+
+  @media (min-width: 768px) {
+    .anio {
+      gap: var(--space-20);
+    }
+
+    .anio__contenido {
+      flex-direction: row;
+      gap: var(--space-20);
+    }
+
+    .anio__encabezado {
+      flex: 0 0 var(--timeline-year);
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-2);
+    }
+  }
+</style>

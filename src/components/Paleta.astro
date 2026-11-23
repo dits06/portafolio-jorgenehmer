@@ -1,0 +1,111 @@
+---
+/**
+ * Paleta de color — Visión general › Marca, Figma 166:558 (mobile 168:815).
+ * Fila de colores principales (2 columnas, 200 px de alto) y fila de fondos
+ * (4 columnas en desktop, 2 × 2 en mobile, 140 px), con pie debajo.
+ * El color de cada muestra es contenido (el hex de Figma), por eso va inline.
+ */
+interface Color {
+  nombre: string;
+  hex: string;
+  /** Texto blanco sobre el color (fondos oscuros). */
+  oscuro?: boolean;
+}
+
+interface Props {
+  principales: Color[];
+  fondos: Color[];
+  pie?: string;
+}
+
+const { principales, fondos, pie } = Astro.props;
+---
+
+<figure class="paleta">
+  <div class="paleta__colores">
+    {
+      [
+        { lista: principales, clase: 'paleta__fila paleta__fila--principales' },
+        { lista: fondos, clase: 'paleta__fila paleta__fila--fondos' },
+      ].map(({ lista, clase }) => (
+        <ul class={clase} role="list">
+          {lista.map((c) => (
+            <li
+              class:list={['muestra', { 'muestra--oscura': c.oscuro }]}
+              style={`background-color: ${c.hex}`}
+            >
+              <span class="muestra__nombre">{c.nombre}</span>
+              <span class="muestra__hex">{c.hex}</span>
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+  {pie && <figcaption class="paleta__pie">{pie}</figcaption>}
+</figure>
+
+<style>
+  .paleta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .paleta__colores {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+  }
+
+  .paleta__fila {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-20) var(--space-16);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .muestra {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-height: 12.5rem; /* 200 px */
+    padding: var(--space-16);
+    border-radius: var(--radius-thumb);
+    color: var(--swatch-ink);
+  }
+
+  .paleta__fila--fondos .muestra {
+    min-height: 8.75rem; /* 140 px */
+  }
+
+  .muestra--oscura {
+    color: var(--paper);
+  }
+
+  .muestra__nombre {
+    font-size: var(--text-label);
+    line-height: var(--leading-label);
+    font-weight: var(--weight-medium);
+  }
+
+  .muestra__hex {
+    opacity: 0.8;
+    font-size: var(--text-thumb-caption);
+    line-height: var(--leading-thumb-caption);
+  }
+
+  .paleta__pie {
+    color: var(--muted);
+    font-size: var(--text-thumb-caption);
+    line-height: var(--leading-thumb-caption);
+  }
+
+  @media (min-width: 768px) {
+    .paleta__fila--fondos {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

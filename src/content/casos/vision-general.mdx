@@ -1,0 +1,294 @@
+---
+# Caso — Visión general. Figma: 106:328 (desktop), 168:540 (mobile).
+# Textos copiados tal cual de Figma. [Confirmar] = dato que falta en Figma.
+# Este caso no tiene bloque "Diseño final" (destacados) en Figma.
+titulo: Cuatro años diseñando Skipo de punta a punta
+bajada: Una plataforma de inversión en cripto, acciones tokenizadas y stablecoins, para personas y empresas.
+nombre: Visión general
+subtitulo: Skipo
+tags: [Diseño de producto, Caso de estudio, App y webapp]
+portada: ../../assets/casos/vision-general/portada.png
+portadaAlt: Pantallas de la app de Skipo
+metadatos:
+  - etiqueta: Rol
+    valor: Único diseñador UX/UI
+  - etiqueta: Período
+    valor: Agosto 2022 – junio 2026
+  - etiqueta: Plataformas
+    valor: App mobile, webapp B2B y landing
+  - etiqueta: Herramientas
+    valor: Figma, FigJam, Jira, Maze
+resumen: 'Skipo es una plataforma chilena para invertir en cripto, acciones tokenizadas y stablecoins, y para que empresas paguen a sus equipos remotos en stablecoins. Fui su único diseñador durante casi cuatro años: diseñé el producto desde sus primeras versiones y lo hice crecer junto al negocio.'
+queHice:
+  - Diseño de la app mobile y la webapp B2B de punta a punta
+  - Identidad de marca y logo
+  - Design system y librería de componentes
+  - Landing pages, animaciones y material de marketing
+metricas:
+  eyebrow: En números
+  items:
+    # En Figma dice "10.000+": va con formato de EE. UU. según el CLAUDE.md
+    - valor: 10,000+
+      descripcion: usuarios registrados y verificados
+    - valor: 25+
+      descripcion: empresas usan la plataforma B2B
+    - valor: 4 años
+      descripcion: como único diseñador del producto
+secciones:
+  - { id: el-producto, titulo: El producto }
+  - { id: mi-rol, titulo: Mi rol }
+  - { id: evolucion, titulo: Evolución }
+  - { id: funcionalidades, titulo: Funcionalidades }
+  - { id: casos-en-profundidad, titulo: Casos en profundidad }
+  - { id: marca, titulo: Marca }
+  - { id: webapp-y-landing, titulo: Webapp y landing }
+  - { id: impacto, titulo: Impacto }
+  - { id: aprendizajes, titulo: Aprendizajes }
+siguientes:
+  - slug: registro-y-verificacion
+    titulo: Registro y verificación
+    texto: Cómo bajamos la fricción del onboarding y el KYC.
+    imagen: ../../assets/casos/vision-general/siguiente-registro-y-verificacion.png
+  - slug: pagos-masivos-b2b
+    titulo: Pagos masivos B2B
+    texto: Cómo empresas pagan a equipos remotos en stablecoins.
+    imagen: ../../assets/casos/registro-y-verificacion/siguiente-pagos-masivos-b2b.png
+  - slug: design-system
+    titulo: Design system de Skipo
+    texto: La librería detrás de la app y la webapp.
+    imagen: ../../assets/casos/registro-y-verificacion/siguiente-design-system.png
+---
+
+import CaseSection from '../../components/CaseSection.astro';
+import CaseImage from '../../components/CaseImage.astro';
+import Metrica from '../../components/Metrica.astro';
+import Metricas from '../../components/Metricas.astro';
+import ImagenConPie from '../../components/ImagenConPie.astro';
+import ImagenConTexto from '../../components/ImagenConTexto.astro';
+import Grilla from '../../components/Grilla.astro';
+import CardNumerada from '../../components/CardNumerada.astro';
+import CardCaso from '../../components/CardCaso.astro';
+import LineaDeTiempo from '../../components/LineaDeTiempo.astro';
+import Tipografia from '../../components/Tipografia.astro';
+import Paleta from '../../components/Paleta.astro';
+
+import pantallasPrincipales from '../../assets/casos/vision-general/pantallas-principales-de-la-app.png';
+import home2022 from '../../assets/casos/vision-general/2022-home-original.png';
+import home2024 from '../../assets/casos/vision-general/2024-nuevo-home.png';
+import home2026 from '../../assets/casos/vision-general/2026-home-3-0.png';
+import compraVenta from '../../assets/casos/vision-general/compra-venta-y-cotizacion.png';
+import cuentaRemunerada from '../../assets/casos/vision-general/cuenta-remunerada.png';
+import xstocks from '../../assets/casos/vision-general/xstocks.png';
+import pagosQr from '../../assets/casos/vision-general/pagos-con-qr-y-cobros.png';
+import enviosYContactos from '../../assets/casos/vision-general/envios-y-contactos.png';
+import ordenesRecurrentes from '../../assets/casos/vision-general/ordenes-recurrentes.png';
+import casoRegistro from '../../assets/casos/vision-general/caso-registro-y-verificacion.png';
+/* [Confirmar] En Figma, las imágenes de las cards de Pagos masivos B2B y
+   Design system (107:505, 107:516) son placeholders vacíos: por ahora va la
+   portada de cada caso. */
+import casoPagos from '../../assets/casos/pagos-masivos-b2b/portada.png';
+import casoDesignSystem from '../../assets/casos/design-system/portada.png';
+import logo from '../../assets/casos/vision-general/construccion-del-logo.png';
+import logo2 from '../../assets/casos/vision-general/construccion-del-logo-2.png';
+import aplicacionesDeMarca from '../../assets/casos/vision-general/aplicaciones-de-marca.png';
+import aplicacionesDeMarca2 from '../../assets/casos/vision-general/aplicaciones-de-marca-2.png';
+import webapp from '../../assets/casos/vision-general/webapp.png';
+import landing from '../../assets/casos/vision-general/landing.png';
+import seccionXstocks from '../../assets/casos/vision-general/seccion-xstocks.png';
+
+<CaseSection id="el-producto" eyebrow="El producto" titulo="Invertir sin tener que ser experto">
+
+Skipo nació para que personas sin experiencia pudieran invertir desde el celular. Con el tiempo sumó acciones tokenizadas, cuenta remunerada y una plataforma para que empresas paguen a sus equipos en stablecoins.
+
+<Grilla columnas={3}>
+  <CardNumerada numero="01" titulo="Cripto" texto="Bitcoin, Ethereum y más de 10 monedas." />
+  <CardNumerada numero="02" titulo="xStocks" texto="Acciones, ETFs e índices tokenizados." />
+  <CardNumerada numero="03" titulo="Stablecoins" texto="USDT y USDC para ahorrar y pagar." />
+</Grilla>
+
+<ImagenConPie src={pantallasPrincipales} alt="Pantallas principales de la app" ratio="800 / 450" />
+
+</CaseSection>
+
+<CaseSection id="mi-rol" eyebrow="Mi rol" titulo="Cómo trabajaba">
+
+Trabajaba con un Product Owner, que priorizaba los tickets en Jira, y con el CTO, que traía los requerimientos del negocio y de los clientes B2B. Diseñábamos en sprints de Scrum, con Design Thinking como marco.
+
+<Grilla columnas={3}>
+  <CardNumerada numero="01" titulo="Requerimiento" texto="Llega desde el PO, el CTO o un cliente B2B." />
+  <CardNumerada numero="02" titulo="Diseño" texto="Flujos, wireframes y prototipos en Figma." />
+  <CardNumerada numero="03" titulo="Entrega y medición" texto="Handoff a desarrollo y seguimiento de métricas." />
+</Grilla>
+
+</CaseSection>
+
+<CaseSection id="evolucion" eyebrow="Evolución" titulo="Cómo creció el producto">
+
+Skipo empezó como una app para comprar y vender cripto. En cinco años sumó pesos chilenos, una plataforma para empresas, pagos en comercios, cuentas remuneradas y acciones tokenizadas. Estos son los hitos que más transformaron el producto.
+
+<LineaDeTiempo
+  anios={[
+    {
+      anio: '2022',
+      etiqueta: 'El inicio',
+      hitos: [
+        { titulo: 'Compra, venta y depósito de cripto', texto: 'La primera versión de la app.' },
+        { titulo: 'Depósitos en pesos desde el banco', texto: 'Sumamos dinero fiat: entrar a cripto sin pasar por otro exchange.' },
+        { titulo: 'Envíos entre usuarios sin comisión', texto: 'Pagos inmediatos dentro de la red de Skipo.' },
+      ],
+    },
+    {
+      anio: '2023',
+      etiqueta: 'Más allá de la app',
+      hitos: [
+        { titulo: 'Webapp y pagos masivos', etiquetas: ['B2B', 'Caso de estudio'], texto: 'El nacimiento del producto para empresas.' },
+        { titulo: 'Gráficos de precios históricos', texto: 'Una limitación técnica que por fin pudimos resolver.' },
+        { titulo: 'Biometría y PIN como 2FA', texto: 'La base de la seguridad que después llevamos al registro.' },
+      ],
+      tambien: 'También: historial de movimientos y la primera landing de Skipo.',
+    },
+    {
+      anio: '2024',
+      etiqueta: 'Madurar el producto',
+      hitos: [
+        { titulo: 'Pago con cripto en comercios', etiquetas: ['Primera en Chile'], texto: 'Fuimos la primera plataforma en Chile en ofrecerlo. Hoy está deprecada por un cambio de proveedor.' },
+        { titulo: 'Nuevo Home y nueva webapp', texto: 'Rediseño completo de la experiencia principal.' },
+        { titulo: 'Rentabilidad (PnL)', texto: 'Cuánto ganas o pierdes en cada activo.' },
+      ],
+      tambien: 'También: estados de cuenta (ledgers) en web y mobile, y pantallas de onboarding.',
+    },
+    {
+      anio: '2025',
+      etiqueta: 'Hacer crecer el dinero',
+      hitos: [
+        { titulo: 'Nuevo registro', etiquetas: ['Caso de estudio'], texto: 'Verificación diferida, PIN + biometría y menos texto en el KYC.' },
+        { titulo: 'Cuenta remunerada en cripto y en pesos', texto: 'Rentabilidad diaria en USDT, USDC y CLP.' },
+        { titulo: 'Órdenes recurrentes (DCA)', texto: 'Invertir de forma automática y periódica.' },
+      ],
+      tambien: 'También: nuevo historial, y animaciones e ilustraciones 3D para la app.',
+    },
+    {
+      anio: '2026',
+      etiqueta: 'Acciones tokenizadas',
+      hitos: [
+        { titulo: 'xStocks', texto: 'Acciones, ETFs e índices tokenizados, operables 24/5.' },
+        { titulo: 'Home 3.0', texto: 'La tercera generación del Home.' },
+        { titulo: 'Nueva landing', texto: 'Un sitio a la altura del producto actual.' },
+      ],
+      tambien: 'También: depósitos en múltiples redes.',
+    },
+  ]}
+/>
+
+<Grilla columnas={3} columnasMobile={2} separacionFilas={20}>
+  <ImagenConPie src={home2022} pie="2022 · Home original" ratio="256 / 480" sizes="(min-width: 1440px) 256px, (min-width: 768px) 20vw, 45vw" />
+  <ImagenConPie src={home2024} pie="2024 · Nuevo Home" ratio="256 / 480" sizes="(min-width: 1440px) 256px, (min-width: 768px) 20vw, 45vw" />
+  <ImagenConPie src={home2026} pie="2026 · Home 3.0" ratio="256 / 480" sizes="(min-width: 1440px) 256px, (min-width: 768px) 20vw, 45vw" />
+</Grilla>
+
+</CaseSection>
+
+<CaseSection id="funcionalidades" eyebrow="Funcionalidades" titulo="Lo que diseñé">
+
+Diseñé cada funcionalidad que se sumó al producto durante estos años. Estas son algunas de las principales:
+
+<Grilla columnas={2} columnasMobile={2} separacion={24} separacionMobile={16}>
+  <ImagenConTexto src={compraVenta} titulo="Compra, venta y cotización" texto="Convert, con tipo de cambio y detalle de la orden." ratio="388 / 510" sizes="(min-width: 1440px) 388px, (min-width: 768px) 30vw, 45vw" />
+  <ImagenConTexto src={cuentaRemunerada} titulo="Cuenta remunerada" texto="Rentabilidad en cripto y en pesos chilenos." ratio="388 / 510" sizes="(min-width: 1440px) 388px, (min-width: 768px) 30vw, 45vw" />
+  <ImagenConTexto src={xstocks} titulo="xStocks" texto="Acciones tokenizadas, mercado 24/5 y dividendos." ratio="388 / 510" sizes="(min-width: 1440px) 388px, (min-width: 768px) 30vw, 45vw" />
+  <ImagenConTexto src={pagosQr} titulo="Pagos con QR y cobros" texto="Pagar en comercios y cobrar entre contactos." ratio="388 / 510" sizes="(min-width: 1440px) 388px, (min-width: 768px) 30vw, 45vw" />
+  <ImagenConTexto src={enviosYContactos} titulo="Envíos y contactos" texto="A usuarios Skipo, billeteras externas y bancos." ratio="388 / 510" sizes="(min-width: 1440px) 388px, (min-width: 768px) 30vw, 45vw" />
+  <ImagenConTexto src={ordenesRecurrentes} titulo="Órdenes recurrentes" texto="Compras y ventas automáticas diarias, semanales o mensuales." ratio="388 / 510" sizes="(min-width: 1440px) 388px, (min-width: 768px) 30vw, 45vw" />
+</Grilla>
+
+</CaseSection>
+
+<CaseSection id="casos-en-profundidad" eyebrow="Casos en profundidad" titulo="Tres historias en detalle">
+
+Algunos proyectos merecen su propio caso, con el proceso completo:
+
+<Grilla columnas={3} separacion={24}>
+  <CardCaso href="/casos/registro-y-verificacion" imagen={casoRegistro} titulo="Registro y verificación" texto="Cómo bajamos la fricción del onboarding y el KYC. La activación de biometría subió de 32% a 75%." />
+  <CardCaso href="/casos/pagos-masivos-b2b" imagen={casoPagos} titulo="Pagos masivos B2B" texto="Cómo empresas pagan a equipos remotos en stablecoins." />
+  <CardCaso href="/casos/design-system" imagen={casoDesignSystem} titulo="Design system de Skipo" texto="La librería detrás de la app y la webapp." />
+</Grilla>
+
+</CaseSection>
+
+<CaseSection id="marca" eyebrow="Marca" titulo="Una identidad que transmita confianza">
+
+Diseñé la identidad de Skipo desde cero. El logo son dos monedas distintas que se cruzan y forman la S: la idea de intercambiar un activo por otro.
+
+<figure class="pila">
+  <CaseImage src={logo} alt="Logo de Skipo" ratio="800 / 360" />
+  <CaseImage src={logo2} alt="Construcción del logo de Skipo" ratio="800 / 360" />
+  <figcaption>Construcción del logo</figcaption>
+</figure>
+
+{/* En Figma la muestra dice "$1.000": va con formato de EE. UU. según el CLAUDE.md */}
+<Tipografia
+  titulo="Tipografía"
+  descripcion="TikTok Sans es la tipografía de toda la marca, en la app, la webapp y la landing. La elegí por dos razones: sus números se leen con mucha claridad, algo clave en una app donde todo son precios y montos, y le da a la marca una personalidad más cercana y atractiva."
+  fuente="TikTok Sans"
+  muestra="Invierte desde $1,000"
+  pesos={[
+    { nombre: 'Regular', valor: 400 },
+    { nombre: 'Medium', valor: 500 },
+    { nombre: 'SemiBold', valor: 600 },
+    { nombre: 'Bold', valor: 700 },
+  ]}
+  caracteres={['ABCDEFGHIJKLMNÑOPQRSTUVWXYZ', 'abcdefghijklmnñopqrstuvwxyz', '0123456789 $ % + – · ,']}
+/>
+
+<Paleta
+  principales={[
+    { nombre: 'Primario', hex: '#00D8AE' },
+    { nombre: 'Secundario', hex: '#06BCC9' },
+  ]}
+  fondos={[
+    { nombre: 'Fondo 0', hex: '#0B101D', oscuro: true },
+    { nombre: 'Fondo 20', hex: '#0A1728', oscuro: true },
+    { nombre: 'Fondo 40', hex: '#0F223D', oscuro: true },
+    { nombre: 'Fondo 70', hex: '#2F5284', oscuro: true },
+  ]}
+  pie="Paleta de color"
+/>
+
+<Grilla columnas={2} separacion={24}>
+  <ImagenConPie src={aplicacionesDeMarca} alt="Aplicaciones de marca de Skipo" ratio="388 / 450" sizes="(min-width: 1440px) 388px, (min-width: 768px) 30vw, calc(100vw - 40px)" />
+  <ImagenConPie src={aplicacionesDeMarca2} alt="Logo de Skipo sobre fondo azul" ratio="388 / 450" sizes="(min-width: 1440px) 388px, (min-width: 768px) 30vw, calc(100vw - 40px)" />
+</Grilla>
+
+</CaseSection>
+
+<CaseSection id="webapp-y-landing" eyebrow="Webapp y landing" titulo="Skipo más allá del celular">
+
+La webapp llevó Skipo al computador y se convirtió en la herramienta de las empresas: desde ahí gestionaban los pagos masivos a sus equipos. La landing, en cambio, tenía un objetivo claro: captar más usuarios, presentando las distintas funcionalidades del producto para que cada visitante encontrara su razón para descargar la app.
+
+<ImagenConPie src={webapp} pie="Webapp" ratio="800 / 500" />
+
+<Grilla columnas={2} columnasMobile={2}>
+  <ImagenConPie src={landing} pie="Landing" ratio="392 / 320" sizes="(min-width: 1440px) 392px, (min-width: 768px) 30vw, 45vw" />
+  <ImagenConPie src={seccionXstocks} pie="Sección xStocks" ratio="392 / 320" sizes="(min-width: 1440px) 392px, (min-width: 768px) 30vw, 45vw" />
+</Grilla>
+
+</CaseSection>
+
+<CaseSection id="impacto" eyebrow="Impacto" titulo="Lo que dejaron cuatro años">
+
+<Metricas>
+  {/* En Figma dice "10.000+": va con formato de EE. UU. según el CLAUDE.md */}
+  <Metrica valor="10,000+" descripcion="usuarios registrados y con identidad verificada" />
+  <Metrica valor="25+" descripcion="empresas pagan a sus equipos con la plataforma B2B" />
+  <Metrica valor="1.ª" descripcion="plataforma en Chile en ofrecer pagos con cripto en supermercados" />
+</Metricas>
+
+</CaseSection>
+
+<CaseSection id="aprendizajes" eyebrow="Aprendizajes" titulo="Qué me llevo">
+
+<CardNumerada numero="01" titulo="Escuchar a los usuarios desde el principio" texto="Construimos el producto sin entrevistas. Hoy las sumaría desde la primera versión." />
+<CardNumerada numero="02" titulo="Un design system necesita plan" texto="Crecer sobre la marcha dejó inconsistencias; por eso lo rehice en Design system de Skipo." />
+<CardNumerada numero="03" titulo="Llevar un producto B2C al mundo de las empresas" texto="Adapté una app pensada para personas hasta convertirla en una herramienta clave para empresas, sin perder la simpleza original." />
+
+</CaseSection>

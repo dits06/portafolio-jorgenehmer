@@ -15,6 +15,8 @@ interface Props {
   ratio?: string;
   eager?: boolean;
   class?: string;
+  /** Imagen para mobile cuando cambia la proporción (p. ej. la tabla de TCG). */
+  mobile?: ImageMetadata;
 }
 
 const {
@@ -24,6 +26,7 @@ const {
   ratio = `${src.width} / ${src.height}`,
   eager = false,
   class: className,
+  mobile,
 } = Astro.props;
 
 const candidateWidths = [160, 320, 400, 640, 800, 1120, 1440, 1600, 2240, 2880];
@@ -36,10 +39,31 @@ const sources = await Promise.all(
   }),
 );
 const fallback = await getImage({ src, format: 'webp', width: Math.min(1600, src.width) });
+
+/* Versión mobile (< 768 px) para imágenes que cambian de proporción
+   (documento de traspaso → Imágenes: nombre-mobile.png). */
+const mobileSources = mobile
+  ? await Promise.all(
+      (['avif', 'webp'] as const).map(async (format) => {
+        const w = candidateWidths.filter((x) => x < mobile.width).concat(mobile.width);
+        const out = await getImage({ src: mobile, format, widths: w });
+        return { type: `image/${format}`, srcset: out.srcSet.attribute };
+      }),
+    )
+  : [];
+const mobileRatio = mobile ? `${mobile.width} / ${mobile.height}` : ratio;
 ---
 
-<div class:list={['case-image', className]} style={`--ratio: ${ratio}`}>
+<div
+  class:list={['case-image', className]}
+  style={`--ratio: ${ratio}; --ratio-mobile: ${mobileRatio}`}
+>
   <picture>
+    {
+      mobileSources.map((s) => (
+        <source media="(max-width: 767px)" type={s.type} srcset={s.srcset} sizes="calc(100vw - 40px)" />
+      ))
+    }
     {sources.map((s) => <source type={s.type} srcset={s.srcset} sizes={sizes} />)}
     <img
       src={fallback.src}
@@ -56,7 +80,7 @@ const fallback = await getImage({ src, format: 'webp', width: Math.min(1600, src
 <style>
   .case-image {
     overflow: hidden;
-    aspect-ratio: var(--ratio);
+    aspect-ratio: var(--ratio-mobile, var(--ratio));
     border-radius: var(--radius-thumb);
     background: var(--placeholder);
   }
@@ -65,5 +89,11 @@ const fallback = await getImage({ src, format: 'webp', width: Math.min(1600, src
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  @media (min-width: 768px) {
+    .case-image {
+      aspect-ratio: var(--ratio);
+    }
   }
 </style>

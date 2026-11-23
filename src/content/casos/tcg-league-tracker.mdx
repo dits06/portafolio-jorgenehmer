@@ -1,0 +1,270 @@
+---
+# Caso — TCG League Tracker. Figma: 291:1062 (desktop), 296:1223 (mobile).
+# Textos copiados tal cual de Figma. [Confirmar] = dato que falta en Figma.
+# Imágenes exportadas desde los placeholders del frame desktop (y la tabla de
+# comparación también desde el mobile, porque cambia de proporción).
+titulo: Aprender de cada partida de Pokémon TCG
+bajada: Una app que diseñé y construí con IA para registrar partidas, conocer el meta de cada tienda y recibir tips de tus propios matchups.
+nombre: TCG League Tracker
+subtitulo: Proyecto propio
+tags: [Diseño y desarrollo, Caso de estudio, IA]
+portada: ../../assets/casos/tcg-league-tracker/portada.png
+portadaAlt: Pantallas de TCG League Tracker
+metadatos:
+  - etiqueta: Rol
+    valor: Diseño y desarrollo
+  - etiqueta: Año
+    valor: '2026'
+  - etiqueta: Alcance
+    valor: Web app mobile
+  - etiqueta: Herramientas
+    valor: Figma, Claude, Claude Code, Supabase
+resumen: 'Muchos jugadores de Pokémon TCG registran sus partidas en Training Court, una app útil pero muy simple: guarda el resultado, la fecha y el nombre del rival. Diseñé y construí TCG League Tracker para ir más allá: ordenar las partidas por tienda, saber qué juegan tus rivales y convertir tus notas en tips para cada matchup con la API de Claude.'
+queHice:
+  - Conversaciones con jugadores novatos y experimentados
+  - Análisis de Training Court
+  - Wireframes en papel y alta fidelidad con Claude
+  - Sistema de diseño básico y modo oscuro
+  - Desarrollo con Claude Code, Supabase y React 19
+metricas:
+  eyebrow: En números
+  items:
+    - valor: '4'
+      descripcion: personas probando la app hoy, antes de abrirla a más jugadores
+    - valor: '2'
+      descripcion: 'integraciones: el meta de Limitless y la API de Claude'
+destacados:
+  eyebrow: Diseño final
+  titulo: Tres claves para aprender de cada partida
+  formato: horizontal
+  items:
+    - eyebrow: Tips con IA
+      titulo: Tus notas, convertidas en tips
+      texto: Después de cada partida puedes anotar qué funcionó y qué no. Con varias notas de un mismo matchup, Claude las analiza y te resume lo que suele funcionar y lo que conviene evitar, según tu propia experiencia.
+      imagen: ../../assets/casos/tcg-league-tracker/destacado-tips-con-ia.png
+      alt: 'Diseño final: tips con IA'
+    - eyebrow: Liga
+      titulo: Tus partidas, ordenadas por tienda
+      texto: Registras las tiendas donde juegas y a tus rivales. Así ves tu rendimiento en cada tienda, el meta que más se juega ahí y qué mazos suele usar cada jugador.
+      imagen: ../../assets/casos/tcg-league-tracker/destacado-liga.png
+      alt: 'Diseño final: liga y tiendas'
+    - eyebrow: Decks
+      titulo: Tu deck en un vistazo
+      texto: Importas tu lista como en TCG Live o Limitless, y la app muestra tu winrate, cómo te va yendo primero o segundo y tus resultados contra cada arquetipo del meta.
+      imagen: ../../assets/casos/tcg-league-tracker/destacado-decks.png
+      alt: 'Diseño final: ficha de deck'
+secciones:
+  - { id: contexto, titulo: Contexto }
+  - { id: mi-proceso, titulo: Mi proceso }
+  - { id: investigacion, titulo: Investigación }
+  - { id: exploracion, titulo: Exploración }
+  - { id: el-flujo, titulo: El flujo }
+  - { id: liga, titulo: Liga }
+  - { id: tips-con-ia, titulo: Tips con IA }
+  - { id: sistema-de-diseno, titulo: Sistema de diseño }
+  - { id: construccion, titulo: Construcción }
+  - { id: resultados, titulo: Resultados }
+  - { id: aprendizajes, titulo: Aprendizajes }
+siguientes:
+  - slug: registro-y-verificacion
+    titulo: Registro y verificación
+    texto: Cómo bajamos la fricción del onboarding y el KYC.
+    imagen: ../../assets/casos/vision-general/siguiente-registro-y-verificacion.png
+  - slug: design-system
+    titulo: Design system de Skipo
+    texto: La librería detrás de la app y la webapp.
+    imagen: ../../assets/casos/registro-y-verificacion/siguiente-design-system.png
+  - slug: pagos-masivos-b2b
+    titulo: Pagos masivos B2B
+    texto: Cómo empresas pagan a equipos remotos en stablecoins.
+    imagen: ../../assets/casos/registro-y-verificacion/siguiente-pagos-masivos-b2b.png
+---
+
+import CaseSection from '../../components/CaseSection.astro';
+import ImagenConPie from '../../components/ImagenConPie.astro';
+import ParDeImagenes from '../../components/ParDeImagenes.astro';
+import Grilla from '../../components/Grilla.astro';
+import CardProceso from '../../components/CardProceso.astro';
+import CardNumerada from '../../components/CardNumerada.astro';
+
+import pantallasPrincipales from '../../assets/casos/tcg-league-tracker/pantallas-principales-de-tcg-league-tracker.png';
+import comparacion from '../../assets/casos/tcg-league-tracker/comparacion-con-training-court.png';
+import comparacionMobile from '../../assets/casos/tcg-league-tracker/comparacion-con-training-court-mobile.png';
+import tcRecord from '../../assets/casos/tcg-league-tracker/training-court-record-y-winrate-por-deck-rival.png';
+import tcLogs from '../../assets/casos/tcg-league-tracker/training-court-logs-y-torneos-con-nombre-fecha-y-resultado.png';
+import home from '../../assets/casos/tcg-league-tracker/home.png';
+import registroDePartidas from '../../assets/casos/tcg-league-tracker/registro-de-partidas.png';
+import registrarUnaPartida from '../../assets/casos/tcg-league-tracker/registrar-una-partida.png';
+import inicioWinrate from '../../assets/casos/tcg-league-tracker/inicio-con-tu-winrate.png';
+import metaLimitless from '../../assets/casos/tcg-league-tracker/meta-con-datos-de-limitless.png';
+import ligaTiendasYJugadores from '../../assets/casos/tcg-league-tracker/liga-tiendas-y-jugadores.png';
+import ligaTiendas from '../../assets/casos/tcg-league-tracker/liga-tiendas.png';
+import ligaJugadores from '../../assets/casos/tcg-league-tracker/liga-jugadores.png';
+import notas from '../../assets/casos/tcg-league-tracker/notas-al-registrar-una-partida.png';
+import tips from '../../assets/casos/tcg-league-tracker/tips-del-matchup.png';
+import componentes from '../../assets/casos/tcg-league-tracker/componentes.png';
+import modoOscuro from '../../assets/casos/tcg-league-tracker/modo-oscuro.png';
+
+<CaseSection id="contexto" eyebrow="Contexto" titulo="Una app de registro que se quedaba corta">
+
+Soy jugador de Pokémon TCG y, como la mayoría de los jugadores que conozco, registraba mis partidas en Training Court. Funciona, pero es muy simple: guarda el resultado, la fecha y el nombre del rival, y no ayuda a entender por qué ganas o pierdes. Conversando con otros jugadores, me di cuenta de que no era solo mi frustración.
+
+<ImagenConPie src={pantallasPrincipales} alt="Pantallas principales de TCG League Tracker" ratio="800 / 450" />
+
+<Grilla columnas={2}>
+  <CardNumerada numero="01" titulo="Registrar cada partida" texto="Con el deck, el rival, la tienda y notas de lo que pasó." />
+  <CardNumerada numero="02" titulo="Ordenar por tienda" texto="Ver tu rendimiento y el meta de cada tienda donde juegas." />
+</Grilla>
+
+<Grilla columnas={2}>
+  <CardNumerada numero="03" titulo="Conocer a tus rivales" texto="Saber qué mazos suele jugar cada persona." />
+  <CardNumerada numero="04" titulo="Aprender de tus notas" texto="Convertir lo que anotas en tips para cada matchup." />
+</Grilla>
+
+</CaseSection>
+
+<CaseSection id="mi-proceso" eyebrow="Mi proceso" titulo="Cómo trabajé este proyecto">
+
+Partí de mi propia frustración y de conversaciones con otros jugadores. Analicé Training Court, bosquejé en papel y pasé a alta fidelidad con Claude. Después iteré el diseño en Figma, lo construí con Claude Code y lo fui probando con amigos.
+
+<Grilla columnas={3}>
+  <CardProceso icono="descubrir" numero="01" titulo="Descubrir" texto="Conversaciones con jugadores novatos y experimentados." />
+  <CardProceso icono="definir" numero="02" titulo="Definir" texto="Qué le faltaba a Training Court." />
+  <CardProceso icono="explorar" numero="03" titulo="Explorar" texto="Wireframes en papel." />
+</Grilla>
+
+<Grilla columnas={3}>
+  <CardProceso icono="idear" numero="04" titulo="Diseñar" texto="Alta fidelidad con Claude y Claude Design, iterada en Figma." />
+  <CardProceso icono="disenar-y-validar" numero="05" titulo="Construir" texto="Desarrollo con Claude Code, Supabase y React 19." />
+  <CardProceso icono="medir-e-iterar" numero="06" titulo="Probar e iterar" texto="Pruebas con amigos y nuevas funcionalidades." />
+</Grilla>
+
+{/* La tabla cambia de proporción en mobile (335 × 452): se exportó aparte. */}
+<ImagenConPie src={comparacion} mobile={comparacionMobile} alt="Comparación con Training Court" ratio="800 / 420" />
+
+<p class="eyebrow">Lo que escuché de los jugadores</p>
+
+<Grilla columnas={2} alinear="stretch">
+  <CardNumerada numero="01" titulo="Querían entender sus matchups" texto="Sentían que la app que usaban era muy sencilla. Cuando les pregunté si les gustaría recibir tips de sus matchups, la mayoría dijo que sí, sobre todo los jugadores con menos experiencia." />
+  <CardNumerada numero="02" titulo="Querían registrar sus tiendas" texto="Varios juegan regularmente en las mismas tiendas, pero Training Court solo registra partidas, fechas y nombres." />
+</Grilla>
+
+</CaseSection>
+
+<CaseSection id="investigacion" eyebrow="Investigación" titulo="Jugadores de todos los niveles">
+
+Hablé con jugadores novatos y con jugadores experimentados, varios de ellos de Oasis Games, una tienda donde juegan personas que han competido en mundiales y torneos internacionales. Les pregunté cómo usaban Training Court y qué les gustaría tener en una app para llevar el registro de sus partidas.
+
+<ParDeImagenes
+  ratio="392 / 360"
+  apilarEnMobile
+  tamanoPie="normal"
+  a={{ src: tcRecord, pie: 'Training Court: récord y winrate por deck rival' }}
+  b={{ src: tcLogs, pie: 'Training Court: logs y torneos con nombre, fecha y resultado' }}
+/>
+
+</CaseSection>
+
+<CaseSection id="exploracion" eyebrow="Exploración" titulo="Del papel a la alta fidelidad">
+
+Empecé con wireframes muy básicos en papel para ordenar las secciones principales. Después pasé directo a pantallas en alta fidelidad con Claude y Claude Design, las llevé a Figma y ahí iteré el diseño y la experiencia hasta que se ajustaron a lo que buscaba. Con esos cambios, Claude reconstruyó la versión final.
+
+<ParDeImagenes
+  ratio="392 / 360"
+  apilarEnMobile
+  tamanoPie="normal"
+  a={{ src: home, pie: 'Home', alt: 'Wireframe en papel: Home' }}
+  b={{ src: registroDePartidas, pie: 'Registro de partidas', alt: 'Wireframe en papel: registro de partidas' }}
+/>
+
+</CaseSection>
+
+<CaseSection id="el-flujo" eyebrow="El flujo" titulo="De la partida al tip en cuatro pasos">
+
+La app gira alrededor de un ciclo simple: registras, revisas y aprendes. Cada partida que anotas alimenta tus estadísticas y, con el tiempo, tus tips.
+
+<Grilla columnas={2}>
+  <CardNumerada numero="01" titulo="Registrar el deck" texto="Importar la lista al estilo de TCG Live o Limitless." />
+  <CardNumerada numero="02" titulo="Registrar la partida" texto="Resultado, rival, tienda, si fuiste primero o segundo, y notas." />
+</Grilla>
+
+<Grilla columnas={2}>
+  <CardNumerada numero="03" titulo="Revisar el matchup" texto="Tu winrate contra cada arquetipo, comparado con el meta." />
+  <CardNumerada numero="04" titulo="Generar tips" texto="Claude resume tus notas de ese matchup." />
+</Grilla>
+
+<ImagenConPie src={registrarUnaPartida} alt="Registrar una partida" ratio="800 / 560" />
+
+<ParDeImagenes
+  ratio="392 / 300"
+  apilarEnMobile
+  tamanoPie="normal"
+  a={{ src: inicioWinrate, pie: 'Inicio con tu winrate' }}
+  b={{ src: metaLimitless, pie: 'Meta con datos de Limitless' }}
+/>
+
+</CaseSection>
+
+<CaseSection id="liga" eyebrow="Liga" titulo="Ordenar las partidas por tienda">
+
+En la primera versión solo se registraba la fecha de cada partida, y con el tiempo el historial se veía muy desordenado. Por eso agregué las tiendas: cada partida queda asociada al lugar donde la jugaste, y puedes ver tu rendimiento y el meta de cada tienda. También puedes registrar a tus rivales para saber qué mazos suelen jugar.
+
+<ImagenConPie src={ligaTiendasYJugadores} alt="Liga: tiendas y jugadores" ratio="800 / 420" />
+
+<ParDeImagenes
+  ratio="392 / 360"
+  apilarEnMobile
+  tamanoPie="normal"
+  a={{ src: ligaTiendas, pie: 'Liga: tiendas' }}
+  b={{ src: ligaJugadores, pie: 'Liga: jugadores' }}
+/>
+
+</CaseSection>
+
+<CaseSection id="tips-con-ia" eyebrow="Tips con IA" titulo="Integrar la API de Claude">
+
+La primera versión tampoco tenía tips. Integré la API de Claude para que, después de varias partidas contra un mismo arquetipo, analice todas tus notas de ese matchup y te devuelva un resumen de lo que suele funcionar y lo que conviene evitar. Cuando sumas notas nuevas, puedes actualizar el resumen.
+
+<ParDeImagenes
+  ratio="392 / 360"
+  apilarEnMobile
+  tamanoPie="normal"
+  a={{ src: notas, pie: 'Notas al registrar una partida' }}
+  b={{ src: tips, pie: 'Tips del matchup' }}
+/>
+
+</CaseSection>
+
+<CaseSection id="sistema-de-diseno" eyebrow="Sistema de diseño" titulo="Un sistema básico, pero propio">
+
+Con apoyo de Claude armé un sistema de diseño básico: colores, tipografía y componentes como botones, chips, indicadores de resultado y filas de partidas y decks. Eso me permitió mantener la consistencia entre pantallas y sumar un modo oscuro.
+
+<ParDeImagenes
+  ratio="392 / 360"
+  apilarEnMobile
+  tamanoPie="normal"
+  a={{ src: componentes, pie: 'Componentes' }}
+  b={{ src: modoOscuro, pie: 'Modo oscuro' }}
+/>
+
+</CaseSection>
+
+<CaseSection id="construccion" eyebrow="Construcción" titulo="Diseñar y construir en el mismo ciclo">
+
+Desarrollé la app con Claude Code, con React 19 y TypeScript en el front y Supabase en el backend. El flujo era un ciclo: Claude armaba las pantallas, yo las iteraba en Figma, Claude Code implementaba los cambios, yo probaba la app y volvíamos a iterar. Lo que más aprendí fue el backend con Supabase, una plataforma que nunca había usado.
+
+</CaseSection>
+
+<CaseSection id="resultados" eyebrow="Resultados" titulo="Publicada y en pruebas">
+
+La app está publicada y hoy la probamos principalmente yo y 3 amigos. Antes de abrirla a un grupo más grande de jugadores, quiero afinar algunos detalles. Puedes probarla en [tcg-league-tracker.vercel.app](https://tcg-league-tracker.vercel.app/).
+
+</CaseSection>
+
+<CaseSection id="aprendizajes" eyebrow="Aprendizajes" titulo="Qué me llevo">
+
+<CardNumerada numero="01" titulo="Escuchar antes de construir" texto="Las conversaciones con jugadores definieron las dos funcionalidades que más diferencian a la app: las tiendas y los tips." />
+<CardNumerada numero="02" titulo="Iterar el diseño fuera del código" texto="Llevar las pantallas a Figma para iterarlas yo mismo me dio más control sobre el diseño que pedir cada cambio directo en el código." />
+<CardNumerada numero="03" titulo="Aprender una herramienta nueva" texto="Supabase fue mi primera experiencia con un backend de este tipo, y entenderlo me ayudó a diseñar pensando en cómo se guardan los datos." />
+
+</CaseSection>

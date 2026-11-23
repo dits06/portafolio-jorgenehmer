@@ -1,0 +1,69 @@
+---
+/**
+ * Card de caso dentro de un caso — "Casos en profundidad" de Visión general
+ * (Figma 107:493, mobile 168:764). Imagen 251 × 220, eyebrow, título (H4),
+ * descripción y link "Ver caso →" (el texto, flecha incluida, es el de Figma).
+ */
+import CaseImage from './CaseImage.astro';
+
+interface Props {
+  href: string;
+  titulo: string;
+  texto: string;
+  imagen: ImageMetadata;
+  eyebrow?: string;
+}
+
+const { href, titulo, texto, imagen, eyebrow = 'Caso de estudio' } = Astro.props;
+---
+
+<article class="card-caso">
+  <CaseImage
+    src={imagen}
+    alt=""
+    ratio="251 / 220"
+    sizes="(min-width: 1440px) 251px, (min-width: 768px) calc((100vw - 688px) / 3), calc(100vw - 40px)"
+  />
+  <p class="eyebrow">{eyebrow}</p>
+  <h3 class="card-caso__titulo">{titulo}</h3>
+  <p class="card-caso__texto">{texto}</p>
+  <a class="card-caso__link" href={href}>Ver caso →</a>
+</article>
+
+<style>
+  .card-caso {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
+    min-width: 0;
+  }
+
+  .card-caso > :global(.case-image) {
+    align-self: stretch;
+  }
+
+  .card-caso__titulo {
+    font-size: var(--text-h4);
+    line-height: var(--leading-h4);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-h4);
+  }
+
+  .card-caso__texto {
+    color: var(--muted-2);
+  }
+
+  .card-caso__link {
+    font-size: var(--text-label);
+    line-height: var(--leading-label);
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+    text-underline-offset: 0.2em;
+  }
+
+  .card-caso__link:hover,
+  .card-caso__link:focus-visible {
+    text-decoration-line: underline;
+  }
+</style>

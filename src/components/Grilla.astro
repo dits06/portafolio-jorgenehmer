@@ -7,9 +7,12 @@
  * cuando la grilla se parte en varias (por defecto, igual a `separacion`).
  */
 interface Props {
-  columnas: 2 | 3 | 4;
+  /** 1: bloques apilados con la separación indicada (p. ej. 16 px en vez de los 24 de la sección). */
+  columnas: 1 | 2 | 3 | 4;
   columnasMobile?: 1 | 2;
   separacion?: 16 | 24;
+  /** Separación entre columnas en mobile, si difiere de la de desktop. */
+  separacionMobile?: 16 | 24;
   separacionFilas?: 16 | 20 | 24;
   /** 'stretch': celdas de una fila con la misma altura (fuentes de Investigación). */
   alinear?: 'start' | 'stretch';
@@ -19,6 +22,7 @@ const {
   columnas,
   columnasMobile = 1,
   separacion = 16,
+  separacionMobile = separacion,
   separacionFilas = separacion,
   alinear = 'start',
 } = Astro.props;
@@ -26,7 +30,7 @@ const {
 
 <div
   class="grilla"
-  style={`--cols: ${columnas}; --cols-mobile: ${columnasMobile}; --col-gap: var(--space-${separacion}); --row-gap: var(--space-${separacionFilas}); --align: ${alinear};`}
+  style={`--cols: ${columnas}; --cols-mobile: ${columnasMobile}; --col-gap: var(--space-${separacion}); --col-gap-mobile: var(--space-${separacionMobile}); --row-gap: var(--space-${separacionFilas}); --align: ${alinear};`}
 >
   <slot />
 </div>
@@ -35,7 +39,7 @@ const {
   .grilla {
     display: grid;
     grid-template-columns: repeat(var(--cols-mobile), minmax(0, 1fr));
-    gap: var(--row-gap) var(--col-gap);
+    gap: var(--row-gap) var(--col-gap-mobile);
     align-items: var(--align);
   }
 
@@ -47,6 +51,7 @@ const {
   @media (min-width: 768px) {
     .grilla {
       grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+      column-gap: var(--col-gap);
     }
   }
 </style>

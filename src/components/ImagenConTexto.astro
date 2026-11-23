@@ -1,0 +1,52 @@
+---
+/**
+ * Imagen con título y descripción debajo (8 px) — "Funcionalidades" de
+ * Visión general (Figma 107:433, mobile 168:733). Título en H4, texto en --muted-2.
+ */
+import CaseImage from './CaseImage.astro';
+
+interface Props {
+  src: ImageMetadata;
+  titulo: string;
+  texto: string;
+  alt?: string;
+  ratio?: string;
+  sizes?: string;
+}
+
+const { src, titulo, texto, alt, ratio, sizes } = Astro.props;
+---
+
+<figure class="imagen-con-texto">
+  <CaseImage src={src} alt={alt ?? titulo} ratio={ratio} sizes={sizes} />
+  <figcaption class="imagen-con-texto__pie">
+    <span class="imagen-con-texto__titulo">{titulo}</span>
+    <span class="imagen-con-texto__texto">{texto}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .imagen-con-texto {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    min-width: 0;
+  }
+
+  .imagen-con-texto__pie {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .imagen-con-texto__titulo {
+    font-size: var(--text-h4);
+    line-height: var(--leading-h4);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-h4);
+  }
+
+  .imagen-con-texto__texto {
+    color: var(--muted-2);
+  }
+</style>

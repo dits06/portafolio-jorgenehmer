@@ -3,6 +3,8 @@
  * Destacado del Diseño final — Figma: 9:78 / 9:89 / 9:100 (desktop), 104:219… (mobile).
  * Desktop: texto + mockup de 440 × 560 con 96 px entre sí, alternando el lado.
  * Mobile: siempre texto arriba e imagen debajo (24 px).
+ * `formato="horizontal"` (Pagos masivos 282:916, TCG 291:1107…): texto de 400 px
+ * + imagen de 640 × 480 con 80 px entre sí.
  */
 import CaseImage from './CaseImage.astro';
 
@@ -14,12 +16,19 @@ interface Props {
   alt: string;
   /** Imagen a la izquierda en desktop. */
   invertido?: boolean;
+  formato?: 'vertical' | 'horizontal';
 }
 
-const { eyebrow, titulo, texto, imagen, alt, invertido = false } = Astro.props;
+const { eyebrow, titulo, texto, imagen, alt, invertido = false, formato = 'vertical' } = Astro.props;
+const horizontal = formato === 'horizontal';
 ---
 
-<article class:list={['destacado', { 'destacado--invertido': invertido }]}>
+<article
+  class:list={[
+    'destacado',
+    { 'destacado--invertido': invertido, 'destacado--horizontal': horizontal },
+  ]}
+>
   <div class="destacado__texto">
     <p class="eyebrow">{eyebrow}</p>
     <h3 class="destacado__titulo">{titulo}</h3>
@@ -29,8 +38,10 @@ const { eyebrow, titulo, texto, imagen, alt, invertido = false } = Astro.props;
     class="destacado__imagen"
     src={imagen}
     alt={alt}
-    ratio="440 / 560"
-    sizes="(min-width: 1024px) 440px, calc(100vw - 40px)"
+    ratio={horizontal ? '640 / 480' : '440 / 560'}
+    sizes={horizontal
+      ? '(min-width: 1440px) 640px, (min-width: 1024px) 55vw, calc(100vw - 40px)'
+      : '(min-width: 1024px) 440px, calc(100vw - 40px)'}
   />
 </article>
 
@@ -78,6 +89,18 @@ const { eyebrow, titulo, texto, imagen, alt, invertido = false } = Astro.props;
 
     .destacado--invertido {
       flex-direction: row-reverse;
+    }
+
+    .destacado--horizontal {
+      gap: var(--space-80);
+    }
+
+    .destacado--horizontal .destacado__texto {
+      flex: 1 1 25rem; /* 400 px */
+    }
+
+    .destacado--horizontal :global(.destacado__imagen) {
+      flex: 0 1 40rem; /* 640 px */
     }
   }
 </style>

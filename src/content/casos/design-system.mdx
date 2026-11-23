@@ -1,0 +1,179 @@
+---
+# Caso — Design system. Figma: 170:637 (desktop), 203:950 (mobile).
+# Textos copiados tal cual de Figma. [Confirmar] = dato que falta en Figma.
+# Este caso no tiene bloque "Diseño final" (destacados) en Figma.
+titulo: El design system detrás de Skipo
+bajada: La librería que construí y mantuve durante cuatro años para la app y la webapp.
+nombre: Design system
+subtitulo: Skipo
+tags: [Design system, Caso de estudio, Componentes]
+portada: ../../assets/casos/design-system/portada.png
+portadaAlt: Componentes del design system de Skipo
+metadatos:
+  - etiqueta: Rol
+    valor: Único diseñador UX/UI
+  - etiqueta: Período
+    valor: 2022 – 2026
+  - etiqueta: Alcance
+    valor: App mobile y webapp
+  - etiqueta: Herramientas
+    valor: Figma
+resumen: 'Diseñé el design system de Skipo al mismo tiempo que el producto. Durante cuatro años fue la base de la app y la webapp: componentes, íconos, colores y tipografía compartidos para que todo se sintiera parte de la misma marca. La landing usaba la misma identidad, pero no los componentes.'
+queHice:
+  - Librería de componentes para la app y la webapp
+  - Set de íconos basado en Material e ilustraciones propias
+  - Estilos de color y tipografía de la marca
+  - Mantenimiento y evolución junto al producto
+metricas:
+  eyebrow: En números
+  items:
+    - valor: '47'
+      descripcion: componentes, con 210 variantes en total
+    - valor: '150'
+      descripcion: íconos en la librería, basados en Material Icons
+    - valor: '2'
+      descripcion: 'plataformas con un mismo sistema: app y webapp'
+secciones:
+  - { id: contexto, titulo: Contexto }
+  - { id: fundamentos, titulo: Fundamentos }
+  - { id: componentes, titulo: Componentes }
+  - { id: iconos-e-ilustraciones, titulo: Íconos e ilustraciones }
+  - { id: app-y-webapp, titulo: App y webapp }
+  - { id: evolucion, titulo: Evolución }
+  - { id: despues-de-skipo, titulo: Después de Skipo }
+  - { id: aprendizajes, titulo: Aprendizajes }
+siguientes:
+  - slug: registro-y-verificacion
+    titulo: Registro y verificación
+    texto: Cómo bajamos la fricción del onboarding y el KYC.
+    imagen: ../../assets/casos/vision-general/siguiente-registro-y-verificacion.png
+  - slug: pagos-masivos-b2b
+    titulo: Pagos masivos B2B
+    texto: Cómo empresas pagan a equipos remotos en stablecoins.
+    imagen: ../../assets/casos/registro-y-verificacion/siguiente-pagos-masivos-b2b.png
+  - slug: vision-general
+    titulo: Skipo — Visión general
+    texto: Cuatro años diseñando el producto de punta a punta.
+    imagen: ../../assets/casos/registro-y-verificacion/siguiente-vision-general.png
+---
+
+import CaseSection from '../../components/CaseSection.astro';
+import Metrica from '../../components/Metrica.astro';
+import Metricas from '../../components/Metricas.astro';
+import ImagenConPie from '../../components/ImagenConPie.astro';
+import ParDeImagenes from '../../components/ParDeImagenes.astro';
+import Grilla from '../../components/Grilla.astro';
+import CardNumerada from '../../components/CardNumerada.astro';
+
+import portadaLibreria from '../../assets/casos/design-system/portada-de-la-libreria-de-skipo.png';
+import variablesDeColor from '../../assets/casos/design-system/variables-de-color.png';
+import estilosDeTexto from '../../assets/casos/design-system/estilos-de-texto.png';
+import paginaDeComponentes from '../../assets/casos/design-system/pagina-de-componentes-de-la-libreria.png';
+import setDeIconos from '../../assets/casos/design-system/set-de-iconos.png';
+import ilustraciones3d from '../../assets/casos/design-system/ilustraciones-3d.png';
+import componentesApp from '../../assets/casos/design-system/componentes-de-la-app.png';
+import componentesWebapp from '../../assets/casos/design-system/componentes-de-la-webapp.png';
+import componente2024 from '../../assets/casos/design-system/componente-en-2024.png';
+import componente2026 from '../../assets/casos/design-system/el-mismo-componente-en-2026.png';
+import tokens from '../../assets/casos/design-system/tokens-de-la-reconstruccion-en-figma.png';
+
+<CaseSection id="contexto" eyebrow="Contexto" titulo="Un sistema que nació con el producto">
+
+Como único diseñador, necesitaba que la app y la webapp se vieran y se comportaran igual, sin tener que rediseñar cada pantalla desde cero. El design system fue la forma de diseñar más rápido y de entregarle a desarrollo piezas claras y reutilizables.
+
+<ImagenConPie src={portadaLibreria} alt="Portada de la librería de Skipo" ratio="800 / 420" />
+
+</CaseSection>
+
+<CaseSection id="fundamentos" eyebrow="Fundamentos" titulo="Color y tipografía">
+
+La marca se apoya en el navy y el teal, y en TikTok Sans. Los definí como 19 variables de color y 8 estilos de texto, compartidos por todas las plataformas.
+
+<ParDeImagenes
+  ratio="392 / 360"
+  apilarEnMobile
+  tamanoPie="normal"
+  a={{ src: variablesDeColor, pie: 'Variables de color' }}
+  b={{ src: estilosDeTexto, pie: 'Estilos de texto' }}
+/>
+
+</CaseSection>
+
+<CaseSection id="componentes" eyebrow="Componentes" titulo="47 componentes, 210 variantes">
+
+La librería cubre todo lo que necesita una app financiera: desde botones e inputs hasta cards de monedas, listas de contactos, tablas de comisiones y gráficos.
+
+<Grilla columnas={2}>
+  <CardNumerada numero="01" titulo="Acciones y formularios" texto="Botones, inputs, selects, checkbox, switch y selector de fechas." />
+  <CardNumerada numero="02" titulo="Feedback" texto="Modales, toasts, tooltips, notificaciones y loaders." />
+</Grilla>
+
+<Grilla columnas={2}>
+  <CardNumerada numero="03" titulo="Datos y finanzas" texto="Cards de monedas, gráficos, historial y tabla de comisiones." />
+  <CardNumerada numero="04" titulo="Navegación" texto="Tabs, selector de moneda, menús y dropdowns." />
+</Grilla>
+
+<ImagenConPie src={paginaDeComponentes} alt="Página de componentes de la librería" ratio="800 / 480" />
+
+</CaseSection>
+
+<CaseSection id="iconos-e-ilustraciones" eyebrow="Íconos e ilustraciones" titulo="Un lenguaje visual propio">
+
+Armé un set de 150 íconos a partir de Material Icons para mantener un estilo consistente en todo el producto. Las ilustraciones, en cambio, las diseñé yo, incluidas las ilustraciones 3D de 2025 que le dieron más personalidad a la app.
+
+<ParDeImagenes
+  ratio="392 / 360"
+  apilarEnMobile
+  tamanoPie="normal"
+  a={{ src: setDeIconos, pie: 'Set de íconos' }}
+  b={{ src: ilustraciones3d, pie: 'Ilustraciones 3D' }}
+/>
+
+</CaseSection>
+
+<CaseSection id="app-y-webapp" eyebrow="App y webapp" titulo="Un sistema, dos plataformas">
+
+La webapp tiene sus propios componentes, como la barra lateral, la navegación y las tablas, pero comparte los mismos fundamentos que la app. Así, un usuario o una empresa reconoce Skipo en cualquier pantalla.
+
+<Grilla columnas={1}>
+  <ImagenConPie src={componentesApp} pie="Componentes de la app" ratio="800 / 420" />
+  <ImagenConPie src={componentesWebapp} pie="Componentes de la webapp" ratio="800 / 420" />
+</Grilla>
+
+</CaseSection>
+
+<CaseSection id="evolucion" eyebrow="Evolución" titulo="Crecer junto al producto">
+
+El sistema cambió con cada etapa de Skipo: el nuevo Home de 2024, las ilustraciones 3D de 2025 y el Home 3.0 de 2026. Cada funcionalidad nueva sumaba componentes, y con el tiempo eso también trajo inconsistencias.
+
+<ParDeImagenes
+  ratio="392 / 360"
+  apilarEnMobile
+  tamanoPie="normal"
+  a={{ src: componente2024, pie: 'Componente en 2024' }}
+  b={{ src: componente2026, pie: 'El mismo componente en 2026' }}
+/>
+
+</CaseSection>
+
+<CaseSection id="despues-de-skipo" eyebrow="Después de Skipo" titulo="Auditarlo y reconstruirlo">
+
+Después de dejar Skipo, audité la librería con calma. Encontré lo que no había tenido tiempo de resolver en el día a día: colores sin una capa semántica, contrastes que no cumplían WCAG, componentes duplicados y un archivo difícil de mantener. Con eso, reconstruí los fundamentos desde cero, manteniendo la misma marca.
+
+<Metricas>
+  <Metrica valor="108" descripcion="tokens primitivos: color, espaciado, radios y bordes" />
+  <Metrica valor="38" descripcion="tokens semánticos con uso y contraste documentados" />
+  <Metrica valor="10" descripcion="estilos de texto, con cifras tabulares en los montos" />
+</Metricas>
+
+<ImagenConPie src={tokens} alt="Tokens de la reconstrucción en Figma" ratio="800 / 380" />
+
+</CaseSection>
+
+<CaseSection id="aprendizajes" eyebrow="Aprendizajes" titulo="Qué me llevo">
+
+<CardNumerada numero="01" titulo="Un sistema ahorra tiempo desde el día uno" texto="Aun siendo el único diseñador, reutilizar componentes me permitió diseñar y entregar mucho más rápido." />
+<CardNumerada numero="02" titulo="Lo urgente deja deuda" texto="Resolver primero lo que pedía el producto funcionó, pero dejó inconsistencias que pagué después." />
+<CardNumerada numero="03" titulo="Los tokens semánticos son decisiones de diseño" texto="Nombrar para qué sirve cada color evita errores y hace el sistema más fácil de mantener." />
+
+</CaseSection>

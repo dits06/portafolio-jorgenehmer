@@ -27,21 +27,26 @@ const casos = defineCollection({
         eyebrow: z.string(),
         items: z.array(z.object({ valor: z.string(), descripcion: z.string() })).min(2).max(3),
       }),
-      destacados: z.object({
-        eyebrow: z.string(),
-        titulo: z.string(),
-        items: z
-          .array(
-            z.object({
-              eyebrow: z.string(),
-              titulo: z.string(),
-              texto: z.string(),
-              imagen: image(),
-              alt: z.string(),
-            }),
-          )
-          .length(3),
-      }),
+      /** Diseño final. Opcional: Visión general y Design system no lo tienen. */
+      destacados: z
+        .object({
+          eyebrow: z.string(),
+          titulo: z.string(),
+          /** 'vertical': mockup de 440 × 560 (Registro). 'horizontal': 640 × 480 (Pagos, TCG). */
+          formato: z.enum(['vertical', 'horizontal']).default('vertical'),
+          items: z
+            .array(
+              z.object({
+                eyebrow: z.string(),
+                titulo: z.string(),
+                texto: z.string(),
+                imagen: image(),
+                alt: z.string(),
+              }),
+            )
+            .length(3),
+        })
+        .optional(),
       /** Ítems del nav lateral: id del ancla y texto (el eyebrow de la sección). */
       secciones: z.array(z.object({ id: z.string(), titulo: z.string() })),
       siguientes: z

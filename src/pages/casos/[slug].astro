@@ -79,26 +79,31 @@ const d = caso.data;
     </section>
 
     <!-- 4. Diseño final: 3 destacados que alternan imagen y texto -->
-    <section class="bloque destacados" aria-labelledby="destacados-titulo">
-      <div class="contenedor destacados__contenido">
-        <header class="titulo-bloque">
-          <p class="eyebrow">{d.destacados.eyebrow}</p>
-          <h2 class="titulo-seccion" id="destacados-titulo">{d.destacados.titulo}</h2>
-        </header>
-        {
-          d.destacados.items.map((item, i) => (
-            <Destacado
-              eyebrow={item.eyebrow}
-              titulo={item.titulo}
-              texto={item.texto}
-              imagen={item.imagen}
-              alt={item.alt}
-              invertido={i % 2 === 1}
-            />
-          ))
-        }
-      </div>
-    </section>
+    {
+      d.destacados && (
+        <section class="bloque destacados" aria-labelledby="destacados-titulo">
+          <div class="contenedor destacados__contenido">
+            <header class="titulo-bloque">
+              <p class="eyebrow">{d.destacados.eyebrow}</p>
+              <h2 class="titulo-seccion" id="destacados-titulo">
+                {d.destacados.titulo}
+              </h2>
+            </header>
+            {d.destacados.items.map((item, i) => (
+              <Destacado
+                eyebrow={item.eyebrow}
+                titulo={item.titulo}
+                texto={item.texto}
+                imagen={item.imagen}
+                alt={item.alt}
+                invertido={i % 2 === 1}
+                formato={d.destacados?.formato}
+              />
+            ))}
+          </div>
+        </section>
+      )
+    }
 
     <!-- 5. Cuerpo: nav lateral fijo + secciones del MDX -->
     <div class="cuerpo">

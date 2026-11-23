@@ -36,6 +36,12 @@
   --diagram-dot-soft: #b5b5b5;
   --diagram-dash: #bdbdbd;
   --diagram-rule: #e6e6e6;
+  /* Línea de tiempo (Visión general, 113:507) */
+  --timeline-line: #d1d1d1;
+  --chip-bg: #ededed; /* etiquetas de los hitos ("B2B", "Caso de estudio") */
+  /* Bloques de marca (Visión general: tipografía 163:545 y paleta 166:558) */
+  --specimen-chars: #595959;
+  --swatch-ink: #0d141f; /* texto sobre colores claros de la paleta */
   --danger: #d84e4e;
   --danger-halo: rgb(216 78 78 / 0.14);
   --bubble-shadow: 0 2px 6px rgb(0 0 0 / 0.06);
@@ -112,6 +118,11 @@
   --text-diagram-md: 0.9375rem; /* 15 */
   --text-diagram-title: clamp(1.125rem, 1.081rem + 0.1878vw, 1.25rem); /* 18 → 20 */
 
+  /* Espécimen tipográfico (Visión general): "Aa" 88 → 120 y muestras 18 → 24 */
+  --text-specimen: clamp(5.5rem, 4.7958rem + 3.0047vw, 7.5rem);
+  --text-specimen-sample: clamp(1.125rem, 0.993rem + 0.5634vw, 1.5rem);
+  --leading-specimen: 1.3;
+
   /* Rol bajo el nombre en el nav ("UX/UI designer"): 15/25, tracking 25% */
   --text-tagline: 0.9375rem;
   --leading-tagline: 1.5625rem;
@@ -133,6 +144,7 @@
   --leading-label: 1.25rem;
 
   /* ---------- Espaciado y layout ---------- */
+  --space-3: 0.1875rem;
   --space-4: 0.25rem;
   --space-8: 0.5rem;
   --space-10: 0.625rem;
@@ -149,7 +161,9 @@
   --space-20: 1.25rem;
   --space-32: 2rem;
   --space-40: 2.5rem;
+  --space-18: 1.125rem;
   --space-48: 3rem;
+  --space-80: 5rem;
   --space-120: 7.5rem;
 
   /* Casos: bloques responsivos (mobile → desktop) */
@@ -171,6 +185,8 @@
   --case-nav-width: 13.75rem; /* 220 px */
   --case-nav-gap: 6.25rem; /* 100 px */
   --case-column: 50rem; /* 800 px */
+  --timeline-year: 6.875rem; /* 110 px, columna del año en desktop */
+  --timeline-dot: 0.75rem; /* 12 px */
   --page-max: 90rem; /* 1440 px */
 
   /* Ritmo vertical */
@@ -193,6 +209,7 @@
   --radius-image: 1rem; /* 16 */
   --radius-thumb: 0.75rem; /* 12, piezas de Exploraciones */
   --radius-chip: 0.6875rem; /* 11, tags y filtros */
+  --radius-pill: 999px; /* etiquetas de la línea de tiempo */
 
   /* Iconos */
   --icon-size: 1.5rem; /* 24 */

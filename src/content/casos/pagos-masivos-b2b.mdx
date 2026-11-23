@@ -1,0 +1,262 @@
+---
+# Caso — Pagos masivos B2B. Figma: 209:775 (desktop), 286:918 (mobile).
+# Textos copiados tal cual de Figma. [Confirmar] = dato que falta en Figma.
+titulo: Pagos masivos para empresas
+bajada: La herramienta con la que empresas pagan a sus equipos remotos en stablecoins, en un solo envío.
+nombre: Pagos masivos B2B
+subtitulo: Skipo
+tags: [Diseño de producto, Caso de estudio, Webapp B2B]
+portada: ../../assets/casos/pagos-masivos-b2b/portada.png
+portadaAlt: Pantallas de pagos masivos en la webapp de Skipo
+metadatos:
+  - etiqueta: Rol
+    valor: Único diseñador UX/UI
+  - etiqueta: Año
+    valor: '2024'
+  - etiqueta: Alcance
+    valor: Webapp para empresas
+  - etiqueta: Herramientas
+    valor: Figma
+resumen: 'Las empresas que usaban Skipo para pagar a sus equipos remotos tenían que enviar cada pago uno por uno. Diseñé el flujo de pagos masivos: cargar la nómina completa con un CSV, con pagos en distintas monedas en un mismo lote, revisarla, aprobarla con doble factor y seguir el estado de cada transferencia, incluso cuando algunas fallan.'
+queHice:
+  - Benchmark de Deel, Remote y Payoneer
+  - Flujo de carga, revisión, confirmación y envío
+  - Carga por CSV con validación y plantilla
+  - Estados de envío y manejo de transferencias fallidas
+  - Pruebas de usabilidad e iteración
+metricas:
+  eyebrow: En números
+  items:
+    - valor: '15'
+      descripcion: empresas pagando sus nóminas con esta funcionalidad
+    - valor: '500'
+      descripcion: pagos en un solo lote, en las empresas más grandes
+    - valor: 25+
+      descripcion: empresas usando la plataforma B2B de Skipo
+destacados:
+  eyebrow: Diseño final
+  titulo: Tres claves para pagar una nómina completa
+  formato: horizontal
+  items:
+    - eyebrow: Carga con CSV
+      titulo: Una nómina completa en un archivo
+      texto: La empresa sube su nómina en un CSV con usuario, monto y moneda por persona. Antes de cargarla, la validación dice cuántos contactos encontró, cuántos va a agregar y cuáles fallaron y por qué, para corregir el archivo sin adivinar.
+      imagen: ../../assets/casos/pagos-masivos-b2b/destacado-carga-con-csv.png
+      alt: 'Diseño final: carga de la nómina con CSV'
+    - eyebrow: Roles y aprobación
+      titulo: Control antes de mover el dinero
+      texto: Quien prepara la nómina no siempre es quien autoriza el pago. El administrador asigna un rol a cada miembro del equipo, y el envío final se confirma con un código de doble factor.
+      imagen: ../../assets/casos/pagos-masivos-b2b/destacado-roles-y-aprobacion.png
+      alt: 'Diseño final: roles y confirmación con doble factor'
+    - eyebrow: Seguimiento del envío
+      titulo: Visibilidad cuando algo falla
+      texto: Con cientos de transferencias, algunas pueden fallar. El flujo muestra el progreso en tiempo real, separa las completadas de las fallidas y permite reintentarlas. Si el saldo no alcanza, la empresa compra USDT sin perder la nómina cargada.
+      imagen: ../../assets/casos/pagos-masivos-b2b/destacado-seguimiento-del-envio.png
+      alt: 'Diseño final: transferencias fallidas y reintento'
+secciones:
+  - { id: contexto, titulo: Contexto }
+  - { id: mi-proceso, titulo: Mi proceso }
+  - { id: roles-y-permisos, titulo: Roles y permisos }
+  - { id: exploracion, titulo: Exploración }
+  - { id: el-flujo, titulo: El flujo }
+  - { id: carga-con-csv, titulo: Carga con CSV }
+  - { id: casos-borde, titulo: Casos borde }
+  - { id: validacion, titulo: Validación }
+  - { id: resultados, titulo: Resultados }
+  - { id: aprendizajes, titulo: Aprendizajes }
+siguientes:
+  - slug: registro-y-verificacion
+    titulo: Registro y verificación
+    texto: Cómo bajamos la fricción del onboarding y el KYC.
+    imagen: ../../assets/casos/vision-general/siguiente-registro-y-verificacion.png
+  - slug: design-system
+    titulo: Design system de Skipo
+    texto: La librería detrás de la app y la webapp.
+    imagen: ../../assets/casos/registro-y-verificacion/siguiente-design-system.png
+  - slug: vision-general
+    titulo: Skipo — Visión general
+    texto: Cuatro años diseñando el producto de punta a punta.
+    imagen: ../../assets/casos/registro-y-verificacion/siguiente-vision-general.png
+---
+
+import CaseSection from '../../components/CaseSection.astro';
+import ImagenConPie from '../../components/ImagenConPie.astro';
+import ParDeImagenes from '../../components/ParDeImagenes.astro';
+import Grilla from '../../components/Grilla.astro';
+import CardProceso from '../../components/CardProceso.astro';
+import CardNumerada from '../../components/CardNumerada.astro';
+
+import envioIndividual from '../../assets/casos/pagos-masivos-b2b/envio-individual-en-la-webapp.png';
+import benchmark from '../../assets/casos/pagos-masivos-b2b/benchmark-deel-remote-y-payoneer.png';
+import miembros from '../../assets/casos/pagos-masivos-b2b/miembros-de-la-empresa.png';
+import confirmacion2fa from '../../assets/casos/pagos-masivos-b2b/confirmacion-con-codigo-2fa.png';
+import wireframeCarga from '../../assets/casos/pagos-masivos-b2b/wireframe-de-la-carga.png';
+import wireframeRevision from '../../assets/casos/pagos-masivos-b2b/wireframe-de-la-revision.png';
+import cargaDePagos from '../../assets/casos/pagos-masivos-b2b/carga-de-pagos.png';
+import revision from '../../assets/casos/pagos-masivos-b2b/revision-antes-de-enviar.png';
+import progreso from '../../assets/casos/pagos-masivos-b2b/progreso-del-envio.png';
+import estadosModal from '../../assets/casos/pagos-masivos-b2b/estados-del-modal-de-carga-csv.png';
+import validacionArchivo from '../../assets/casos/pagos-masivos-b2b/validacion-del-archivo.png';
+import historial from '../../assets/casos/pagos-masivos-b2b/historial-de-nominas.png';
+import fallidas from '../../assets/casos/pagos-masivos-b2b/transferencias-fallidas-y-reintento.png';
+import compraUsdt from '../../assets/casos/pagos-masivos-b2b/compra-de-usdt-sin-salir-del-flujo.png';
+import antesPruebas from '../../assets/casos/pagos-masivos-b2b/antes-de-las-pruebas-de-usabilidad.png';
+import versionLanzada from '../../assets/casos/pagos-masivos-b2b/version-lanzada.png';
+
+<CaseSection id="contexto" eyebrow="Contexto" titulo="Pagar a un equipo, una persona a la vez">
+
+Muchas empresas usaban Skipo para pagarles a sus equipos remotos en stablecoins, pero la webapp solo permitía enviar un pago a la vez. El equipo comercial detectó que era una necesidad de muchos clientes, que para pagar nóminas usaban plataformas más costosas, como Deel.
+
+<ImagenConPie src={envioIndividual} alt="Envío individual en la webapp" ratio="800 / 450" />
+
+<Grilla columnas={2}>
+  <CardNumerada numero="01" titulo="Cargar muchos pagos a la vez" texto="Desde decenas hasta cientos de personas en una sola nómina." />
+  <CardNumerada numero="02" titulo="Evitar errores antes de enviar" texto="Revisar destinatarios, montos y monedas antes de mover el dinero." />
+</Grilla>
+
+<Grilla columnas={2}>
+  <CardNumerada numero="03" titulo="Controlar quién hace qué" texto="Separar a quien prepara la nómina de quien autoriza el pago." />
+  <CardNumerada numero="04" titulo="Mostrar qué pasa con cada pago" texto="Con cientos de transferencias, algunas pueden fallar." />
+</Grilla>
+
+</CaseSection>
+
+<CaseSection id="mi-proceso" eyebrow="Mi proceso" titulo="Cómo trabajé este problema">
+
+Partí de la necesidad que trajo el equipo comercial, revisé cómo resolvían los pagos masivos Deel, Remote y Payoneer, y probé el flujo con usuarios antes de lanzarlo.
+
+<Grilla columnas={3}>
+  <CardProceso icono="descubrir" numero="01" titulo="Descubrir" texto="La necesidad que trajo comercial y cómo pagaban las empresas." />
+  <CardProceso icono="definir" numero="02" titulo="Definir" texto="El flujo, los roles y las restricciones técnicas." />
+  <CardProceso icono="explorar" numero="03" titulo="Explorar" texto="Benchmark de Deel, Remote y Payoneer." />
+</Grilla>
+
+<Grilla columnas={3}>
+  <CardProceso icono="idear" numero="04" titulo="Idear" texto="Wireframes del flujo de carga y aprobación." />
+  <CardProceso icono="disenar-y-validar" numero="05" titulo="Diseñar y validar" texto="Prototipos en Figma y pruebas con 7 personas." />
+  <CardProceso icono="medir-e-iterar" numero="06" titulo="Medir e iterar" texto="Ajustes después del lanzamiento." />
+</Grilla>
+
+<ImagenConPie src={benchmark} alt="Benchmark: Deel, Remote y Payoneer" ratio="800 / 420" />
+
+<p class="eyebrow">Lo que encontré en el benchmark</p>
+
+<Grilla columnas={2} alinear="stretch">
+  <CardNumerada numero="01" titulo="Pagos en varias monedas a la vez" texto="En ese momento, esas plataformas no permitían pagos masivos en distintas monedas en un mismo lote. Era una oportunidad para Skipo." />
+  <CardNumerada numero="02" titulo="Roles para cada responsabilidad" texto="Todas trabajaban con roles. Tomé esa idea para separar quién carga, quién modifica y quién aprueba." />
+</Grilla>
+
+</CaseSection>
+
+<CaseSection id="roles-y-permisos" eyebrow="Roles y permisos" titulo="Quién carga, quién modifica y quién aprueba">
+
+En una empresa, quien prepara la nómina no siempre es quien autoriza el pago. Como en las plataformas del benchmark, el administrador de la cuenta podía asignar roles a cada miembro del equipo: algunos podían subir y aprobar los CSV, otros solo modificar montos. Por eso el flujo separa la carga de la aprobación, y el envío final se confirma con un código de doble factor.
+
+<ParDeImagenes
+  ratio="392 / 360"
+  apilarEnMobile
+  tamanoPie="normal"
+  a={{ src: miembros, pie: 'Miembros de la empresa', alt: 'Miembros de la empresa y roles' }}
+  b={{ src: confirmacion2fa, pie: 'Confirmación con código 2FA', alt: 'Confirmación con doble factor' }}
+/>
+
+</CaseSection>
+
+<CaseSection id="exploracion" eyebrow="Exploración" titulo="Por qué una planilla y no un formulario">
+
+En el benchmark vi dos enfoques: Payoneer usaba un formulario dentro de la plataforma, y otras, un CSV. Nos quedamos con el CSV porque para las empresas era mucho más fácil y escalable preparar la nómina en una planilla de Excel y subirla, que armar cada pago dentro de la plataforma. Igual se pueden agregar o ajustar pagos a mano antes de enviar.
+
+<ParDeImagenes
+  ratio="392 / 360"
+  apilarEnMobile
+  tamanoPie="normal"
+  a={{ src: wireframeCarga, pie: 'Wireframe de la carga', alt: 'Wireframe: carga de pagos' }}
+  b={{ src: wireframeRevision, pie: 'Wireframe de la revisión', alt: 'Wireframe: revisión y aprobación' }}
+/>
+
+</CaseSection>
+
+<CaseSection id="el-flujo" eyebrow="El flujo" titulo="De la nómina al pago en cuatro pasos">
+
+Dividí el proceso en etapas claras, para que la empresa siempre sepa en qué punto está y qué falta para enviar.
+
+<Grilla columnas={2}>
+  <CardNumerada numero="01" titulo="Cargar" texto="Agregar pagos a mano o subir un CSV, con asunto, monto y moneda por persona." />
+  <CardNumerada numero="02" titulo="Revisar" texto="Una tabla con cada pago, su network fee y el total antes de enviar a revisión." />
+</Grilla>
+
+<Grilla columnas={2}>
+  <CardNumerada numero="03" titulo="Confirmar" texto="Resumen del envío, su equivalente en USD y el código del autenticador." />
+  <CardNumerada numero="04" titulo="Seguir el envío" texto="El progreso en tiempo real y el estado de cada transferencia." />
+</Grilla>
+
+<ImagenConPie src={cargaDePagos} alt="Carga de pagos" ratio="800 / 560" />
+
+<ParDeImagenes
+  ratio="392 / 300"
+  apilarEnMobile
+  tamanoPie="normal"
+  a={{ src: revision, pie: 'Revisión antes de enviar' }}
+  b={{ src: progreso, pie: 'Progreso del envío' }}
+/>
+
+</CaseSection>
+
+<CaseSection id="carga-con-csv" eyebrow="Carga con CSV" titulo="Subir una nómina completa">
+
+La carga por CSV incluye una plantilla descargable y una validación que dice cuántos contactos encontró, cuántos va a agregar y cuáles fallaron y por qué. Así la empresa puede corregir el archivo sin adivinar dónde está el error. Además, cada nómina se puede guardar en un historial para volver a usarla.
+
+<ImagenConPie src={estadosModal} alt="Estados del modal de carga CSV" ratio="800 / 420" />
+
+<ParDeImagenes
+  ratio="392 / 360"
+  apilarEnMobile
+  tamanoPie="normal"
+  a={{ src: validacionArchivo, pie: 'Validación del archivo' }}
+  b={{ src: historial, pie: 'Historial de nóminas' }}
+/>
+
+</CaseSection>
+
+<CaseSection id="casos-borde" eyebrow="Casos borde" titulo="Diseñar para cuando algo falla">
+
+Al enviar cientos de transferencias, algunas pueden fallar, por ejemplo por congestión de la red. En vez de esconder el error, el flujo muestra cuántas se completaron y cuáles fallaron, y permite reintentarlas o continuar sin ellas. Si el saldo no alcanza, la empresa puede comprar USDT desde el mismo flujo, sin perder la nómina cargada.
+
+<ParDeImagenes
+  ratio="392 / 360"
+  apilarEnMobile
+  tamanoPie="normal"
+  a={{ src: fallidas, pie: 'Transferencias fallidas y reintento' }}
+  b={{ src: compraUsdt, pie: 'Compra de USDT sin salir del flujo', alt: 'Compra de USDT por saldo insuficiente' }}
+/>
+
+</CaseSection>
+
+<CaseSection id="validacion" eyebrow="Validación" titulo="Probar, ajustar y volver a iterar">
+
+Antes del lanzamiento hicimos pruebas de usabilidad con 7 personas del equipo interno y de una de las empresas más grandes que usaban Skipo. La pantalla de transferencias pendientes no dejaba claro cuál era el monto final, así que la iteramos y lanzamos a producción la versión mejorada. Después del lanzamiento volvimos a iterar: al principio, por una limitación técnica, los contactos externos tenían que estar agregados antes de pagarles. Cuando se resolvió, el CSV empezó a agregarlos automáticamente.
+
+<ParDeImagenes
+  ratio="392 / 360"
+  apilarEnMobile
+  tamanoPie="normal"
+  a={{ src: antesPruebas, pie: 'Antes de las pruebas de usabilidad', alt: 'Transferencias pendientes, antes de las pruebas de usabilidad' }}
+  b={{ src: versionLanzada, pie: 'Versión lanzada', alt: 'Transferencias pendientes, versión lanzada' }}
+/>
+
+</CaseSection>
+
+<CaseSection id="resultados" eyebrow="Resultados" titulo="Una de las funcionalidades clave para empresas">
+
+{/* [Confirmar] El corchete viene así en Figma: falta decidir si se publica el volumen mensual. */}
+Se lanzó en 2024 y pasó a ser una de las funcionalidades principales de Skipo para empresas. Unas 15 empresas la usaban para pagar sus nóminas, y las más grandes enviaban hasta 500 pagos en un solo lote. [Volumen mensual: confirmar si se puede publicar]
+
+</CaseSection>
+
+<CaseSection id="aprendizajes" eyebrow="Aprendizajes" titulo="Qué me llevo">
+
+<CardNumerada numero="01" titulo="El error también es parte del flujo" texto="Con cientos de transferencias, que algo falle es esperable. Diseñar ese caso desde el principio le da control a la empresa en vez de dejarla con dudas." />
+<CardNumerada numero="02" titulo="Los permisos también son experiencia" texto="En un producto B2B, quién puede hacer qué define cómo se diseña cada pantalla." />
+<CardNumerada numero="03" titulo="Un archivo necesita feedback específico" texto="Decir qué contacto falló y por qué le permite a la empresa corregir el CSV por su cuenta." />
+
+</CaseSection>

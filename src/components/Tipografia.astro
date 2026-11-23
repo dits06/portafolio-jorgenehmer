@@ -1,0 +1,148 @@
+---
+/**
+ * Espécimen tipográfico — Visión general › Marca, Figma 163:545 (mobile 168:791).
+ * Encabezado (H4 + descripción) y una card --surface con "Aa", los cuatro pesos
+ * con su muestra y los caracteres. Desktop: "Aa" a la izquierda, pesos en filas
+ * con la etiqueta a la derecha. Mobile: todo apilado, etiqueta bajo la muestra.
+ */
+interface Peso {
+  nombre: string;
+  valor: 400 | 500 | 600 | 700;
+}
+
+interface Props {
+  titulo: string;
+  descripcion: string;
+  fuente: string;
+  muestra: string;
+  pesos: Peso[];
+  caracteres: string[];
+}
+
+const { titulo, descripcion, fuente, muestra, pesos, caracteres } = Astro.props;
+---
+
+<div class="tipografia">
+  <div class="tipografia__encabezado">
+    <h3 class="tipografia__titulo">{titulo}</h3>
+    <p class="tipografia__descripcion">{descripcion}</p>
+  </div>
+  <div class="especimen">
+    <div class="especimen__muestra">
+      <p class="especimen__aa" aria-hidden="true">Aa</p>
+      <p class="eyebrow">{fuente}</p>
+    </div>
+    <div class="especimen__pesos">
+      {
+        pesos.map((p) => (
+          <p class="peso">
+            <span class="peso__muestra" style={`font-weight: ${p.valor}`}>
+              {muestra}
+            </span>
+            <span class="peso__nombre">
+              {p.nombre} · {p.valor}
+            </span>
+          </p>
+        ))
+      }
+      <p class="especimen__caracteres">
+        {caracteres.map((linea) => <span>{linea}</span>)}
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .tipografia {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+  }
+
+  .tipografia__encabezado {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .tipografia__titulo {
+    font-size: var(--text-h4);
+    line-height: var(--leading-h4);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-h4);
+  }
+
+  .tipografia__descripcion {
+    color: var(--muted-2);
+  }
+
+  .especimen {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-24);
+    padding: var(--space-40);
+    border-radius: var(--radius-thumb);
+    background: var(--surface);
+  }
+
+  .especimen__muestra {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .especimen__aa {
+    font-size: var(--text-specimen);
+    line-height: var(--leading-specimen);
+    font-weight: var(--weight-bold);
+  }
+
+  .especimen__pesos {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: var(--space-14);
+    min-width: 0;
+  }
+
+  .peso {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .peso__muestra {
+    font-size: var(--text-specimen-sample);
+    line-height: var(--leading-specimen);
+  }
+
+  .peso__nombre {
+    color: var(--muted);
+    font-size: var(--text-thumb-caption);
+    line-height: var(--leading-thumb-caption);
+  }
+
+  .especimen__caracteres {
+    display: flex;
+    flex-direction: column;
+    color: var(--specimen-chars);
+    font-size: var(--text-body);
+    line-height: var(--space-24);
+    overflow-wrap: anywhere;
+  }
+
+  @media (min-width: 768px) {
+    .especimen {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-48);
+    }
+
+    .peso {
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-16);
+    }
+  }
+</style>

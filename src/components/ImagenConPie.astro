@@ -14,13 +14,15 @@ interface Props {
   ratio?: string;
   sizes?: string;
   tamanoPie?: 'normal' | 'chico';
+  /** Versión mobile si la imagen cambia de proporción (ver CaseImage). */
+  mobile?: ImageMetadata;
 }
 
-const { src, pie, alt, ratio, sizes, tamanoPie = 'normal' } = Astro.props;
+const { src, pie, alt, ratio, sizes, tamanoPie = 'normal', mobile } = Astro.props;
 ---
 
 <figure class="imagen-con-pie">
-  <CaseImage src={src} alt={alt ?? pie ?? ''} ratio={ratio} sizes={sizes} />
+  <CaseImage src={src} alt={alt ?? pie ?? ''} ratio={ratio} sizes={sizes} mobile={mobile} />
   {pie && <figcaption class:list={['pie', `pie--${tamanoPie}`]}>{pie}</figcaption>}
 </figure>
 

@@ -58,6 +58,24 @@ const { id, eyebrow, titulo } = Astro.props;
     gap: var(--space-40);
   }
 
+  /* Imágenes apiladas con un solo pie (Construcción del logo, 107:531): 8 px */
+  .case-section > :global(.pila) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .case-section > :global(.pila figcaption) {
+    color: var(--muted);
+    font-size: var(--text-thumb-caption);
+    line-height: var(--leading-thumb-caption);
+  }
+
+  /* Links dentro del texto de la sección (subrayados, como en Figma) */
+  .case-section > :global(p:not([class]) a) {
+    text-underline-offset: 0.2em;
+  }
+
   .case-section > :global(ol),
   .case-section > :global(ul) {
     max-width: 45rem;
