@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="647 17.5 760 760">
+  <!-- JN del header circuito (geometría y colores de src/scripts/hero-circuit.js) -->
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="75%">
+      <stop offset="0" stop-color="#0014BC"/>
+      <stop offset="1" stop-color="#000956"/>
+    </radialGradient>
+    <linearGradient id="bar" gradientUnits="userSpaceOnUse" x1="687" y1="237" x2="990" y2="237">
+      <stop offset="0" stop-color="#740FCD"/>
+      <stop offset="1" stop-color="#CF0E8D"/>
+    </linearGradient>
+    <linearGradient id="j" gradientUnits="userSpaceOnUse" x1="990" y1="182" x2="687" y2="613">
+      <stop offset="0" stop-color="#CF0E8D"/>
+      <stop offset="1" stop-color="#370ECC"/>
+    </linearGradient>
+    <linearGradient id="n" gradientUnits="userSpaceOnUse" x1="1215" y1="182" x2="1215" y2="613">
+      <stop offset="0" stop-color="#FF6F16"/>
+      <stop offset="1" stop-color="#0A068B"/>
+    </linearGradient>
+  </defs>
+  <rect x="647" y="17.5" width="760" height="760" rx="160" fill="url(#bg)"/>
+  <g fill="none" stroke-width="110.669" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="url(#n)" d="M934.3 237.32 L1119.84 557.5 L1119.84 333.23 A95.913 95.913 0 0 1 1215.75 237.32 A95.913 95.913 0 0 1 1311.67 333.23"/>
+    <path stroke="url(#bar)" d="M742.33 237.32 L934.3 237.32"/>
+    <path stroke="url(#j)" d="M934.3 237.32 L934.41 461.6 A95.913 95.913 0 0 1 838.49 557.51 A95.913 95.913 0 0 1 742.58 461.6"/>
+    <!-- Diagonal de vidrio: cápsula translúcida sobre el cruce -->
+    <path stroke="#FFFFFF" stroke-opacity="0.3" d="M934.16 237.32 L1119.84 557.03"/>
+  </g>
+</svg>
