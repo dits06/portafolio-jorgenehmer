@@ -1,10 +1,11 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
 import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://jorgenehmer.com',
-  integrations: [mdx()],
+  integrations: [mdx(), sitemap()],
   fonts: [
     {
       provider: fontProviders.fontsource(),
