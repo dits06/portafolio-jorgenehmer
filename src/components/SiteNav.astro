@@ -137,16 +137,32 @@ const nuevaPestana = { target: '_blank', rel: 'noopener' };
     border: 1px solid var(--nav-borde);
     border-radius: var(--nav-radio);
     background: var(--nav-fondo);
+    box-shadow: var(--nav-sombra);
     color: var(--nav-tinta);
     -webkit-backdrop-filter: var(--nav-filtro);
     backdrop-filter: var(--nav-filtro);
     transition:
       background-color var(--duration-nav) ease,
       border-color var(--duration-nav) ease,
+      box-shadow var(--duration-nav) ease,
       color var(--duration-nav) ease,
       border-radius var(--duration-nav) ease,
       -webkit-backdrop-filter var(--duration-nav) ease,
       backdrop-filter var(--duration-nav) ease;
+  }
+
+  /* Brillo del vidrio: capa aparte para que se desvanezca al pasar al tono claro
+     (un degradado no se puede animar). Va bajo el contenido de la cápsula. */
+  .site-nav::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: -1px;
+    border-radius: inherit;
+    background: var(--nav-vidrio-brillo);
+    opacity: var(--nav-brillo);
+    pointer-events: none;
+    transition: opacity var(--duration-nav) ease;
   }
 
   /* Casos: en el mismo lugar, pero anclada arriba de la página (se va con el scroll) */
@@ -154,12 +170,15 @@ const nuevaPestana = { target: '_blank', rel: 'noopener' };
     position: absolute;
   }
 
-  /* Sobre el header azul: vidrio oscuro, sin borde ni desenfoque (Figma 348:1434) */
+  /* Sobre el header azul: vidrio líquido. Figma (348:1434) usa #2F2F2F al 20 %
+     sin desenfoque; se cambió a pedido de Jorge porque se veía muy traslúcido. */
   .site-nav[data-tono='oscuro'] {
     --nav-fondo: var(--nav-vidrio);
     --nav-borde: transparent;
+    --nav-sombra: var(--nav-vidrio-sombra);
+    --nav-brillo: 1;
     --nav-tinta: var(--paper);
-    --nav-filtro: blur(0);
+    --nav-filtro: var(--nav-vidrio-filtro);
     --nav-divisor: var(--nav-divisor-oscuro);
   }
 
@@ -167,8 +186,11 @@ const nuevaPestana = { target: '_blank', rel: 'noopener' };
   .site-nav[data-tono='claro'] {
     --nav-fondo: var(--nav-claro);
     --nav-borde: var(--line);
+    --nav-sombra: var(--nav-claro-sombra);
+    --nav-brillo: 0;
     --nav-tinta: var(--ink);
-    --nav-filtro: blur(var(--nav-blur));
+    /* Misma lista de filtros que el vidrio, para que la transición interpole */
+    --nav-filtro: blur(var(--nav-blur)) saturate(1);
     --nav-divisor: var(--nav-divisor-claro);
   }
 

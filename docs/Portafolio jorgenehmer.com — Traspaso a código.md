@@ -130,7 +130,7 @@ Cambio posterior a las 7 etapas (noviembre de 2026). Reemplaza el nav anterior (
 - El logotipo JORGENEHMER (SVG en línea, color del texto) queda alineado con el título del hero en el home (20 px en mobile, 63 px en 1440) y con el margen de página en el resto. La cápsula sobresale 24 px (desktop) o 12 px (mobile) a cada lado del logotipo.
 - Desktop: links Proyectos (`/#proyectos`) y Currículum (el PDF, en una pestaña nueva), en Body/Large.
 - Tonos:
-  - **Oscuro**, sobre el header azul: relleno `#2F2F2F` al 20 %, sin borde ni desenfoque (así está en Figma), texto e íconos blancos.
+  - **Oscuro**, sobre el header azul: vidrio líquido. Blanco al 10 %, desenfoque de 16 px con saturación 1.3, un brillo arriba (degradado blanco del 14 % a 0) y bordes de luz (sombras interiores blancas de 1 px al 30 % arriba a la izquierda y al 12 % abajo a la derecha, como el botón Contáctame del hero), más una sombra suave hacia abajo. Texto e íconos blancos. **Se aparta de Figma**, que usa `#2F2F2F` al 20 % sin desenfoque: Jorge lo pidió porque se veía muy traslúcido. El brillo y las sombras se apagan en la transición al tono claro.
   - **Claro**, sobre fondo blanco: blanco al 78 %, desenfoque de fondo 24 de Figma, borde `#E5E5E5`, texto e íconos negros.
   - En el home parte oscura y pasa a clara cuando el borde inferior del header sube más allá de la barra (IntersectionObserver), con una transición de 250 ms. En casos, exploraciones y la 404 parte clara.
 - El desenfoque "24" de Figma se escribe `blur(12px)` en CSS: es como Figma lo dibuja (su propio export lo traduce así). El del fondo atenuado, 8 en Figma, es `blur(4px)`.
