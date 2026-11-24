@@ -8,10 +8,11 @@ import HomeSectionTitle from '../components/HomeSectionTitle.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import ExplorationsGallery from '../components/ExplorationsGallery.astro';
 import { projects } from '../data/home';
+import compartir from '../assets/home/compartir.png';
 ---
 
-<!-- Descripción: el texto del hero (Figma 55:429). Imagen para compartir: [Confirmar], no está en Figma. -->
-<BaseLayout description="Product designer en Santiago, con 5 años creando productos digitales de punta a punta: apps, plataformas web, design systems y marca. Me dedico a hacer simple lo complejo.">
+<!-- Descripción: el texto del hero (Figma 55:429). Imagen para compartir: la que entregó Jorge (1200 × 630). -->
+<BaseLayout image={compartir} imageAlt="Jorge Nehmer, Portafolio" description="Product designer en Santiago, con 5 años creando productos digitales de punta a punta: apps, plataformas web, design systems y marca. Me dedico a hacer simple lo complejo.">
 
   <HeroCircuit />
 
