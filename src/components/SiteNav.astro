@@ -20,9 +20,11 @@ import { site } from '../data/site';
 interface Props {
   /** Home: la cápsula parte sobre el header azul (tono oscuro). */
   sobreHeader?: boolean;
+  /** false (casos): queda arriba de la página y se va con el scroll. */
+  fija?: boolean;
 }
 
-const { sobreHeader = false } = Astro.props;
+const { sobreHeader = false, fija = true } = Astro.props;
 const tono = sobreHeader ? 'oscuro' : 'claro';
 const nuevaPestana = { target: '_blank', rel: 'noopener' };
 ---
@@ -32,6 +34,7 @@ const nuevaPestana = { target: '_blank', rel: 'noopener' };
   data-site-nav
   data-tono={tono}
   data-sobre-header={sobreHeader ? 'true' : undefined}
+  data-estatica={fija ? undefined : 'true'}
 >
   <div class="barra" data-nav-barra>
     <a class="logo" href="/">
@@ -144,6 +147,11 @@ const nuevaPestana = { target: '_blank', rel: 'noopener' };
       border-radius var(--duration-nav) ease,
       -webkit-backdrop-filter var(--duration-nav) ease,
       backdrop-filter var(--duration-nav) ease;
+  }
+
+  /* Casos: en el mismo lugar, pero anclada arriba de la página (se va con el scroll) */
+  .site-nav[data-estatica] {
+    position: absolute;
   }
 
   /* Sobre el header azul: vidrio oscuro, sin borde ni desenfoque (Figma 348:1434) */

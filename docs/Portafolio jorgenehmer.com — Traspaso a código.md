@@ -126,7 +126,7 @@ El sitio son 12 páginas, pero solo 3 plantillas: home, caso y exploración. Cad
 
 Cambio posterior a las 7 etapas (noviembre de 2026). Reemplaza el nav anterior (nombre + rol en una franja blanca). Figma: estados en 348:1402 y navbar del home en 1:33. Componente: `src/components/SiteNav.astro`; tokens `--nav-*` en `tokens.css`.
 
-- Cápsula fija arriba, flotando sobre la página. Desktop (desde 861 px): 64 px de alto, radio 16, a 24 px del borde superior. Mobile (hasta 860 px, el mismo corte del header circuito JN): 56 px, radio 14, a 12 px.
+- Cápsula flotante arriba. En el home, las exploraciones y la 404 es fija y baja con el scroll. En las páginas de caso queda anclada arriba de la página y se va con el scroll (`navFija={false}` en BaseLayout, `position: absolute`). Desktop (desde 861 px): 64 px de alto, radio 16, a 24 px del borde superior. Mobile (hasta 860 px, el mismo corte del header circuito JN): 56 px, radio 14, a 12 px.
 - El logotipo JORGENEHMER (SVG en línea, color del texto) queda alineado con el título del hero en el home (20 px en mobile, 63 px en 1440) y con el margen de página en el resto. La cápsula sobresale 24 px (desktop) o 12 px (mobile) a cada lado del logotipo.
 - Desktop: links Proyectos (`/#proyectos`) y Currículum (el PDF, en una pestaña nueva), en Body/Large.
 - Tonos:
@@ -141,7 +141,7 @@ Cambio posterior a las 7 etapas (noviembre de 2026). Reemplaza el nav anterior (
   - Home: el header queda debajo de la cápsula. En mobile, el texto del hero empieza en 80 px y va a 20 px del borde (Figma 348:1596).
   - Casos: la portada en banda empieza arriba de todo y la cápsula flota encima (la banda ya deja 136 px de aire).
   - Exploraciones y 404: el contenido baja lo que ocupa la cápsula (`--nav-espacio`: 68 px en mobile, 88 px en desktop).
-  - Las anclas usan `scroll-padding-top` y el nav lateral de los casos se pega 48 px bajo la cápsula.
+  - Las anclas usan `scroll-padding-top` donde la cápsula es fija. En los casos no hace falta: ahí el nav lateral sigue pegado a 48 px del borde superior.
 
 Rol: el sitio dice "Product designer" (antes "UX/UI designer") en el título de la página y en los metadatos.
 

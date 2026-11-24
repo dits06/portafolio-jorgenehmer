@@ -23,7 +23,7 @@ const { Content } = await render(caso);
 const d = caso.data;
 ---
 
-<BaseLayout title={d.nombre} description={d.bajada} image={d.portada} imageAlt={d.portadaAlt} nav={d.banda ? 'portada' : 'pagina'}>
+<BaseLayout title={d.nombre} description={d.bajada} image={d.portada} imageAlt={d.portadaAlt} nav={d.banda ? 'portada' : 'pagina'} navFija={false}>
   <article class="caso">
     <!-- 1. Portada a todo el ancho: banda (página Portadas de Figma) o, si el caso no la tiene, imagen única -->
     {
