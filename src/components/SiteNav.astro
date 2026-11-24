@@ -1,99 +1,204 @@
 ---
 /**
- * Nav del sitio — Figma: desktop 1:33 (frame 1:2), mobile 103:303 (frame 103:302).
- * En mobile los links van en un menú que abre el ícono de hamburguesa.
- * El estado abierto del menú no está diseñado en Figma.
+ * Navbar del sitio — Figma: estados 348:1402 (desktop y mobile, sobre el header y
+ * sobre fondo blanco, y menú mobile abierto) y navbar del home 1:33.
+ *
+ * Cápsula flotante y fija arriba. El logotipo JORGENEHMER queda alineado con el
+ * título del hero en el home y con el margen de página en el resto.
+ * - Tono "oscuro" (vidrio sobre el header azul) y "claro" (blanco translúcido).
+ *   En el home parte oscura y pasa a clara al salir del header; en las demás
+ *   páginas parte clara.
+ * - Mobile (hasta 860 px): logotipo y hamburguesa. El menú abierto hace crecer la
+ *   cápsula hacia abajo, atenúa y desenfoca el fondo, bloquea el scroll y deja el
+ *   foco dentro de la cápsula. Se cierra con la X, con Escape, al tocar un link o
+ *   al tocar el fondo.
  */
-import MenuIcon from '../assets/icons/menu.svg';
+import MailIcon from '../assets/icons/mail.svg';
+import LinkedinIcon from '../assets/icons/linkedin.svg';
 import { site } from '../data/site';
 
-const links = [
-  { label: 'Proyectos', href: '/#proyectos' },
-  { label: 'Currículum', href: site.curriculum, external: true },
-];
+interface Props {
+  /** Home: la cápsula parte sobre el header azul (tono oscuro). */
+  sobreHeader?: boolean;
+}
+
+const { sobreHeader = false } = Astro.props;
+const tono = sobreHeader ? 'oscuro' : 'claro';
+const nuevaPestana = { target: '_blank', rel: 'noopener' };
 ---
 
-<header class="site-nav" data-site-nav>
-  <a class="brand" href="/">
-    <span class="brand__name">{site.name}</span>
-    <span class="brand__role">{site.role}</span>
-  </a>
+<header
+  class="site-nav"
+  data-site-nav
+  data-tono={tono}
+  data-sobre-header={sobreHeader ? 'true' : undefined}
+>
+  <div class="barra" data-nav-barra>
+    <a class="logo" href="/">
+      <svg viewBox="0 0 171.069 17.651" aria-hidden="true" focusable="false">
+        <path d="M0 17.3V13.477H2.622C3.541 13.477 3.987 13.026 3.987 12.107V.355H8.002V13.381C8.002 16.026 6.586 17.3 4.46 17.3H0Z" />
+        <path d="M9.49 8.803C9.49 3.705 13.309 0 18.197 0C23.085 0 26.927 3.705 26.927 8.803C26.927 13.9 23.104 17.651 18.197 17.651C13.29 17.651 9.49 13.9 9.49 8.803ZM22.799 8.803C22.799 6.063 21.074 3.823 18.197 3.823C15.32 3.823 13.618 6.063 13.618 8.803C13.618 11.543 15.316 13.828 18.197 13.828C21.078 13.828 22.799 11.565 22.799 8.803Z" />
+        <path d="M37.905 17.3L34.551 11.943H32.407V17.3H28.347V.237H34.765C39.038.237 41.678 2.385 41.678 6.063C41.678 7.316 41.396 8.378 40.832 9.249C40.308 10.077 39.557 10.737 38.588 11.188L42.598 17.3H37.905ZM32.407 3.823V8.188H35.069C36.417 8.188 37.573 7.387 37.573 5.876C37.573 4.579 36.558 3.823 35.069 3.823H32.407Z" />
+        <path d="M43.899 8.757C43.899 3.728 47.559 0 52.538 0C55.369 0 57.659 1.111 59.074 2.881C59.78 3.75 60.276 4.884 60.562 6.231H56.384C55.984 5.075 55.346 4.506 54.4 4.128C53.929 3.94 53.269 3.846 52.42 3.846C50.012 3.846 47.937 5.403 47.937 8.848C47.937 10.901 48.856 12.412 50.226 13.218C50.909 13.618 51.783 13.828 52.866 13.828C55.629 13.828 56.83 12.412 56.83 10.596H52.702V7.433H60.845C60.822 9.722 60.654 11.374 60.371 12.389C60.066 13.404 59.616 14.301 58.979 15.079C57.704 16.613 55.415 17.651 52.657 17.651C47.768 17.651 43.899 13.996 43.899 8.757Z" />
+        <path d="M75.241 13.5V17.3H62.31V.355H75.241V4.155H66.343L66.32 6.914H75.241V10.737H66.32L66.343 13.5H75.241Z" />
+        <path d="M89.715 17.301L80.134 2.877V17.301H78.409V.355H80.607L90.093 14.606V.355H91.818V17.301H89.715Z" />
+        <path d="M105.668 15.694V17.301H95.145V.355H105.668V1.935H96.893V8.025H105.668V9.627H96.893V15.694H105.668Z" />
+        <path d="M110.392 17.301H108.645V.355H110.392V7.811H120.042V.355H121.789V17.301H120.042V9.395H110.392V17.301Z" />
+        <path d="M132.909 17.301L126.819 2.995V17.301H125.094V.355H127.501L133.664 14.725L139.845.355H142.23V17.301H140.505V3.023L134.415 17.301H132.909Z" />
+        <path d="M156.085 15.694V17.301H145.557V.355H156.085V1.935H147.305V8.025H156.085V9.627H147.305V15.694H156.085Z" />
+        <path d="M160.828 11.047V17.301H159.057V.305H164.605C168.096.305 170.481 2.312 170.481 5.662C170.481 7.952 169.444 9.581 167.673 10.432C167.414 10.551 167.104 10.669 166.799 10.76L171.069 17.301H169.039L165.006 11.047H160.828ZM160.828 1.839V9.463H164.674C167.059 9.463 168.711 8.093 168.711 5.617C168.711 3.141 167.104 1.839 164.674 1.839H160.828Z" />
+      </svg>
+      <span class="visually-hidden">{site.name}, inicio</span>
+    </a>
 
-  <nav class="links" aria-label="Principal">
-    <ul role="list">
-      {
-        links.map((link) => (
+    <nav class="links" aria-label="Principal">
+      <ul role="list">
+        <li><a href="/#proyectos">Proyectos</a></li>
+        <li><a href={site.curriculum} {...nuevaPestana}>Currículum</a></li>
+      </ul>
+    </nav>
+
+    <button
+      class="menu-boton"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menu-mobile"
+      aria-label="Abrir menú"
+      data-menu-boton
+    >
+      <svg class="icono-menu" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M4.8 7.2H19.2M4.8 15.2H19.2" />
+      </svg>
+      <svg class="icono-cerrar" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M6 6L18 18M18 6L6 18" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="menu" id="menu-mobile" inert data-menu>
+    <div class="menu__recorte">
+      <div class="menu__contenido">
+        <div class="divisor" aria-hidden="true"></div>
+
+        <nav aria-label="Menú">
+          <ul class="menu__links" role="list">
+            <li><a href="/#proyectos">Proyectos</a></li>
+            <li><a href="/#exploraciones">Exploraciones</a></li>
+            <li>
+              <a href={site.curriculum} {...nuevaPestana}>
+                Currículum <span class="etiqueta">PDF</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <a class="contacto" href="#contacto">Contáctame</a>
+
+        <ul class="social" role="list">
           <li>
-            <a
-              href={link.href}
-              {...(link.external ? { target: '_blank', rel: 'noopener' } : {})}
-            >
-              {link.label}
+            <a class="icono-link" href={`mailto:${site.email}`}>
+              <span class="icono icono--mail"><MailIcon aria-hidden="true" /></span>
+              <span class="visually-hidden">Correo</span>
             </a>
           </li>
-        ))
-      }
-    </ul>
-  </nav>
-
-  <button
-    class="menu-button"
-    type="button"
-    aria-expanded="false"
-    aria-controls="menu-mobile"
-    data-menu-button
-  >
-    <MenuIcon aria-hidden="true" />
-    <span class="visually-hidden">Menú</span>
-  </button>
-
-  <nav class="menu" id="menu-mobile" aria-label="Principal" hidden data-menu>
-    <ul role="list">
-      {
-        links.map((link) => (
           <li>
-            <a
-              href={link.href}
-              {...(link.external ? { target: '_blank', rel: 'noopener' } : {})}
-            >
-              {link.label}
+            <a class="icono-link" href={site.linkedin} target="_blank" rel="me noopener">
+              <span class="icono"><LinkedinIcon aria-hidden="true" /></span>
+              <span class="visually-hidden">LinkedIn</span>
             </a>
           </li>
-        ))
-      }
-    </ul>
-  </nav>
+        </ul>
+      </div>
+    </div>
+  </div>
 </header>
 
+<!-- Fondo atenuado del menú mobile: va fuera de la cápsula porque su backdrop-filter
+     encerraría a un hijo con position: fixed. -->
+<div class="nav-velo" data-nav-velo data-tono={tono}></div>
+
 <style>
+  /* ---------- Cápsula ---------- */
   .site-nav {
-    position: relative;
-    z-index: 10;
+    /* Dónde cae el logotipo: margen de página, o el título del hero en el home */
+    --nav-x: var(--page-gutter);
+
+    position: fixed;
+    z-index: 50;
+    top: var(--nav-top);
+    left: calc(var(--nav-x) - var(--nav-pad));
+    right: calc(var(--nav-x) - var(--nav-pad));
+    /* El borde (transparente en el tono oscuro) se descuenta para que el
+       logotipo caiga justo en --nav-x en los dos tonos */
+    padding-inline: calc(var(--nav-pad) - 1px);
+    border: 1px solid var(--nav-borde);
+    border-radius: var(--nav-radio);
+    background: var(--nav-fondo);
+    color: var(--nav-tinta);
+    -webkit-backdrop-filter: var(--nav-filtro);
+    backdrop-filter: var(--nav-filtro);
+    transition:
+      background-color var(--duration-nav) ease,
+      border-color var(--duration-nav) ease,
+      color var(--duration-nav) ease,
+      border-radius var(--duration-nav) ease,
+      -webkit-backdrop-filter var(--duration-nav) ease,
+      backdrop-filter var(--duration-nav) ease;
+  }
+
+  /* Sobre el header azul: vidrio oscuro, sin borde ni desenfoque (Figma 348:1434) */
+  .site-nav[data-tono='oscuro'] {
+    --nav-fondo: var(--nav-vidrio);
+    --nav-borde: transparent;
+    --nav-tinta: var(--paper);
+    --nav-filtro: blur(0);
+    --nav-divisor: var(--nav-divisor-oscuro);
+  }
+
+  /* Sobre fondo blanco: 78 %, desenfoque y borde #E5E5E5 (Figma 348:1474) */
+  .site-nav[data-tono='claro'] {
+    --nav-fondo: var(--nav-claro);
+    --nav-borde: var(--line);
+    --nav-tinta: var(--ink);
+    --nav-filtro: blur(var(--nav-blur));
+    --nav-divisor: var(--nav-divisor-claro);
+  }
+
+  /* En el home el logotipo sigue al título del hero (mismo cálculo que
+     .hero__copy en HeroCircuit.astro: 20 px hasta 860 px y 63 px en 1440). */
+  .site-nav[data-sobre-header] {
+    --nav-x: 1.25rem;
+  }
+
+  @media (min-width: 861px) {
+    .site-nav[data-sobre-header] {
+      --nav-x: max(clamp(24px, 4.375vw, 63px), calc((100% - 1440px) / 2 + 63px));
+    }
+  }
+
+  .site-nav :focus-visible {
+    outline-color: currentColor;
+  }
+
+  .barra {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--space-16) var(--page-gutter);
-    background: var(--surface);
-    color: var(--ink);
+    gap: var(--space-24);
+    /* El borde de 1 px va dentro de los 56 / 64 px de la cápsula */
+    height: calc(var(--nav-alto) - 2px);
   }
 
-  .brand {
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
+  .logo {
+    flex-shrink: 0;
+    width: var(--nav-logo-w);
+    color: inherit;
   }
 
-  .brand__name {
-    font-size: var(--text-sub);
-    line-height: var(--leading-sub);
-    font-weight: var(--weight-semibold);
-    letter-spacing: var(--tracking-sub);
-  }
-
-  .brand__role {
-    font-size: var(--text-tagline);
-    line-height: var(--leading-tagline);
-    letter-spacing: var(--tracking-tagline);
+  .logo svg {
+    width: 100%;
+    height: auto;
+    fill: currentColor;
   }
 
   ul {
@@ -102,17 +207,12 @@ const links = [
     list-style: none;
   }
 
-  a:not(.brand) {
+  a {
+    color: inherit;
     text-decoration: none;
-    text-underline-offset: 0.2em;
   }
 
-  a:not(.brand):hover {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-  }
-
-  /* Desktop: links en línea */
+  /* ---------- Desktop: links en línea ---------- */
   .links {
     display: none;
   }
@@ -125,93 +225,327 @@ const links = [
     white-space: nowrap;
   }
 
-  /* Mobile: hamburguesa */
-  .menu-button {
+  .links a {
+    text-underline-offset: 0.2em;
+  }
+
+  .links a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+  }
+
+  /* ---------- Mobile: hamburguesa / X ---------- */
+  .menu-boton {
     position: relative;
     display: grid;
-    place-items: center;
     width: var(--icon-size);
     height: var(--icon-size);
     padding: 0;
     border: 0;
     background: none;
+    color: inherit;
     cursor: pointer;
   }
 
-  .menu-button::before {
+  .menu-boton::before {
     /* Área táctil de 44 px sin cambiar el tamaño visual del ícono */
     content: '';
     position: absolute;
+    inset: 50% auto auto 50%;
     width: 2.75rem;
     height: 2.75rem;
+    transform: translate(-50%, -50%);
   }
 
+  .menu-boton svg {
+    grid-area: 1 / 1;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    transition: opacity var(--duration-nav) ease;
+  }
+
+  .icono-cerrar,
+  [data-abierto] .icono-menu {
+    opacity: 0;
+  }
+
+  [data-abierto] .icono-cerrar {
+    opacity: 1;
+  }
+
+  /* ---------- Menú abierto (Figma 350:1435 / 350:1482) ---------- */
+  /* Crece hacia abajo animando la fila de 0fr a 1fr; cerrado queda invisible e inert. */
   .menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    padding: var(--space-8) var(--page-gutter) var(--space-24);
-    background: var(--surface);
-    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition:
+      grid-template-rows var(--duration-nav) var(--ease-out),
+      visibility 0s linear var(--duration-nav);
   }
 
-  .menu ul {
+  [data-abierto] .menu {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition: grid-template-rows var(--duration-nav) var(--ease-out);
+  }
+
+  .menu__recorte {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .menu__contenido {
+    padding-bottom: var(--space-20);
+  }
+
+  .site-nav[data-abierto] {
+    --nav-radio: var(--nav-radio-abierto);
+  }
+
+  .site-nav[data-abierto][data-tono='oscuro'] {
+    --nav-fondo: var(--nav-menu-oscuro);
+  }
+
+  .site-nav[data-abierto][data-tono='claro'] {
+    --nav-fondo: var(--nav-menu-claro);
+  }
+
+  .divisor {
+    height: 1px;
+    background: var(--nav-divisor);
+  }
+
+  .menu__links {
     display: flex;
     flex-direction: column;
-    gap: var(--space-8);
-    font-size: var(--text-body-lg);
-    line-height: var(--leading-body-lg);
+    gap: var(--space-4);
+    padding-block: var(--space-16) var(--space-20);
   }
 
-  .menu a {
+  .menu__links a {
+    display: flex;
+    align-items: center;
+    gap: var(--space-10);
+    padding-block: var(--space-10);
+    font-size: var(--text-menu);
+    line-height: var(--leading-menu);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-menu);
+  }
+
+  .etiqueta {
+    padding: var(--space-3) var(--space-8);
+    border: 1px solid var(--nav-etiqueta-borde-oscuro);
+    border-radius: var(--radius-etiqueta);
+    color: var(--nav-etiqueta-texto-oscuro);
+    font-size: var(--text-etiqueta);
+    line-height: normal;
+    font-weight: var(--weight-regular);
+    letter-spacing: normal;
+  }
+
+  [data-tono='claro'] .etiqueta {
+    border-color: var(--nav-etiqueta-borde-claro);
+    color: var(--muted);
+  }
+
+  .contacto {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-10);
+    border-radius: var(--radius-boton);
+    background: var(--nav-boton-oscuro);
+    color: var(--paper);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+  }
+
+  [data-tono='claro'] .contacto {
+    background: var(--ink);
+  }
+
+  .social {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-14);
+    margin-top: var(--space-16);
+  }
+
+  .icono-link {
+    position: relative;
     display: block;
-    padding-block: var(--space-4);
   }
 
-  @media (min-width: 768px) {
+  .icono-link::before {
+    /* Área táctil de 44 px */
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 2.75rem;
+    height: 2.75rem;
+    transform: translate(-50%, -50%);
+  }
+
+  .icono {
+    position: relative;
+    display: block;
+    width: var(--icon-size);
+    height: var(--icon-size);
+  }
+
+  /* Los SVG del footer vienen en negro: en el menú toman el color de la cápsula */
+  .icono :global([stroke]) {
+    stroke: currentColor;
+  }
+
+  .icono :global([fill]:not([fill='none'])) {
+    fill: currentColor;
+  }
+
+  /* El sobre de charm:mail mide 20.25 × 15.75 dentro de su caja de 24 px */
+  .icono--mail :global(svg) {
+    position: absolute;
+    left: 1.875px;
+    top: 4.875px;
+  }
+
+  /* ---------- Fondo atenuado ---------- */
+  .nav-velo {
+    position: fixed;
+    z-index: 40;
+    inset: 0;
+    background: var(--nav-velo-claro);
+    -webkit-backdrop-filter: blur(var(--nav-velo-blur));
+    backdrop-filter: blur(var(--nav-velo-blur));
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--duration-nav) ease,
+      visibility 0s linear var(--duration-nav);
+  }
+
+  .nav-velo[data-tono='oscuro'] {
+    background: var(--nav-velo-oscuro);
+  }
+
+  .nav-velo[data-visible] {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--duration-nav) ease;
+  }
+
+  /* ---------- Desktop ---------- */
+  @media (min-width: 861px) {
     .links {
       display: block;
     }
 
-    .menu-button,
-    .menu {
+    .menu-boton,
+    .menu,
+    .nav-velo {
       display: none;
     }
   }
 </style>
 
 <script>
-  function setupMenu() {
+  function setupNav() {
     const nav = document.querySelector<HTMLElement>('[data-site-nav]');
-    const button = nav?.querySelector<HTMLButtonElement>('[data-menu-button]');
+    const barra = nav?.querySelector<HTMLElement>('[data-nav-barra]');
+    const boton = nav?.querySelector<HTMLButtonElement>('[data-menu-boton]');
     const menu = nav?.querySelector<HTMLElement>('[data-menu]');
-    if (!nav || !button || !menu) return;
+    const velo = document.querySelector<HTMLElement>('[data-nav-velo]');
+    if (!nav || !barra || !boton || !menu || !velo) return;
 
-    const setOpen = (open: boolean) => {
-      button.setAttribute('aria-expanded', String(open));
-      menu.hidden = !open;
+    /* ---------- Tono: oscuro sobre el header, claro fuera de él ---------- */
+    const hero = document.getElementById('hero');
+    if (nav.hasAttribute('data-sobre-header') && hero) {
+      let observer: IntersectionObserver | undefined;
+      // El header "se sale" cuando su borde inferior pasa el borde inferior de la barra.
+      // Se mide la barra y no la cápsula, que crece con el menú abierto.
+      const observar = () => {
+        observer?.disconnect();
+        const limite = Math.round(barra.getBoundingClientRect().bottom);
+        observer = new IntersectionObserver(
+          ([entrada]) => {
+            const tono = entrada.isIntersecting ? 'oscuro' : 'claro';
+            nav.dataset.tono = tono;
+            velo.dataset.tono = tono;
+          },
+          { rootMargin: `-${limite}px 0px 0px 0px` },
+        );
+        observer.observe(hero);
+      };
+      observar();
+      // La barra cambia de alto entre mobile y desktop
+      matchMedia('(min-width: 861px)').addEventListener('change', observar);
+    }
+
+    /* ---------- Menú mobile ---------- */
+    const desktop = matchMedia('(min-width: 861px)');
+    // Todo lo que queda detrás del menú abierto se vuelve inert (sin foco ni lector de pantalla).
+    const detras = () =>
+      [...document.body.children].filter(
+        (el): el is HTMLElement => el instanceof HTMLElement && el !== nav && el !== velo && el.tagName !== 'SCRIPT',
+      );
+
+    const estaAbierto = () => nav.hasAttribute('data-abierto');
+
+    const setAbierto = (abierto: boolean, devolverFoco = false) => {
+      nav.toggleAttribute('data-abierto', abierto);
+      velo.toggleAttribute('data-visible', abierto);
+      boton.setAttribute('aria-expanded', String(abierto));
+      boton.setAttribute('aria-label', abierto ? 'Cerrar menú' : 'Abrir menú');
+      menu.inert = !abierto;
+      detras().forEach((el) => (el.inert = abierto));
+      document.documentElement.classList.toggle('nav-bloqueo', abierto);
+      if (!abierto && devolverFoco) boton.focus();
     };
 
-    button.addEventListener('click', () => {
-      setOpen(button.getAttribute('aria-expanded') !== 'true');
-    });
+    boton.addEventListener('click', () => setAbierto(!estaAbierto()));
 
     menu.addEventListener('click', (event) => {
-      if ((event.target as HTMLElement).closest('a')) setOpen(false);
+      if ((event.target as HTMLElement).closest('a')) setAbierto(false);
     });
 
+    velo.addEventListener('click', () => setAbierto(false, true));
+
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && !menu.hidden) {
-        setOpen(false);
-        button.focus();
+      if (!estaAbierto()) return;
+
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setAbierto(false, true);
+        return;
+      }
+
+      // Foco atrapado en la cápsula: logotipo, X y links del menú.
+      if (event.key === 'Tab') {
+        const focusables = [...nav.querySelectorAll<HTMLElement>('a[href], button')].filter(
+          (el) => el.getClientRects().length > 0,
+        );
+        const primero = focusables[0];
+        const ultimo = focusables[focusables.length - 1];
+        const activo = document.activeElement;
+        if (event.shiftKey && (activo === primero || !nav.contains(activo))) {
+          event.preventDefault();
+          ultimo.focus();
+        } else if (!event.shiftKey && (activo === ultimo || !nav.contains(activo))) {
+          event.preventDefault();
+          primero.focus();
+        }
       }
     });
 
-    document.addEventListener('click', (event) => {
-      if (!menu.hidden && !nav.contains(event.target as Node)) setOpen(false);
+    desktop.addEventListener('change', (event) => {
+      if (event.matches && estaAbierto()) setAbierto(false);
     });
   }
 
-  setupMenu();
+  setupNav();
 </script>

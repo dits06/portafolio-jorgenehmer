@@ -9,6 +9,14 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* Las anclas no quedan tapadas por el navbar fijo */
+  scroll-padding-top: var(--nav-espacio);
+}
+
+/* Menú mobile abierto: sin scroll detrás (SiteNav.astro) */
+html.nav-bloqueo,
+html.nav-bloqueo body {
+  overflow: hidden;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -36,6 +44,11 @@ body {
 
 main {
   flex: 1 0 auto;
+}
+
+/* Páginas sin header ni portada: el contenido empieza bajo el navbar fijo */
+main.bajo-nav {
+  padding-top: var(--nav-espacio);
 }
 
 h1,

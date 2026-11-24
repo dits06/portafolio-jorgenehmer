@@ -116,11 +116,34 @@ El sitio son 12 páginas, pero solo 3 plantillas: home, caso y exploración. Cad
 
 ### Plantilla Home
 
-1. Nav: nombre + "UX/UI designer", links Proyectos y Currículum; en mobile, menú hamburguesa.
+1. Navbar: cápsula flotante con el logotipo JORGENEHMER y los links Proyectos y Currículum; en mobile, menú hamburguesa (ver "Navbar" más abajo).
 2. Header circuito JN (componente aparte).
 3. Proyectos: título con línea, grilla de 2 columnas; la quinta card ocupa las 2 columnas. Cada card: imagen, nombre + subtítulo (Skipo o Proyecto propio) y 3 tags.
 4. Exploraciones: título, filtros (Todo, 3D, Tipografía, Logos, UI, Publicidad), grilla de 3 columnas en desktop y 2 en mobile, link "Ver todas las exploraciones".
 5. Footer: © 2026 Jorge Nehmer, mail y LinkedIn.
+
+#### Navbar
+
+Cambio posterior a las 7 etapas (noviembre de 2026). Reemplaza el nav anterior (nombre + rol en una franja blanca). Figma: estados en 348:1402 y navbar del home en 1:33. Componente: `src/components/SiteNav.astro`; tokens `--nav-*` en `tokens.css`.
+
+- Cápsula fija arriba, flotando sobre la página. Desktop (desde 861 px): 64 px de alto, radio 16, a 24 px del borde superior. Mobile (hasta 860 px, el mismo corte del header circuito JN): 56 px, radio 14, a 12 px.
+- El logotipo JORGENEHMER (SVG en línea, color del texto) queda alineado con el título del hero en el home (20 px en mobile, 63 px en 1440) y con el margen de página en el resto. La cápsula sobresale 24 px (desktop) o 12 px (mobile) a cada lado del logotipo.
+- Desktop: links Proyectos (`/#proyectos`) y Currículum (el PDF, en una pestaña nueva), en Body/Large.
+- Tonos:
+  - **Oscuro**, sobre el header azul: relleno `#2F2F2F` al 20 %, sin borde ni desenfoque (así está en Figma), texto e íconos blancos.
+  - **Claro**, sobre fondo blanco: blanco al 78 %, desenfoque de fondo 24 de Figma, borde `#E5E5E5`, texto e íconos negros.
+  - En el home parte oscura y pasa a clara cuando el borde inferior del header sube más allá de la barra (IntersectionObserver), con una transición de 250 ms. En casos, exploraciones y la 404 parte clara.
+- El desenfoque "24" de Figma se escribe `blur(12px)` en CSS: es como Figma lo dibuja (su propio export lo traduce así). El del fondo atenuado, 8 en Figma, es `blur(4px)`.
+- Menú mobile abierto (350:1435 sobre el header, 350:1482 sobre blanco): la cápsula crece hacia abajo (radio 20) y la hamburguesa pasa a X. Muestra un divisor, Proyectos, Exploraciones y Currículum con la etiqueta PDF (28/34 SemiBold), el botón Contáctame a todo el ancho (lleva al footer) y los íconos de mail y LinkedIn. En tono oscuro el menú es `#0D1259` al 72 % y el botón blanco al 10 %; en claro, blanco al 92 % y botón negro.
+- Fondo atenuado detrás del menú: `#00031F` al 45 % (sobre el header) o `#0F0F1A` al 18 % (sobre blanco), con desenfoque. Se cierra con la X, con Escape, al tocar un link o al tocar el fondo, y bloquea el scroll mientras está abierto.
+- Accesibilidad: el botón lleva `aria-expanded`, `aria-controls` y `aria-label` ("Abrir menú" / "Cerrar menú"). Con el menú abierto, el resto de la página queda `inert` y Tab da la vuelta dentro de la cápsula; al cerrar con Escape o con el fondo, el foco vuelve al botón. Con prefers-reduced-motion los cambios son instantáneos.
+- Integración con el resto del sitio:
+  - Home: el header queda debajo de la cápsula. En mobile, el texto del hero empieza en 80 px y va a 20 px del borde (Figma 348:1596).
+  - Casos: la portada en banda empieza arriba de todo y la cápsula flota encima (la banda ya deja 136 px de aire).
+  - Exploraciones y 404: el contenido baja lo que ocupa la cápsula (`--nav-espacio`: 68 px en mobile, 88 px en desktop).
+  - Las anclas usan `scroll-padding-top` y el nav lateral de los casos se pega 48 px bajo la cápsula.
+
+Rol: el sitio dice "Product designer" (antes "UX/UI designer") en el título de la página y en los metadatos.
 
 ### Plantilla Caso
 

@@ -45,6 +45,19 @@
   --danger: #d84e4e;
   --danger-halo: rgb(216 78 78 / 0.14);
   --bubble-shadow: 0 2px 6px rgb(0 0 0 / 0.06);
+  /* Navbar (Figma 348:1402): cápsula, menú mobile abierto y fondo atenuado */
+  --nav-vidrio: rgb(47 47 47 / 0.2); /* sobre el header */
+  --nav-claro: rgb(255 255 255 / 0.78); /* sobre fondo blanco */
+  --nav-menu-oscuro: rgb(13 18 89 / 0.72);
+  --nav-menu-claro: rgb(255 255 255 / 0.92);
+  --nav-velo-oscuro: rgb(0 3 31 / 0.45);
+  --nav-velo-claro: rgb(15 15 26 / 0.18);
+  --nav-divisor-oscuro: rgb(255 255 255 / 0.14);
+  --nav-divisor-claro: rgb(0 0 0 / 0.08);
+  --nav-boton-oscuro: rgb(255 255 255 / 0.1); /* "Contáctame" sobre el header */
+  --nav-etiqueta-borde-oscuro: rgb(255 255 255 / 0.35);
+  --nav-etiqueta-texto-oscuro: rgb(255 255 255 / 0.7);
+  --nav-etiqueta-borde-claro: rgb(0 0 0 / 0.25);
 
   /* ---------- Tipografía ---------- */
   --font-sans: var(--font-tiktok-sans), system-ui, sans-serif;
@@ -127,10 +140,13 @@
   --text-specimen-sample: clamp(1.125rem, 0.993rem + 0.5634vw, 1.5rem);
   --leading-specimen: 1.3;
 
-  /* Rol bajo el nombre en el nav ("UX/UI designer"): 15/25, tracking 25% */
-  --text-tagline: 0.9375rem;
-  --leading-tagline: 1.5625rem;
-  --tracking-tagline: 0.25em;
+  /* Links del menú mobile abierto: 28/34, SemiBold, -1% */
+  --text-menu: 1.75rem;
+  --leading-menu: 2.125rem;
+  --tracking-menu: -0.01em;
+
+  /* Etiqueta "PDF" del menú: 12 px */
+  --text-etiqueta: 0.75rem;
 
   /* Footer: 12 px */
   --text-legal: 0.75rem;
@@ -233,6 +249,22 @@
   /* Iconos */
   --icon-size: 1.5rem; /* 24 */
 
+  /* Navbar (Figma 348:1402). Mobile hasta 860 px, el mismo corte del header
+     circuito JN; desde 861 px, desktop (ver el bloque @media al final).
+     El logotipo queda en --nav-x (el margen de página o, en el home, el borde
+     del título del hero); la cápsula sobresale --nav-pad a cada lado. */
+  --nav-top: 0.75rem; /* 12 */
+  --nav-alto: 3.5rem; /* 56 */
+  --nav-radio: 0.875rem; /* 14 */
+  --nav-radio-abierto: 1.25rem; /* 20 */
+  --nav-pad: 0.75rem; /* 12 */
+  --nav-espacio: calc(var(--nav-top) + var(--nav-alto)); /* lo que tapa la cápsula */
+  --nav-logo-w: 8.3396rem; /* 133.43 */
+  --nav-blur: 12px; /* "Background blur 24" de Figma: Figma lo dibuja como blur(12px) */
+  --nav-velo-blur: 4px; /* fondo atenuado: blur 8 en Figma */
+  --radius-boton: 0.5rem; /* 8, "Contáctame" */
+  --radius-etiqueta: 0.375rem; /* 6, etiqueta PDF */
+
   /* ---------- Movimiento ---------- */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-reveal: 500ms;
@@ -240,9 +272,20 @@
   --reveal-shift: 1rem; /* 16 px */
   --reveal-stagger: 60ms;
   --hover-scale: 1.03;
+  --duration-nav: 250ms; /* cambio de tono del navbar y apertura del menú */
 
   /* Breakpoints de referencia (en CSS se escriben literal en @media):
      375 · 768 · 1024 · 1440 */
+}
+
+@media (min-width: 861px) {
+  :root {
+    --nav-top: 1.5rem; /* 24 */
+    --nav-alto: 4rem; /* 64 */
+    --nav-radio: 1rem; /* 16 */
+    --nav-pad: 1.5rem; /* 24 */
+    --nav-logo-w: 10.6918rem; /* 171.07 */
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -252,5 +295,6 @@
     --reveal-shift: 0;
     --reveal-stagger: 0ms;
     --hover-scale: 1;
+    --duration-nav: 0ms;
   }
 }

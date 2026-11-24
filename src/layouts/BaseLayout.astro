@@ -14,9 +14,16 @@ interface Props {
   imageAlt?: string;
   /** Páginas que no deben indexarse (404). */
   noindex?: boolean;
+  /**
+   * Qué hay bajo el navbar al cargar la página:
+   * - 'header': el header azul del home (el navbar parte oscuro).
+   * - 'portada': la portada en banda de los casos, que ya deja aire arriba.
+   * - 'pagina' (por defecto): el contenido baja lo que ocupa el navbar.
+   */
+  nav?: 'header' | 'portada' | 'pagina';
 }
 
-const { title, description, image, imageAlt, noindex = false } = Astro.props;
+const { title, description, image, imageAlt, noindex = false, nav = 'pagina' } = Astro.props;
 const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.role}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
@@ -103,8 +110,8 @@ const shareUrl = share ? new URL(share.src, Astro.site).href : undefined;
   </head>
   <body>
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
-    <SiteNav />
-    <main id="contenido">
+    <SiteNav sobreHeader={nav === 'header'} />
+    <main id="contenido" class:list={{ 'bajo-nav': nav === 'pagina' }}>
       <slot />
     </main>
     <SiteFooter />

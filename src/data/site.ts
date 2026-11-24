@@ -4,7 +4,7 @@
  */
 export const site = {
   name: 'Jorge Nehmer',
-  role: 'UX/UI designer',
+  role: 'Product designer',
   url: 'https://jorgenehmer.com',
   email: 'jorgenehmer06@gmail.com',
   linkedin: 'https://www.linkedin.com/in/jorge-nehmer-71493325/',

@@ -9,6 +9,7 @@
  * - --hero-bg y --font apuntan a los tokens del sitio (mismos valores).
  * - `.hero__art canvas` pasa a :global() porque los canvas los crea el script.
  * - El script vive en src/scripts/hero-circuit.js, idéntico al original.
+ * - Hasta 860 px, padding de 80 px arriba y 20 px a los lados, para el navbar fijo.
  * Todo lo demás (medidas, media query de 860 px, animaciones) es el CSS original.
  */
 ---
@@ -102,8 +103,10 @@
   @keyframes rise { to { opacity: 1; transform: none; } }
 
   @media (max-width: 860px) {
-    .hero { height: auto; padding: 56px 0 48px; }
-    .hero__copy { position: static; transform: none; width: auto; max-width: 460px; padding: 0 24px; }
+    /* Integración con el navbar fijo (Figma 348:1596): el texto empieza en 80 px,
+       bajo la cápsula, y a 20 px del borde, alineado con el logotipo. */
+    .hero { height: auto; padding: 80px 0 48px; }
+    .hero__copy { position: static; transform: none; width: auto; max-width: 460px; padding: 0 20px; }
     .hero__art { position: relative; top: auto; right: auto; transform: none; width: min(96%, 560px); margin: 24px auto 0; }
   }
   @media (prefers-reduced-motion: reduce) {
