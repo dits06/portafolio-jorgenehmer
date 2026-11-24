@@ -18,5 +18,8 @@
 - Mobile primero en el CSS; revisar siempre en 375 px y en 1440 px.
 
 ## Forma de trabajo
-- Una etapa por sesión. Al terminar: revisar con capturas contra Figma, listar diferencias y hacer commit.
+- El sitio está publicado en jorgenehmer.com. Las 7 etapas del traspaso están terminadas.
+- Cambios (textos, imágenes, ajustes): una sesión por tanda de cambios. Al terminar: `npm run build` sin advertencias, revisar con capturas en 375 y 1440 px (contra Figma si el cambio viene de ahí), listar diferencias y hacer commit en main.
+- Un push a main publica el sitio en Vercel: pedir confirmación antes de cada push y, después, revisar que el deploy termine.
+- Algo grande (por ejemplo, la versión en inglés) va en su propia sesión, como las etapas.
 - No cambiar el header circuito JN salvo para integrarlo.
