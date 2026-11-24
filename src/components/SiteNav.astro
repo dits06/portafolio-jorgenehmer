@@ -6,8 +6,9 @@
  * Cápsula flotante y fija arriba. El logotipo JORGENEHMER queda alineado con el
  * título del hero en el home y con el margen de página en el resto.
  * - Tono "oscuro" (vidrio sobre el header azul) y "claro" (blanco translúcido).
- *   En el home parte oscura y pasa a clara al salir del header; en las demás
- *   páginas parte clara.
+ *   En el home parte oscura y pasa a clara al salir del header. En los casos con
+ *   portada queda oscura (no baja con el scroll, siempre está sobre la portada).
+ *   En exploraciones y la 404, clara.
  * - Mobile (hasta 860 px): logotipo y hamburguesa. El menú abierto hace crecer la
  *   cápsula hacia abajo, atenúa y desenfoca el fondo, bloquea el scroll y deja el
  *   foco dentro de la cápsula. Se cierra con la X, con Escape, al tocar un link o
@@ -22,10 +23,12 @@ interface Props {
   sobreHeader?: boolean;
   /** false (casos): queda arriba de la página y se va con el scroll. */
   fija?: boolean;
+  /** Casos: parte en tono oscuro (vidrio) porque está sobre la portada, que es oscura. */
+  sobreFondoOscuro?: boolean;
 }
 
-const { sobreHeader = false, fija = true } = Astro.props;
-const tono = sobreHeader ? 'oscuro' : 'claro';
+const { sobreHeader = false, fija = true, sobreFondoOscuro = false } = Astro.props;
+const tono = sobreHeader || sobreFondoOscuro ? 'oscuro' : 'claro';
 const nuevaPestana = { target: '_blank', rel: 'noopener' };
 ---
 
