@@ -8,16 +8,33 @@ import { z } from 'astro/zod';
 
 const casos = defineCollection({
   loader: glob({ pattern: '**/*.mdx', base: './src/content/casos' }),
-  schema: ({ image }) =>
-    z.object({
+  schema: ({ image }) => {
+    /**
+     * Una versión de la portada en banda (Figma, página Portadas): desktop 1440 × 640, mobile 375 × 380.
+     * - fondo: valor CSS de `background` (color o degradado del frame y brillos radiales).
+     * - contenido: PNG ×2 transparente, recortado en el borde inferior del frame.
+     * - caja: ancho y alto del contenido en Figma, desde su borde superior hasta el borde
+     *   inferior del frame, sin sombras. Es lo que se limita a 1040 px y a los 136 px libres.
+     * - lineas: SVG de las líneas decorativas; x, y = esquina superior izquierda respecto del frame.
+     */
+    const versionBanda = z.object({
+      fondo: z.string(),
+      contenido: image(),
+      caja: z.tuple([z.number().positive(), z.number().positive()]),
+      lineas: z.object({ svg: image(), x: z.number(), y: z.number() }).optional(),
+    });
+    return z.object({
       titulo: z.string(),
       bajada: z.string(),
       /** Nombre corto (card del home, título de la pestaña). */
       nombre: z.string(),
       subtitulo: z.string(),
       tags: z.array(z.string()).length(3),
+      /** Imagen única: se usa para compartir y como portada de los casos sin banda. */
       portada: image(),
       portadaAlt: z.string(),
+      /** Portada en banda a todo el ancho. Opcional: Pagos masivos B2B todavía no la tiene en Figma. */
+      banda: z.object({ desktop: versionBanda, mobile: versionBanda }).optional(),
       /** Metadatos de la intro, en el orden de Figma (Rol, Equipo, Herramientas, Período…). */
       metadatos: z.array(z.object({ etiqueta: z.string(), valor: z.string() })),
       resumen: z.string(),
@@ -59,7 +76,8 @@ const casos = defineCollection({
           }),
         )
         .length(3),
-    }),
+    });
+  },
 });
 
 /**

@@ -9,6 +9,26 @@ subtitulo: Skipo
 tags: [Design system, Caso de estudio, Componentes]
 portada: ../../assets/casos/design-system/portada.png
 portadaAlt: Componentes del design system de Skipo
+# Portada en banda — Figma, página Portadas: 356:14569 (desktop), 356:14637 (mobile).
+# Brillos: elipses "Glow" pasadas a degradados radiales (ver Visión general).
+# Desktop: las 5 columnas de 1 px (blanco al 4 %, cada 240 px) también van en el fondo.
+banda:
+  desktop:
+    fondo: >-
+      repeating-linear-gradient(to right, transparent 0 120px, rgb(255 255 255 / 0.04) 120px 121px, transparent 121px 240px) 50% 0 / 1200px 100% no-repeat,
+      radial-gradient(405px at calc(50% + 20px) calc(100% - 280px), rgb(62 126 214 / 0.156) 0, rgb(62 126 214 / 0.136) 81px, rgb(62 126 214 / 0.084) 162px, rgb(62 126 214 / 0.043) 223px, rgb(62 126 214 / 0.016) 284px, rgb(62 126 214 / 0.007) 324px, rgb(62 126 214 / 0.002) 365px, rgb(62 126 214 / 0) 405px),
+      radial-gradient(410px at calc(50% - 650px) calc(100% + 50px), rgb(0 216 174 / 0.242) 0, rgb(0 216 174 / 0.225) 82px, rgb(0 216 174 / 0.159) 164px, rgb(0 216 174 / 0.088) 226px, rgb(0 216 174 / 0.032) 287px, rgb(0 216 174 / 0.013) 328px, rgb(0 216 174 / 0.004) 369px, rgb(0 216 174 / 0) 410px),
+      radial-gradient(410px at calc(50% + 670px) calc(100% - 590px), rgb(6 188 201 / 0.339) 0, rgb(6 188 201 / 0.315) 82px, rgb(6 188 201 / 0.223) 164px, rgb(6 188 201 / 0.123) 226px, rgb(6 188 201 / 0.045) 287px, rgb(6 188 201 / 0.018) 328px, rgb(6 188 201 / 0.006) 369px, rgb(6 188 201 / 0) 410px),
+      #0B101D
+    contenido: ../../assets/casos/design-system/portada-contenido.png
+    caja: [1040, 587]
+  mobile:
+    fondo: >-
+      radial-gradient(410px at calc(50% - 225.5px) calc(100% + 102px), rgb(0 216 174 / 0.242) 0, rgb(0 216 174 / 0.225) 82px, rgb(0 216 174 / 0.159) 164px, rgb(0 216 174 / 0.088) 226px, rgb(0 216 174 / 0.032) 287px, rgb(0 216 174 / 0.013) 328px, rgb(0 216 174 / 0.004) 369px, rgb(0 216 174 / 0) 410px),
+      radial-gradient(410px at calc(50% + 296.5px) calc(100% - 455px), rgb(6 188 201 / 0.339) 0, rgb(6 188 201 / 0.315) 82px, rgb(6 188 201 / 0.223) 164px, rgb(6 188 201 / 0.123) 226px, rgb(6 188 201 / 0.045) 287px, rgb(6 188 201 / 0.018) 328px, rgb(6 188 201 / 0.006) 369px, rgb(6 188 201 / 0) 410px),
+      #0B101D
+    contenido: ../../assets/casos/design-system/portada-contenido-mobile.png
+    caja: [341, 265]
 metadatos:
   - etiqueta: Rol
     valor: Único diseñador UX/UI

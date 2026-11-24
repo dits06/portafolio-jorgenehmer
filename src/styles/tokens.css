@@ -193,6 +193,11 @@
   --timeline-dot: 0.75rem; /* 12 px */
   --page-max: 90rem; /* 1440 px */
 
+  /* Portada en banda de los casos (Figma, página Portadas) */
+  --portada-alto: clamp(26.25rem, 62vh, 45rem); /* 420 → 720 */
+  --portada-aire: 8.5rem; /* 136 px libres arriba, para el navbar */
+  --portada-contenido-max: 65rem; /* 1040 px */
+
   /* Exploraciones (Figma 157:634 / 305:1345): mobile → desktop */
   --exp-intro-pt: clamp(2.5rem, 1.2676rem + 5.2582vw, 6rem); /* 40 → 96 */
   --exp-intro-pb: clamp(2.5rem, 2.1479rem + 1.5023vw, 3.5rem); /* 40 → 56 */

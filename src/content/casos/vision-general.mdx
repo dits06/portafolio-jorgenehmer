@@ -9,6 +9,25 @@ subtitulo: Skipo
 tags: [Diseño de producto, Caso de estudio, App y webapp]
 portada: ../../assets/casos/vision-general/portada.png
 portadaAlt: Pantallas de la app de Skipo
+# Portada en banda — Figma, página Portadas: 356:14542 (desktop), 356:14540 (mobile).
+# Contenido: capa "portadacel 1" (este frame no tiene capa "Contenido").
+# Brillos: elipses "Glow" (relleno al 35, 25 y 18 %, desenfoque 160–180) pasadas a degradados
+# radiales en px, anclados al centro y al borde inferior, igual que el contenido.
+banda:
+  desktop:
+    fondo: >-
+      radial-gradient(405px at calc(50% + 20px) calc(100% - 280px), rgb(62 126 214 / 0.156) 0, rgb(62 126 214 / 0.136) 81px, rgb(62 126 214 / 0.084) 162px, rgb(62 126 214 / 0.043) 223px, rgb(62 126 214 / 0.016) 284px, rgb(62 126 214 / 0.007) 324px, rgb(62 126 214 / 0.002) 365px, rgb(62 126 214 / 0) 405px),
+      radial-gradient(410px at calc(50% - 650px) calc(100% + 50px), rgb(0 216 174 / 0.242) 0, rgb(0 216 174 / 0.225) 82px, rgb(0 216 174 / 0.159) 164px, rgb(0 216 174 / 0.088) 226px, rgb(0 216 174 / 0.032) 287px, rgb(0 216 174 / 0.013) 328px, rgb(0 216 174 / 0.004) 369px, rgb(0 216 174 / 0) 410px),
+      radial-gradient(410px at calc(50% + 670px) calc(100% - 590px), rgb(6 188 201 / 0.339) 0, rgb(6 188 201 / 0.315) 82px, rgb(6 188 201 / 0.223) 164px, rgb(6 188 201 / 0.123) 226px, rgb(6 188 201 / 0.045) 287px, rgb(6 188 201 / 0.018) 328px, rgb(6 188 201 / 0.006) 369px, rgb(6 188 201 / 0) 410px),
+      #0B101D
+    contenido: ../../assets/casos/vision-general/portada-contenido.png
+    caja: [654, 590]
+    lineas: { svg: ../../assets/casos/vision-general/portada-lineas.svg, x: -540, y: -1047 }
+  mobile:
+    fondo: 'linear-gradient(180deg, #0B101D 0%, #004D42 100%)'
+    contenido: ../../assets/casos/vision-general/portada-contenido-mobile.png
+    caja: [268, 283]
+    lineas: { svg: ../../assets/casos/vision-general/portada-lineas-mobile.svg, x: -221, y: -305 }
 metadatos:
   - etiqueta: Rol
     valor: Único diseñador UX/UI

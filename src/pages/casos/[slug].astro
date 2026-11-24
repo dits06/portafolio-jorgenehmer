@@ -11,6 +11,7 @@ import Metrica from '../../components/Metrica.astro';
 import Metricas from '../../components/Metricas.astro';
 import Destacado from '../../components/Destacado.astro';
 import CaseNav from '../../components/CaseNav.astro';
+import PortadaBanda from '../../components/PortadaBanda.astro';
 
 export async function getStaticPaths() {
   const casos = await getCollection('casos');
@@ -24,16 +25,27 @@ const d = caso.data;
 
 <BaseLayout title={d.nombre} description={d.bajada} image={d.portada} imageAlt={d.portadaAlt}>
   <article class="caso">
-    <!-- 1. Portada a todo el ancho -->
-    <CaseImage
-      class="portada"
-      src={d.portada}
-      alt={d.portadaAlt}
-      ratio="1440 / 703"
-      sizes="100vw"
-      eager
-      transitionName={`caso-${caso.id}`}
-    />
+    <!-- 1. Portada a todo el ancho: banda (página Portadas de Figma) o, si el caso no la tiene, imagen única -->
+    {
+      d.banda ? (
+        <PortadaBanda
+          desktop={d.banda.desktop}
+          mobile={d.banda.mobile}
+          alt={d.portadaAlt}
+          transitionName={`caso-${caso.id}`}
+        />
+      ) : (
+        <CaseImage
+          class="portada"
+          src={d.portada}
+          alt={d.portadaAlt}
+          ratio="1440 / 703"
+          sizes="100vw"
+          eager
+          transitionName={`caso-${caso.id}`}
+        />
+      )
+    }
 
     <!-- 2. Título y bajada -->
     <header class="encabezado">

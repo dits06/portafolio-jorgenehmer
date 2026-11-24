@@ -48,6 +48,16 @@ Todo el diseño del sitio está en un solo archivo de Figma, en la página Porta
 
 En la URL de Figma el id va con guion: 8:10 se escribe node-id=8-10.
 
+### Portadas de los casos (página Portadas, 356:13222)
+
+| Caso | Desktop (1440 × 640) | Mobile (375 × 380) |
+| --- | --- | --- |
+| TCG League Tracker | 356:13412 | 356:13756 |
+| Registro y verificación | 356:14529 | 356:14534 |
+| Visión general | 356:14542 | 356:14540 |
+| Design system | 356:14569 | 356:14637 |
+| Pagos masivos B2B | — (todavía no tiene) | — |
+
 ## Fundamentos visuales
 
 El sitio usa una sola familia, TikTok Sans, sobre fondo blanco con grises neutros; el color fuerte vive en el header azul y en las imágenes. No hay variables ni estilos definidos en Figma, así que estos valores salen de medir las páginas y se convierten en tokens CSS.
@@ -114,7 +124,7 @@ El sitio son 12 páginas, pero solo 3 plantillas: home, caso y exploración. Cad
 
 ### Plantilla Caso
 
-1. Portada a todo el ancho.
+1. Portada a todo el ancho (ver "Portada en banda" más abajo).
 2. Título y bajada.
 3. Intro: metadatos (Rol, Año, Alcance, Herramientas), Resumen + Qué hice, En números (2 o 3 métricas).
 4. Diseño final: 3 destacados que alternan imagen y texto.
@@ -123,6 +133,20 @@ El sitio son 12 páginas, pero solo 3 plantillas: home, caso y exploración. Cad
 7. Footer.
 
 Componentes del caso: Card/Numerada, Card/Proceso, Métrica, Imagen con pie, Par de imágenes, Destacado.
+
+#### Portada en banda
+
+Cambio posterior a las 7 etapas (noviembre de 2026). Rehace la portada según los frames de la página Portadas. Componente: `src/components/PortadaBanda.astro`. Los datos van en el campo `banda` del MDX (`desktop` y `mobile`).
+
+- Banda a todo el ancho: alto `clamp(420px, 62vh, 720px)` (token `--portada-alto`) y overflow oculto. Bajo 768 px usa la versión mobile.
+- Tres capas, de abajo hacia arriba:
+  1. **Fondo**, en CSS (`fondo` en el MDX): el color o degradado del frame y los brillos radiales. Las elipses "Glow" de Figma (relleno al 35, 25 o 18 % y desenfoque de 160 o 180) se pasan a `radial-gradient` en px, con la caída de un círculo desenfocado. Los degradados del frame van en %, así que se estiran con la banda. Las columnas de Design system (1 px de blanco al 4 %, cada 240 px) también van en el fondo.
+  2. **Líneas decorativas** (`lineas`, solo Visión general y el playmat de TCG): un SVG para desktop y otro para mobile, con el grupo completo, sin el recorte del frame. Van a tamaño real, centradas respecto del frame y ancladas a su borde inferior, como el contenido. `x` e `y` son la esquina superior izquierda respecto del frame. No escalan con el ancho y solo las recorta la banda.
+  3. **Contenido** (`contenido`): la capa "Contenido (PNG transparente…)" de cada frame, en PNG ×2 sin fondo y recortada en el borde inferior del frame. En Visión general es la capa "portadacel 1". En Design system el PNG se completa con transparente hasta el borde inferior del frame.
+- `caja`: ancho y alto del contenido en Figma (sin sombras), desde su borde superior hasta el borde inferior del frame. En desktop, la caja va centrada y anclada abajo. Mide como máximo su tamaño real y 1040 px (`--portada-contenido-max`), no pasa del margen lateral y deja 136 px libres arriba (`--portada-aire`). En pantallas grandes no crece: solo se extiende el fondo. En mobile ocupa la misma proporción que en el frame de 375 y escala con el ancho. Las sombras del PNG pueden sobresalir de la caja.
+- Cómo se exportó: `download_assets` devuelve los PNG con el fondo del frame incluido. Por eso, cada capa de contenido se copió escalada ×2 a un frame temporal transparente del mismo tamaño ×2, se capturó solo el contenido y después se borró el frame temporal. El SVG que exporta Figma deja afuera lo que cae fuera del frame. El playmat de TCG se armó a partir de la geometría de cada forma (trazo interior, blanco al 16 %), y las líneas de Visión general salieron de los trazos completos del export.
+- El campo `portada` (imagen única) se mantiene: es la imagen para compartir y la portada de Pagos masivos B2B, que todavía no tiene frame en la página Portadas.
+- La transición desde la card del home apunta a la banda completa.
 
 ### Plantilla Exploración
 
