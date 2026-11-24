@@ -33,8 +33,8 @@ const casos = defineCollection({
       /** Imagen única: se usa para compartir y como portada de los casos sin banda. */
       portada: image(),
       portadaAlt: z.string(),
-      /** Portada en banda a todo el ancho. Opcional: Pagos masivos B2B todavía no la tiene en Figma. */
-      banda: z.object({ desktop: versionBanda, mobile: versionBanda }).optional(),
+      /** Portada en banda a todo el ancho. Sin versión mobile, en mobile se reduce la de desktop. */
+      banda: z.object({ desktop: versionBanda, mobile: versionBanda.optional() }).optional(),
       /** Metadatos de la intro, en el orden de Figma (Rol, Equipo, Herramientas, Período…). */
       metadatos: z.array(z.object({ etiqueta: z.string(), valor: z.string() })),
       resumen: z.string(),

@@ -8,6 +8,7 @@
  * 3. Contenido: PNG ×2 transparente, centrado y anclado abajo. Su caja (el contenido sin
  *    sombras) mide como máximo 1040 px y deja 136 px libres arriba; nunca crece.
  * Bajo 768 px se usa la versión mobile; ahí el contenido escala con el ancho, como el frame de 375.
+ * Si el caso no tiene versión mobile, en mobile se usa la de desktop reducida al ancho de la pantalla.
  */
 import { getImage } from 'astro:assets';
 
@@ -20,7 +21,7 @@ type Version = {
 
 interface Props {
   desktop: Version;
-  mobile: Version;
+  mobile?: Version;
   alt: string;
   /** Mismo valor que el transition:name de la card del home. */
   transitionName?: string;
@@ -42,25 +43,29 @@ const anchoCss = (v: Version) => v.contenido.width / 2;
 
 const sources = await Promise.all(
   (['avif', 'webp'] as const).flatMap((format) => [
-    srcset(mobile.contenido, format).then((s) => ({
-      media: '(max-width: 767px)',
-      type: `image/${format}`,
-      srcset: s,
-      sizes: `${((anchoCss(mobile) / FRAME.mobile[0]) * 100).toFixed(2)}vw`,
-    })),
+    ...(mobile
+      ? [
+          srcset(mobile.contenido, format).then((s) => ({
+            media: '(max-width: 767px)',
+            type: `image/${format}`,
+            srcset: s,
+            sizes: `${((anchoCss(mobile) / FRAME.mobile[0]) * 100).toFixed(2)}vw`,
+          })),
+        ]
+      : []),
     srcset(desktop.contenido, format).then((s) => ({
       media: undefined,
       type: `image/${format}`,
       srcset: s,
-      sizes: `${Math.round(anchoCss(desktop))}px`,
+      sizes: mobile ? `${Math.round(anchoCss(desktop))}px` : `(max-width: 767px) 100vw, ${Math.round(anchoCss(desktop))}px`,
     })),
   ]),
 );
 const fallback = await getImage({ src: desktop.contenido, format: 'webp', width: desktop.contenido.width });
 
 /* Variables por versión: la hoja elige las de mobile o desktop con la media query. */
-const vars = (v: Version, k: 'm' | 'd') => {
-  const [fw, fh] = FRAME[k === 'm' ? 'mobile' : 'desktop'];
+const vars = (v: Version, k: 'm' | 'd', frame: keyof typeof FRAME) => {
+  const [fw, fh] = FRAME[frame];
   const out: Record<string, string | number> = {
     [`--fondo-${k}`]: v.fondo,
     [`--caja-w-${k}`]: v.caja[0],
@@ -77,17 +82,22 @@ const vars = (v: Version, k: 'm' | 'd') => {
   return out;
 };
 
+/* Sin versión mobile: en mobile van el fondo, las líneas y el contenido de desktop. */
+const m = mobile ?? desktop;
 const style = {
-  ...vars(mobile, 'm'),
-  ...vars(desktop, 'd'),
+  ...vars(m, 'm', mobile ? 'mobile' : 'desktop'),
+  ...vars(desktop, 'd', 'desktop'),
   ...(transitionName ? { 'view-transition-name': transitionName } : {}),
 };
 ---
 
-<div class:list={['portada', { 'portada--transicion': transitionName }]} style={style}>
+<div
+  class:list={['portada', { 'portada--transicion': transitionName, 'portada--sin-mobile': !mobile }]}
+  style={style}
+>
   {
-    mobile.lineas && (
-      <img class="portada__lineas portada__lineas--m" src={mobile.lineas.svg.src} width={mobile.lineas.svg.width} height={mobile.lineas.svg.height} alt="" aria-hidden="true" decoding="async" />
+    m.lineas && (
+      <img class="portada__lineas portada__lineas--m" src={m.lineas.svg.src} width={m.lineas.svg.width} height={m.lineas.svg.height} alt="" aria-hidden="true" decoding="async" />
     )
   }
   {
@@ -161,6 +171,16 @@ const style = {
     );
     aspect-ratio: var(--caja-w) / var(--caja-h);
     translate: -50% 0;
+  }
+
+  /* Sin versión mobile: la caja de desktop, reducida al ancho de la pantalla menos el margen. */
+  @media (max-width: 767px) {
+    .portada--sin-mobile .portada__caja {
+      width: min(
+        100% - 2 * var(--page-padding),
+        calc((var(--portada-alto) - var(--portada-aire)) * var(--caja-w) / var(--caja-h))
+      );
+    }
   }
 
   .portada__contenido {
