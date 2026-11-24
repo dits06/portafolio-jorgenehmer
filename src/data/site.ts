@@ -9,6 +9,5 @@ export const site = {
   email: 'jorgenehmer06@gmail.com',
   linkedin: 'https://www.linkedin.com/in/jorge-nehmer-71493325/',
   // PDF en public/curriculum.pdf; /curriculum redirige a él (vercel.json).
-  // [Confirmar] falta subir el archivo.
   curriculum: '/curriculum.pdf',
 } as const;

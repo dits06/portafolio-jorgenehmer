@@ -16,7 +16,7 @@ El portafolio se construye en Claude Code con Astro y archivos MDX, sin CMS, y s
 | Imágenes | Exportadas desde Figma en ×2 y optimizadas por Astro a WebP o AVIF |
 | Hosting | Vercel, con jorgenehmer.com |
 
-Preguntas abiertas: si el sitio tendrá versión en inglés, y si habrá analítica (por ejemplo Vercel Analytics).
+Decidido en la etapa 7: la versión en inglés llega más adelante (por ahora solo español) y por ahora no hay analítica; se evalúa más adelante.
 
 ## Fuentes
 

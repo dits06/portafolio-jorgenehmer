@@ -1,20 +1,21 @@
 ---
 /**
- * 404 — No hay frame en Figma ni texto en el documento de traspaso.
- * Usa la estructura del encabezado de Exploración (eyebrow, título, descripción) y
- * un link al inicio. Los textos quedan como [Confirmar] hasta que estén en Figma.
- * Vercel sirve dist/404.html para cualquier ruta que no existe.
+ * 404 — No hay frame en Figma. Usa la estructura del encabezado de Exploración
+ * (eyebrow, título, descripción) y un link al inicio. Textos aprobados por Jorge
+ * en la etapa 7. Vercel sirve dist/404.html para cualquier ruta que no existe.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="[Confirmar]" noindex>
+<BaseLayout title="Página no encontrada" noindex>
   <section class="bloque" aria-labelledby="error-titulo">
     <div class="contenedor">
-      <p class="eyebrow">404</p>
-      <h1 class="titulo" id="error-titulo">[Confirmar]</h1>
-      <p class="descripcion">[Confirmar]</p>
-      <a class="inicio" href="/">[Confirmar]</a>
+      <p class="eyebrow">Error 404</p>
+      <h1 class="titulo" id="error-titulo">Esta página no existe</h1>
+      <p class="descripcion">
+        Puede que el link esté mal escrito o que la página haya cambiado de lugar.
+      </p>
+      <a class="inicio" href="/">Volver al inicio</a>
     </div>
   </section>
 </BaseLayout>
