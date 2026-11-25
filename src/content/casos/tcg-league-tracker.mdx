@@ -115,6 +115,7 @@ import ligaTiendas from '../../assets/casos/tcg-league-tracker/liga-tiendas.png'
 import ligaJugadores from '../../assets/casos/tcg-league-tracker/liga-jugadores.png';
 import notas from '../../assets/casos/tcg-league-tracker/notas-al-registrar-una-partida.png';
 import tips from '../../assets/casos/tcg-league-tracker/tips-del-matchup.png';
+import tokensSemanticos from '../../assets/casos/tcg-league-tracker/tokens-semanticos.png';
 import componentes from '../../assets/casos/tcg-league-tracker/componentes.png';
 import modoOscuro from '../../assets/casos/tcg-league-tracker/modo-oscuro.png';
 
@@ -250,7 +251,14 @@ La primera versión tampoco tenía tips. Integré la API de Claude para que, des
 
 <CaseSection id="sistema-de-diseno" eyebrow="Sistema de diseño" titulo="Un sistema básico, pero propio">
 
-Con apoyo de Claude armé un sistema de diseño básico: colores, tipografía y componentes como botones, chips, indicadores de resultado y filas de partidas y decks. Eso me permitió mantener la consistencia entre pantallas y sumar un modo oscuro.
+Con apoyo de Claude armé un sistema de diseño básico con tokens semánticos: cada color tiene un uso (fondo, texto, bordes, resultado de cada partida y tipos de energía) y un valor para modo claro y otro para modo oscuro. Así, el modo oscuro salió de cambiar de modo, sin rehacer pantallas. Sobre esos tokens armé componentes como botones, chips, indicadores de resultado y filas de partidas y decks.
+
+<ImagenConPie
+  src={tokensSemanticos}
+  pie="Tokens semánticos con su valor en modo claro y oscuro"
+  alt="Tokens semánticos con su valor en modo claro y oscuro"
+  ratio="800 / 568"
+/>
 
 <ParDeImagenes
   ratio="392 / 360"
